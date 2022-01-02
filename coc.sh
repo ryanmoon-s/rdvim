@@ -6,7 +6,10 @@
 #########################################################################
 #!/bin/bash
 
-#coc.nvim需要的nodejs，与language server clangd for c++
+# linux专用 
+# mac执行：brew install nodejs; brew install llvm
+
+# nodejs and clangd(c++)
 
 # nodejs
 coc=coc_dependence

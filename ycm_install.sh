@@ -1,5 +1,5 @@
 #########################################################################
-# File Name:    final_install.sh
+# File Name:    ycm_install.sh
 # Author:       arashi
 # mail:         arashi@tencent.com
 # Created Time: 二 12/21 11:29:57 2021

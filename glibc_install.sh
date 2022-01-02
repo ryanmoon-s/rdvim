@@ -6,6 +6,8 @@
 #########################################################################
 #!/bin/bash
 
+# linux系统专用
+
 # 输入 clangd --version 查看clangd安装情况
 # 如果显示需要glibc_2.18支持，则运行此脚本
 
@@ -21,3 +23,7 @@ cd build
 ../configure --prefix=/usr --disable-profile --enable-add-ons --with-headers=/usr/include --with-binutils=/usr/bin
 make -j 8
 sudo make install
+
+rm -rf glibc-2.18.tar.gz
+rm -rf glibc-2.18/
+
