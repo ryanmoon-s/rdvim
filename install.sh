@@ -15,10 +15,18 @@ if [ -d .vim ]; then
     mv .vim .vim.`digitaldatetime`;
 fi
 
+cd $vimdir
+
 echo "\033[0;32mln -s ${vimdir}/.vimrc .vimrc\033[0m"
-ln -s ${vimdir}/.vimrc .vimrc
+ln -s .vimrc .vimrc
 echo "\033[0;32mln -s ${vimdir}/.vim .vim\033[0m"
-ln -s ${vimdir}/.vim .vim
+ln -s .vim .vim
+
+cd .vim
+
+if [[ ! -d colors ]];then
+    mkdir colors
+fi
 
 # 安装vim插件
 vim +PlugInstall +qall
