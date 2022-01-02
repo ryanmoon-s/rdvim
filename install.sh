@@ -3,7 +3,9 @@ function digitaldatetime() {
     echo `date +"%Y%m%d%H%M%S"`
 }
 vimdir=`pwd -P`
-cd $HOME
+cd ~
+
+# back-up
 
 if [ -f .vimrc ] || [ -h .vimrc ]; then
     echo "\033[0;33mFound ~/.vimrc.\033[0m \033[0;32mBacking up to ~/.vimrc.`digitaldatetime`\033[0m";
@@ -15,16 +17,20 @@ if [ -d .vim ]; then
     mv .vim .vim.`digitaldatetime`;
 fi
 
-echo "\033[0;32mln -s ${vimdir}/.vimrc .vimrc\033[0m"
-ln -s ${vimdir}/.vimrc .vimrc
-echo "\033[0;32mln -s ${vimdir}/.vim .vim\033[0m"
-ln -s ${vimdir}/.vim .vim
+# colors dir
 
 cd ${vimdir}/.vim
 
 if [[ ! -d colors ]];then
     mkdir colors
 fi
+
+# ln
+
+echo "\033[0;32mln -s ${vimdir}/.vimrc .vimrc\033[0m"
+ln -s ${vimdir}/.vimrc ~/.vimrc
+echo "\033[0;32mln -s ${vimdir}/.vim .vim\033[0m"
+ln -s ${vimdir}/.vim ~/.vim
 
 # 安装vim插件
 vim +PlugInstall +qall
