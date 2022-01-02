@@ -25,11 +25,8 @@ ln -s ${vimdir}/.vimrc ~/.vimrc
 echo "\033[0;32mln -s ${vimdir}/.vim .vim\033[0m"
 ln -s ${vimdir}/.vim ~/.vim
 
-# 安装vim插件
-
-vim +PlugInstall +qall
-
 # finish
 
-echo "** 原来的文件已经备份成 ~/.vim*.xxxxxxxx **"
-echo "** 安装完成 **"
+echo ""
+echo "** 原来的文件已经备份成   ~/.vim*.xxxxxxxx **"
+echo "** 请先安装插件->进入vim输入  :PlugInstall **"
