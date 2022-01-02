@@ -15,14 +15,12 @@ if [ -d .vim ]; then
     mv .vim .vim.`digitaldatetime`;
 fi
 
-cd $vimdir
-
 echo "\033[0;32mln -s ${vimdir}/.vimrc .vimrc\033[0m"
-ln -s .vimrc .vimrc
+ln -s ${vimdir}/.vimrc .vimrc
 echo "\033[0;32mln -s ${vimdir}/.vim .vim\033[0m"
-ln -s .vim .vim
+ln -s ${vimdir}/.vim .vim
 
-cd .vim
+cd ${vimdir}/.vim
 
 if [[ ! -d colors ]];then
     mkdir colors
