@@ -2,6 +2,7 @@
 function digitaldatetime() {
     echo `date +"%Y%m%d%H%M%S"`
 }
+
 vimdir=`pwd -P`
 cd ~
 
@@ -17,14 +18,6 @@ if [ -d .vim ]; then
     mv .vim .vim.`digitaldatetime`;
 fi
 
-# colors dir
-
-cd ${vimdir}/.vim
-
-if [[ ! -d colors ]];then
-    mkdir colors
-fi
-
 # ln
 
 echo "\033[0;32mln -s ${vimdir}/.vimrc .vimrc\033[0m"
@@ -33,7 +26,10 @@ echo "\033[0;32mln -s ${vimdir}/.vim .vim\033[0m"
 ln -s ${vimdir}/.vim ~/.vim
 
 # 安装vim插件
+
 vim +PlugInstall +qall
 
-echo "原来的文件已经备份成 .vim*.xxxxxxxx"
-echo "** 安装完成** "
+# finish
+
+echo "** 原来的文件已经备份成 ~/.vim*.xxxxxxxx **"
+echo "** 安装完成 **"
