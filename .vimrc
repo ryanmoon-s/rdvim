@@ -74,7 +74,7 @@ Plug 'preservim/tagbar'
 " 语法补全2 coc
 " 1、需要先安装nodejs(coc 依赖)、clangd(作为language server) 有些系统可以用包管理器安装
 " 2、运行sh ./coc.sh 安装这两个东西
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " 在头/源文件之间快速跳转
 Plug 'vim-scripts/a.vim'

@@ -8,22 +8,22 @@ cd ~
 
 # back-up
 
-if [ -f .vimrc ] || [ -h .vimrc ]; then
+if [ -f ~/.vimrc ] || [ -h ~/.vimrc ]; then
     echo "\033[0;33mFound ~/.vimrc.\033[0m \033[0;32mBacking up to ~/.vimrc.`digitaldatetime`\033[0m";
-    mv .vimrc .vimrc.`digitaldatetime`;
+    mv ~/.vimrc ~/.vimrc.`digitaldatetime`;
 fi
 
-if [ -d .vim ]; then
+if [ -d ~/.vim ]; then
     echo "\033[0;33mFound ~/.vim.\033[0m \033[0;32mBacking up to ~/.vim.`digitaldatetime`\033[0m";
-    mv .vim .vim.`digitaldatetime`;
+    mv ~/.vim ~/.vim.`digitaldatetime`;
 fi
 
 # ln
+echo "\033[0;32mln -s `pwd`/.vimrc .vimrc\033[0m"
+ln -s ${vimdir}/.vimrc .vimrc
 
-echo "\033[0;32mln -s ${vimdir}/.vimrc .vimrc\033[0m"
-ln -s ${vimdir}/.vimrc ~/.vimrc
-echo "\033[0;32mln -s ${vimdir}/.vim .vim\033[0m"
-ln -s ${vimdir}/.vim ~/.vim
+echo "\033[0;32mln -s `pwd`/.vim .vim\033[0m"
+ln -s ${vimdir}/.vim .vim
 
 # install plug
 vim +PlugInstall +qall

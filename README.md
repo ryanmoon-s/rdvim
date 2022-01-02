@@ -4,7 +4,12 @@ sh ./install.sh
 # 自动补全
 ## YouCompleteMe
 集成所有补全、跳转 等一套功能，但是能使用的语言有限  
-安装：sh ./ycm_install.sh  
+安装：
+```txt
+1、打开.vimrc 里面的plug注释
+2、sh ./ycm_install.sh  
+```
+
 安装前最好先阅读一遍这个脚本，里面有遇到错误的解决办法  
 
 ## coc.nvim
@@ -14,8 +19,9 @@ sh ./install.sh
 2、它需要一个language server来完成补全等功能，c++用的是clangd，其它语言自行下载对应的server  
 3、安装方式   
 ```txt
-linux：运行脚本 sh ./coc.sh 会同时安装nodejs、clangd
-mac：brew install nodejs; brew install llvm
+1、打开.vimrc 里面的plug注释
+2、linux：运行脚本 sh ./coc.sh 会同时安装nodejs、clangd
+3、mac：brew install nodejs; brew install llvm
 ```
 
 ### linux可能会出现安装问题：
