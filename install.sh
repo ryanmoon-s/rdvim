@@ -25,6 +25,10 @@ ln -s ${vimdir}/.vimrc ~/.vimrc
 echo "\033[0;32mln -s ${vimdir}/.vim .vim\033[0m"
 ln -s ${vimdir}/.vim ~/.vim
 
+# install plug
+vim +PlugInstall +qall
+vim +PlugInstall +qall
+
 # finish
 
 echo ""
