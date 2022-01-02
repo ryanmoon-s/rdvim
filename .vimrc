@@ -36,7 +36,7 @@ colorscheme gruvbox
 " <Space>  space
 " <Leader> mapleader
 
-" <Plug> 类型的不能加 nore 否则不起作用
+" <Plug> 类型的不能加 nore 否则不起作用、与数字组合的不能加nore 否则3 G等不起作用
 " 绑定fx，就不要绑定f了，想要f出效果，会等待一段时间 以确认用户不输入第二个字母
 " 绑定l， 就不要绑定lx， l会被暂存，下次与其它按键一起出来
 " 即 两个键的和一个键的不要重合
@@ -191,6 +191,7 @@ let g:ctrlp_max_depth = 10
 " 可自行map
 
 " ==== coc T ========================
+nmap <Leader>c <plug>(coc-fix-current)
 
 " ==== ycm T ========================
 " 全局文件配置
@@ -423,7 +424,7 @@ nnoremap <Leader>gr <C-T>
 " 高
 " nnoremap <Leader>1 <ESC><C-W>15+
 " 大
-nnoremap 3 <ESC><C-W>15>
+nmap <Leader>3 <ESC><C-W>15>
 
 " 窗口移动
 " h左 l右 k上 j下
