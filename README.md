@@ -6,7 +6,7 @@ sh ./install.sh
 集成所有补全、跳转 等一套功能，但是能使用的语言有限  
 安装：
 ```txt
-1、打开.vimrc 里面的plug注释
+1、打开.vimrc 里面的plug注释 :PlugInstall 安装plug
 2、sh ./ycm_install.sh  
 ```
 
@@ -19,7 +19,7 @@ sh ./install.sh
 2、它需要一个language server来完成补全等功能，c++用的是clangd，其它语言自行下载对应的server  
 3、安装方式   
 ```txt
-1、打开.vimrc 里面的plug注释
+1、打开.vimrc 里面的plug注释 :PlugInstall 安装plug
 2、linux：运行脚本 sh ./coc.sh 会同时安装nodejs、clangd
 3、mac：brew install nodejs; brew install llvm
 ```
