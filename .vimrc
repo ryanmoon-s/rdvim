@@ -17,13 +17,13 @@ let mapleader=";"
 " tg gt gr
 
 " ==== 主题 ================================================
-" 暗紫
-" set background=dark
-" colorscheme onedark
-
-" 橙灰
+" 紫蓝 default
 set background=dark
-colorscheme gruvbox
+colorscheme onedark
+
+" 橙绿
+" set background=dark
+" colorscheme gruvbox
 
 " ==== 教学 ================================================
 " ==== map =============================
@@ -90,6 +90,9 @@ Plug 'ctrlpvim/ctrlp.vim'
 
 " 使ctrl + d 翻页画面过渡流畅
 Plug 'psliwka/vim-smoothie'
+
+" c++ 语法高亮
+Plug 'octol/vim-cpp-enhanced-highlight'
 
 " vim 主题 包含airline主题
 Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
@@ -166,6 +169,12 @@ nmap 'j <Plug>(GitGutterNextHunk)
 " ==== fugitive T ======================
 nnoremap <Leader>v :Git blame <CR>
 
+" ==== cpp hilight T ===================
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_template_highlight = 1
 
 " ==== ack T ===========================
 " 高亮搜索关键词
