@@ -17,7 +17,7 @@ let mapleader=";"
 " tg gt gr
 
 " ==== 主题 ================================================
-" 紫蓝 default
+" 紫蓝 default 支持coc.nvim错误点有下划线
 set background=dark
 colorscheme onedark
 
@@ -98,7 +98,7 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
 Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
 
-" 文字对齐
+" 文本对齐
 " Plug 'godlygeek/tabular'
 
 call plug#end()
@@ -148,8 +148,7 @@ let g:airline_symbols.paste = '[paste]'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 let g:airline_symbols.branch = ' '
-
-" statusline trailing  末尾的文字后面有尾随的空格
+" trailing  末尾的文字后面有尾随的空格
 
 " ==== gitgutter T =====================
 " 更新间隔
@@ -181,7 +180,6 @@ let g:cpp_experimental_template_highlight = 1
 let g:ackhighlight = 1
 " 修改快速预览窗口高度为15
 let g:ack_qhandler = "botright copen 15"
-
 
 " ==== ctrlp T =========================
 " 寻找目录：c 当前文件所在目录 
@@ -246,8 +244,9 @@ let g:ycm_enable_diagnostic_highlighting = 0
 
 " ==== VIM Config T =========================================
 " ==== other ===========================
-" 点亮光标所在前行
+" 点亮光标所在行列
 set cursorline
+set cursorcolumn
 " 插件高度 main for ycm
 set pumheight=25
 " 退格可以删除：自动缩进、跨行、之前插入的
@@ -406,6 +405,7 @@ nnoremap <Leader>s :source ~/.vimrc <CR>
 
 " 输入括号时 括号匹配 ESC光标会向前移一格
 inoremap ( ()<ESC>i
+inoremap { {}<ESC>i
 inoremap [ []<ESC>i
 inoremap ' ''<ESC>i
 inoremap " ""<ESC>i
@@ -453,7 +453,7 @@ nmap <Leader>d <C-d>
 
 " ==== autocmd T ===========================================
 " 花括号自动格式化，首行一个tab
-autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
+" autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
 
 " 注释针对不同语言的注释方法 需要vim-commentary插件支持
 autocmd FileType cpp set commentstring=//\ %s
