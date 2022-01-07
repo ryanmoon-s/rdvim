@@ -1,4 +1,11 @@
+#########################################################################
+# File Name:    install.sh
+# Author:       arashi
+# mail:         arashi@tencent.com
+# Created Time: 2022年01月06日 星期四 20时34分57秒
+#########################################################################
 #!/bin/bash
+
 function digitaldatetime() {
     echo `date +"%Y%m%d%H%M%S"`
 }

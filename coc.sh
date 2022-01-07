@@ -6,8 +6,8 @@
 #########################################################################
 #!/bin/bash
 
-# linux专用 
-# mac执行：brew install nodejs; brew install llvm
+# 此脚本为linux专用 
+# mac请执行：brew install nodejs; brew install llvm
 
 # nodejs and clangd(c++)
 

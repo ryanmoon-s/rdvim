@@ -55,6 +55,8 @@ Plug 'camspiers/animate.vim'  " 窗口调整时 动画效果
 
 " 文件窗口
 Plug 'preservim/nerdtree'
+" 文件窗口显示git 文件状态
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " 快捷注释 行:gcc  块: gc
 Plug 'tpope/vim-commentary'
@@ -79,10 +81,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " 在头/源文件之间快速跳转
 Plug 'vim-scripts/a.vim'
 
-" git插件 状态栏branch blame
+" git插件 
+" 状态栏branch 文件内执行git命令 方便的diff 
 Plug 'tpope/vim-fugitive'
-
-" git插件 左侧查看变动
+" 状态栏变更显示 左侧变更显示
 Plug 'airblade/vim-gitgutter'
 
 " 文件模糊搜索 ctrl + p
@@ -114,11 +116,26 @@ let NERDTreeWinPos="left"
 let NERDTreeIgnore=['\.vim$', '\~$', '\.o$', '\.d$', '\.a$', '\.out$', '\.tgz$']
 " 打开快捷键
 nnoremap <silent> <Leader>n :NERDTreeToggle <CR>
+" git 文件状态
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'✹',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'✭',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
+" 隐藏[] 1隐藏
+let g:NERDTreeGitStatusConcealBrackets = 1
 
 " ==== airline T =======================
 " 永远显示状态栏
 set laststatus=2
-" tab line
+" tab
 let g:airline#extensions#tabline#enabled = 1              " 是否打开tabline
 let g:airline#extensions#tabline#buffer_idx_mode = 1      " 切换模式
 nmap <Leader>1 <Plug>AirlineSelectPrevTab                 " 前一个tab <Plug>类型的只可nmap
@@ -126,29 +143,34 @@ nmap <Leader>2 <Plug>AirlineSelectNextTab                 " 后一个tab
 let g:airline#extensions#tabline#left_sep = ''           " 分隔符
 let g:airline#extensions#tabline#left_alt_sep = '➤'
 
-" ale support
-let g:airline#extensions#ale#enabled = 1
-
 " fugitive support
-let g:airline#extensions#fugitiveline#enabled = 1
+let g:airline#extensions#fugitiveline#enabled = 0
 let g:airline#extensions#branch#enabled = 1
 
-" symbol
+" coc.nvim support
+let g:airline#extensions#coc#enabled = 0 " 后台项目pb未引入 错误太多 暂时关闭 仅有下划线提示错误
+let airline#extensions#coc#error_symbol = 'E:'
+let airline#extensions#coc#warning_symbol = 'W:'
+let g:airline#extensions#coc#show_coc_status = 1
+
+" symbol 需要终端安装powerline字体
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = '❯'
-let g:airline_right_sep = '▌'
+let g:airline_right_sep = ''
 let g:airline_right_alt_sep = '❮'
 let g:airline_symbols.linenr = '  ｢'
 let g:airline_symbols.maxlinenr = '｣'
 let g:airline_symbols.colnr = '   ❤ '
-let g:airline_symbols.paste = '[paste]'
+let g:airline_symbols.paste = '｢paste｣'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 let g:airline_symbols.branch = ' '
-" trailing  末尾的文字后面有尾随的空格
+
+" 关闭white space 提示
+let g:airline#extensions#whitespace#enabled = 0
 
 " ==== gitgutter T =====================
 " 更新间隔
@@ -158,15 +180,21 @@ let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_removed = '-'
 let g:gitgutter_sign_modified = '~'
 let g:gitgutter_sign_modified_removed = '#'
+" 优先级 高
+let g:gitgutter_sign_priority = 100
 " 进入自动显示
-autocmd BufEnter * GitGutter
-autocmd VimEnter * GitGutter
+autocmd BufEnter,VimEnter * GitGutter
 " 改动 块间 跳转
 nmap 'k <Plug>(GitGutterPrevHunk)
 nmap 'j <Plug>(GitGutterNextHunk)
 
 " ==== fugitive T ======================
+" blame D 缩小到时间维度
 nnoremap <Leader>v :Git blame <CR>
+" :G            等于:Git 接git命令 不接则显示一些基本信息: Untracked Unstaged 
+" :G!           背后执行
+" :G difftool   将所有hunk展示 每个hunk显示文件名、开始的行号
+" :G mergetool  类似于difftool
 
 " ==== cpp hilight T ===================
 let g:cpp_class_scope_highlight = 1
@@ -249,8 +277,8 @@ set cursorline
 set cursorcolumn
 " 插件高度 main for ycm
 set pumheight=25
-" 退格可以删除：自动缩进、跨行、之前插入的
-set backspace=indent,eol,start
+" 退格可以删除：自动缩进、之前插入的、跨行
+set backspace=indent,start,eol
 " o O <CR> 时复制上一行的缩进格式
 set autoindent
 " c-style indent
