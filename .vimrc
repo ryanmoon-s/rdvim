@@ -45,41 +45,47 @@ colorscheme onedark
 " ==== junegunn/vim-plug ===============
 call plug#begin('~/.vim/plugged')
 
+" 美化专题
 " 状态栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
 " 窗口调整
 Plug 'camspiers/lens.vim'     " 切换窗口时 自动调整大小
 Plug 'camspiers/animate.vim'  " 窗口调整时 动画效果
+" vim 主题 包含airline主题
+Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
+Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
+" 使ctrl + d 翻页画面过渡流畅
+Plug 'psliwka/vim-smoothie'
 
+
+" 导航专题
 " 文件窗口
 Plug 'preservim/nerdtree'
 " 文件窗口显示git 文件状态
 Plug 'Xuyuanp/nerdtree-git-plugin'
-
-" 快捷注释 行:gcc  块: gc
-Plug 'tpope/vim-commentary'
-
-" 快捷使用ack 前提是已经安装ack
-Plug 'mileszs/ack.vim'
-
 " 基于ctag 用于跳转
 Plug 'preservim/tagbar'
 
-" 语法补全1 ycm 
-" 安装：sh ycm_install.sh
+
+" 实用工具专题
+" 快捷注释 行:gcc  块: gc
+Plug 'tpope/vim-commentary'
+" 快捷使用ack 前提是已经安装ack
+Plug 'mileszs/ack.vim'
+" 文件模糊搜索 ctrl + p
+Plug 'ctrlpvim/ctrlp.vim'
+
+
+" 语法补全专题
+" 1、ycm 参考sh ycm_install.sh安装
 " Plug 'ryanmoon-s/YouCompleteMe'
 " 帮助项目生成 .ycm_extra_conf.py，支持make cmake qmake autotools
 " Plug 'rdnetto/YCM-Generator'
-
-" 语法补全2 coc
-" 1、需要先安装nodejs(coc 依赖)、clangd(作为language server) 有些系统可以用包管理器安装
-" 2、运行sh ./coc.sh 安装这两个东西
+" ====
+" 2、coc 参考coc.sh安装依赖
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" 在头/源文件之间快速跳转
-Plug 'vim-scripts/a.vim'
 
 " git插件 
 " 状态栏branch 文件内执行git命令 方便的diff 
@@ -87,22 +93,17 @@ Plug 'tpope/vim-fugitive'
 " 状态栏变更显示 左侧变更显示
 Plug 'airblade/vim-gitgutter'
 
-" 文件模糊搜索 ctrl + p
-Plug 'ctrlpvim/ctrlp.vim'
 
-" 使ctrl + d 翻页画面过渡流畅
-Plug 'psliwka/vim-smoothie'
-
+" c++ 开发专题
 " c++ 语法高亮
 Plug 'octol/vim-cpp-enhanced-highlight'
-
 " 对齐长条显示 for if ...
 Plug 'Yggdroot/indentLine'
+" 在头/源文件之间快速跳转
+Plug 'vim-scripts/a.vim'
 
-" vim 主题 包含airline主题
-Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
-Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
 
+" 未来可能用上专题
 " 文本对齐
 " Plug 'godlygeek/tabular'
 
@@ -353,12 +354,14 @@ set smartcase  "如果有大写字母，则切换到大小写敏感查找
 " 1. 施放后还在NORMAL模式
 "
 " U 将当前行恢复至开始编辑前的样子 只缓存当前行 u撤销是上次操作可无限u
+" V 行 可视模式
 " D 删除至行尾 dd 删除当前行
 " x 删除光标上的符号 X 删除光标左边的符号
-" w 后一单词 b 前一单词 e 词尾(映射成行尾)
+"
+" w 跳到后一单词 b 前一单词 e 词尾(映射成行尾)
 " f + x 行内查找字符x 直接跳转
-" V 行 可视模式
 " K 跳到 当前位置的单词 的help
+" { 跳到上一段 } 下一段 一般以空行为单位
 "
 " M 光标跳到当前屏幕中间行
 " H 光标跳到当前屏幕顶部行
@@ -378,11 +381,17 @@ set smartcase  "如果有大写字母，则切换到大小写敏感查找
 "
 " 二、实用快速技巧
 "
+" 1. 多行操作
 " y: yy 、nyy 、 ygg yG yw y0 y$
-" 剪切 复制 对齐 [可以] -->  左接数字 || 右接跳转 || 可视选择
-" 只能左接数字 s x << >>
-" 左数字右跳转 y d c =
-" 以上都能可视选择
+" 很多按键 [可以] -->  左接数字 || 右接跳转 || 可视选择
+" 只能左接数字 s x w b << >>
+" 只能右接跳转 v V
+" 左数字右跳转 y d c = v
+" 以上都能可视选择 + 按键
+" 组合使用: y2w d2w
+"
+" yi(  解释:y inner  作用:复制光标所在的 括号 内的所有内容
+" 变种: y d c  +  i  +  ( [ {
 
 " ==== ban map T =======================
 " 禁用快捷键 需要shift+ 才能按出的
