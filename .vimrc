@@ -96,6 +96,9 @@ Plug 'psliwka/vim-smoothie'
 " c++ 语法高亮
 Plug 'octol/vim-cpp-enhanced-highlight'
 
+" 对齐长条显示 for if ...
+Plug 'Yggdroot/indentLine'
+
 " vim 主题 包含airline主题
 Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
 Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
