@@ -101,6 +101,8 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'Yggdroot/indentLine'
 " 在头/源文件之间快速跳转
 Plug 'vim-scripts/a.vim'
+" 括号处理
+Plug 'tpope/vim-surround'
 
 
 " 未来可能用上专题
@@ -206,6 +208,10 @@ let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_posix_standard = 1
 let g:cpp_experimental_template_highlight = 1
+
+" ==== surround T ===================
+" cs" '
+
 
 " ==== ack T ===========================
 " 高亮搜索关键词
@@ -505,8 +511,8 @@ nmap <Leader>u <C-u>
 nmap <Leader>d <C-d>
 
 " ==== autocmd T ===========================================
-" 花括号自动格式化，首行一个tab
-" autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
+" c++ 花括号自动格式化，首行一个tab
+autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
 
 " 注释针对不同语言的注释方法 需要vim-commentary插件支持
 autocmd FileType cpp set commentstring=//\ %s
