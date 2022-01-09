@@ -25,22 +25,6 @@ colorscheme onedark
 " set background=dark
 " colorscheme gruvbox
 
-" ==== 教学 ================================================
-" ==== map =============================
-" n/i/c   nore    map    <silent>        src-cmd    dst-cmd
-" mode    非递归  映射   不显示提示信息
-
-" <CR>     carriage-return 回车
-" <ESC>    esc
-" <C-w>    Ctrl + w 可跟大写
-" <Space>  space
-" <Leader> mapleader
-
-" <Plug> 类型的不能加 nore 否则不起作用、与数字组合的不能加nore 否则3 G等不起作用
-" 绑定fx，就不要绑定f了，想要f出效果，会等待一段时间 以确认用户不输入第二个字母
-" 绑定l， 就不要绑定lx， l会被暂存，下次与其它按键一起出来
-" 即 两个键的和一个键的不要重合
-
 " ==== Plug config T =======================================
 " ==== junegunn/vim-plug ===============
 call plug#begin('~/.vim/plugged')
@@ -203,6 +187,7 @@ nnoremap <Leader>v :Git blame <CR>
 " :G mergetool  类似于difftool
 
 " ==== cpp hilight T ===================
+" 开启一些高亮
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
@@ -210,8 +195,13 @@ let g:cpp_posix_standard = 1
 let g:cpp_experimental_template_highlight = 1
 
 " ==== surround T ===================
-" cs" '
-
+" 都是nmap 都是pair操作
+" 在一对标志 前/中 释放，都会操作到这对标志
+"
+" ds (  : 删除(
+" cs ([ : 将( 替换成[   
+"       特别是html中的<a>会被变成</a> 所有标签类比
+"       有方向区别的括号：[ 会将文字与括号间加上空格，] 则不会
 
 " ==== ack T ===========================
 " 高亮搜索关键词
@@ -423,7 +413,6 @@ nnoremap # <nop>
 nnoremap ? <nop>
 
 " 未解之迷 [ ]
-
 " 还可以用来组合其它快捷键 直接按出的
 nnoremap t <nop>
 nnoremap m <nop>
@@ -590,4 +579,50 @@ if (empty($TMUX))
     set termguicolors
   endif
 endif
+
+
+" ==== 教学 ================================================
+" ==== map =============================
+" n/i/c   nore    map    <silent>        src-cmd    dst-cmd
+" mode    非递归  映射   不显示提示信息
+
+" <CR>     carriage-return 回车
+" <ESC>    esc
+" <C-w>    Ctrl + w 可跟大写
+" <Space>  space
+" <Leader> mapleader
+
+" <Plug> 类型的不能加 nore 否则不起作用、与数字组合的不能加nore 否则3 G等不起作用
+" 绑定fx，就不要绑定f了，想要f出效果，会等待一段时间 以确认用户不输入第二个字母
+" 绑定l， 就不要绑定lx， l会被暂存，下次与其它按键一起出来
+" 即 两个键的和一个键的不要重合
+
+" ==== vimdiff==========================
+" 对比两个文件的差异 删除 增加 修改 三种颜色不同，删除有--- 修改部分高亮
+" 外部打开 vimdiff a.txt b.txt
+" 内部打开 vi a.txt   :vertical diffsplit b.txt
+"
+" 跳转
+" [c 跳到上一个差异处
+" ]c 跳到下一个差异处
+"
+" 差异替换
+" dp (diff put)    以当前文件为准 put   过去
+" do (diff obtain) 以对面文件为准 obtain过来
+"
+" 替换反悔
+" ,u 先跳到对方文件中
+"
+" 手动更新状态 (有时候自动更新失败)
+" :diffupdate  
+"
+" 同时操作两个文件
+" :qa  (quit all)
+" :wa
+" :wqa
+"
+" 缺省相同行数
+" 相同的上下文 默认只展示6行 可以改变其行数
+set diffopt=context:6
+
 
