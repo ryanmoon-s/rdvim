@@ -61,7 +61,8 @@ Plug 'tpope/vim-commentary'
 Plug 'mileszs/ack.vim'
 " 文件模糊搜索 ctrl + p
 Plug 'ctrlpvim/ctrlp.vim'
-
+" 显著提升ctrlp的查找速度
+Plug 'FelikZ/ctrlp-py-matcher'
 
 " 语法补全专题
 " 1、ycm 参考sh ycm_install.sh安装
@@ -233,10 +234,19 @@ let g:ackhighlight = 1
 let g:ack_qhandler = "botright copen 15"
 
 " ==== ctrlp T =========================
-" 寻找目录：c 当前文件所在目录 
-let g:ctrlp_working_path_mode = 'c'
+" 寻找目录：c 当前文件所在目录 r .git 等的最近公共祖先
+let g:ctrlp_working_path_mode = 'rc'
 " 最大查找深度
 let g:ctrlp_max_depth = 10
+" 用pymatcher作为匹配方法 显著提升匹配速度
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+
+" 启用缓存
+let g:ctrlp_use_caching = 1
+" 退出文件不删除缓存
+let g:ctrlp_clear_cache_on_exit = 0
+" 缓存文件存储目录
+let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
 
 " <C-o>  选择打开方式
 " <C-c>  退出
