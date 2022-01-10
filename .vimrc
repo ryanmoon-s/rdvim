@@ -1,5 +1,6 @@
 " 定义快捷键前缀，即<Leader> 不要用在数字上
 let mapleader=";"
+" ;             - ;; quickmenu
 " a             - jump .h .cpp
 " e             - new file
 " d u b f
@@ -123,6 +124,9 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 " 隐藏[] 1隐藏
 let g:NERDTreeGitStatusConcealBrackets = 1
 
+" lens.vim
+" let g:lens#disabled_filetypes = ['[quickmenu][-]']
+
 " ==== airline T =======================
 " 永远显示状态栏
 set laststatus=2
@@ -216,6 +220,11 @@ call g:quickmenu#append('# Git', '')
 call g:quickmenu#append('Git', 'Git', 'Git base message')
 call g:quickmenu#append('Git blame', 'Git blame', "Git blame")
 call g:quickmenu#append('Git difftool', 'Git difftool', "Git difftool")
+
+call g:quickmenu#append('# Paste', '')
+call g:quickmenu#append('Paste mode on', 'set paste', 'paste without specific format')
+call g:quickmenu#append('Paste mode off', 'set nopaste', 'unset paste')
+
 
 " ==== ack T ===========================
 " 高亮搜索关键词
