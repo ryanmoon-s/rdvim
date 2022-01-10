@@ -1,20 +1,19 @@
 " 定义快捷键前缀，即<Leader> 不要用在数字上
 let mapleader=";"
-" leader have been apply :
-" a
-" e
+" a             - jump .h .cpp
+" e             - new file
 " d u b f
 " h j k l
-" n m
-" v
-" ,
-" 1 2 3
+" n m           - nerd taglist
+" v             - :G blame
+" ,             - jump to another brackets(括号)
+" 1 2 / 3       - buffer switch / widen
+" r             - rotate window    
 " q w Q
-" s
-" r
-" [ ]
-" gf gw
-" tg gt gr
+" s             - source ~/.vimrc
+" [ ]           - vim jsession
+" gf gw         - ack file word
+" tg gt gr      - tag goto goreturn
 
 " ==== theme (主题) ================================================
 " 紫蓝 default 支持coc.nvim错误处有下划线
@@ -36,11 +35,11 @@ Plug 'vim-airline/vim-airline-themes'
 " 窗口调整
 Plug 'camspiers/lens.vim'     " 切换窗口时 自动调整大小
 Plug 'camspiers/animate.vim'  " 窗口调整时 动画效果
+" 使ctrl + d 翻页画面过渡流畅
+Plug 'psliwka/vim-smoothie'
 " vim 主题 包含airline主题
 Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
 Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
-" 使ctrl + d 翻页画面过渡流畅
-Plug 'psliwka/vim-smoothie'
 
 
 " 导航专题
