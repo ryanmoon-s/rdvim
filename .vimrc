@@ -49,6 +49,8 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 " 基于ctag 用于跳转
 Plug 'preservim/tagbar'
+" 将命令放到菜单栏
+Plug 'skywind3000/quickmenu.vim'
 
 
 " 实用工具专题
@@ -201,6 +203,19 @@ let g:cpp_experimental_template_highlight = 1
 " cs ([ : 将( 替换成[   
 "       特别是html中的<a>会被变成</a> 所有标签类比
 "       有方向区别的括号：[ 会将文字与括号间加上空格，] 则不会
+
+" ==== quickmenu T =====================
+" 开启
+noremap <silent><Leader>; :call quickmenu#toggle(0)<cr>
+let g:quickmenu_options = "LH"
+call g:quickmenu#reset()
+" 修改标题
+call g:quickmenu#header('QuickMenu')
+" 添加项 append(show text, cmd, help message, filetype filter)
+call g:quickmenu#append('# Git', '')
+call g:quickmenu#append('Git', 'Git', 'Git base message')
+call g:quickmenu#append('Git blame', 'Git blame', "Git blame")
+call g:quickmenu#append('Git difftool', 'Git difftool', "Git difftool")
 
 " ==== ack T ===========================
 " 高亮搜索关键词
@@ -488,7 +503,7 @@ func Lorem()
         call append(line("."), "Lorem ipsum dolor sit amet, consectetur adipisicing elit dolore magna aliqua.")
 endfunc
 
-" 自动插入文件头 .cpp .c .h .sh .java .go
+" 新建文件 自动插入文件头 .cpp .c .h .sh .java .go
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.Java,*.go exec ":call SetTitle()"
 func SetTitle()
     if &filetype == 'sh'
