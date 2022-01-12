@@ -487,7 +487,8 @@ nnoremap <Leader>j <C-W><C-J>
 " 窗口交换 针对sp分屏 依次向后
 nnoremap <Leader>r <ESC><C-W>r
 
-" 安装了smoothie顺滑插件，以下按键被自动顺滑
+" 安装了smoothie插件，以下按键被自动顺滑
+let g:smoothie_enabled = 0 " smoothie开关
 nmap <Leader>f <C-f>
 nmap <Leader>b <C-b>
 nmap <Leader>u <C-u> 
