@@ -17,11 +17,15 @@ let mapleader=";"
 " tg gt gr      - tag goto goreturn
 
 " ==== theme (主题) ================================================
-" 紫蓝 default 支持coc.nvim错误处有下划线
-set background=dark
-colorscheme onedark
+" 紫蓝 default
+" set background=dark
+" colorscheme onedark
 
-" 橙绿
+" 灰蓝
+set background=dark
+colorscheme nord 
+
+" 橙绿 不支持coc.nvim
 " set background=dark
 " colorscheme gruvbox
 
@@ -41,6 +45,7 @@ Plug 'psliwka/vim-smoothie'
 " vim 主题 包含airline主题
 Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
 Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
+Plug 'arcticicestudio/nord-vim', {'do': 'cp colors/nord.vim ~/.vim/colors'}
 
 
 " 导航专题
