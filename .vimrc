@@ -666,4 +666,3 @@ set diffopt=context:6
 " yi(  解释:y inner  作用:复制光标所在的 括号 内的所有内容
 " 变种: y d c  +  i  +  ( [ {
 
-let g:a = 1
