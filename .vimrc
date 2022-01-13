@@ -226,12 +226,12 @@ call g:quickmenu#header('QuickMenu')
 call g:quickmenu#append('# Git', '')
 call g:quickmenu#append('Git', 'Git', 'Git base message')
 call g:quickmenu#append('Git blame', 'Git blame', "Git blame")
-call g:quickmenu#append('Git difftool', 'Git difftool', "Git difftool")
+call g:quickmenu#append('Git diff  tool', 'Git difftool', "Git difftool")
+call g:quickmenu#append('Git merge tool', 'Git mergetool', "Git mergetool")
 
 call g:quickmenu#append('# Paste', '')
 call g:quickmenu#append('Paste mode on', 'set paste', 'paste without specific format')
 call g:quickmenu#append('Paste mode off', 'set nopaste', 'unset paste')
-
 
 " ==== ack T ===========================
 " 高亮搜索关键词
