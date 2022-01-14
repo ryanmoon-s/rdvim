@@ -1,6 +1,6 @@
 " 定义快捷键前缀，即<Leader> 不要用在数字上
 let mapleader=";"
-" ;             - ;; quickmenu
+" z             - ;; quickmenu
 " a             - jump .h .cpp
 " e             - new file
 " d u b f
@@ -17,7 +17,7 @@ let mapleader=";"
 " gf gw         - ack file word
 " tg gt gr      - tag goto goreturn
 
-" ==== theme (主题) ================================================
+" ==== theme (主题) ========================================
 " 紫蓝 default
 " set background=dark
 " colorscheme onedark
@@ -90,7 +90,7 @@ Plug 'airblade/vim-gitgutter'
 " c++ 开发专题
 " c++ 语法高亮
 Plug 'octol/vim-cpp-enhanced-highlight'
-" 对齐长条显示 for if ...
+" 对齐线 for if ...
 Plug 'Yggdroot/indentLine'
 " 在头/源文件之间快速跳转
 Plug 'vim-scripts/a.vim'
@@ -235,16 +235,19 @@ call g:quickmenu#append('# Paste', '')
 call g:quickmenu#append('paste-copy on', 'call M_paste_copy()', 'cleanly paste and copy')
 call g:quickmenu#append('paste-copy off', 'call M_no_paste_copy()', 'recovery')
 
+" 粘贴复制模式：进入paste模式 取消行号 关闭对齐线
 func M_paste_copy()
     set paste
     set nonu
     :GitGutterSignsDisable
+	:IndentLinesDisable
 endfunc
 
 func M_no_paste_copy()
     set nopaste
     set nu
     :GitGutterSignsEnable
+	:IndentLinesEnable
 endfunc
 
 " ==== ack T ===========================
