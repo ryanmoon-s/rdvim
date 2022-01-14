@@ -4,14 +4,14 @@ let mapleader=";"
 " a             - jump .h .cpp
 " e             - new file
 " d u b f
-"
 " h j k l
 " n m           - nerd taglist
+" z             - quickmenu
 " v             - :G blame
 " ,             - jump to another brackets(括号)
 " 1 2 / 3       - buffer switch / widen
 " r             - rotate window    
-" q w Q
+" q w Q         - quit write q!
 " s             - source ~/.vimrc
 " [ ]           - vim jsession
 " gf gw         - ack file word
@@ -148,6 +148,7 @@ let g:airline#extensions#tabline#left_alt_sep = '➤'
 " fugitive support
 let g:airline#extensions#fugitiveline#enabled = 0
 let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#hunks#enabled = 1
 
 " coc.nvim support
 let g:airline#extensions#coc#enabled = 0 " 后台项目pb未引入 错误太多 暂时关闭 仅有下划线提示错误
@@ -217,11 +218,12 @@ let g:cpp_experimental_template_highlight = 1
 
 " ==== quickmenu T =====================
 " 开启
-noremap <silent><Leader>; :call quickmenu#toggle(0)<cr>
+noremap <silent><Leader>z :call quickmenu#toggle(0)<cr>
 let g:quickmenu_options = "LH"
 call g:quickmenu#reset()
 " 修改标题
 call g:quickmenu#header('QuickMenu')
+
 " 添加项 append(show text, cmd, help message, filetype filter)
 call g:quickmenu#append('# Git', '')
 call g:quickmenu#append('Git', 'Git', 'Git base message')
@@ -230,8 +232,20 @@ call g:quickmenu#append('Git diff  tool', 'Git difftool', "Git difftool")
 call g:quickmenu#append('Git merge tool', 'Git mergetool', "Git mergetool")
 
 call g:quickmenu#append('# Paste', '')
-call g:quickmenu#append('Paste mode on', 'set paste', 'paste without specific format')
-call g:quickmenu#append('Paste mode off', 'set nopaste', 'unset paste')
+call g:quickmenu#append('paste-copy on', 'call M_paste_copy()', 'cleanly paste and copy')
+call g:quickmenu#append('paste-copy off', 'call M_no_paste_copy()', 'recovery')
+
+func M_paste_copy()
+    set paste
+    set nonu
+    :GitGutterSignsDisable
+endfunc
+
+func M_no_paste_copy()
+    set nopaste
+    set nu
+    :GitGutterSignsEnable
+endfunc
 
 " ==== ack T ===========================
 " 高亮搜索关键词
@@ -242,27 +256,58 @@ let g:ack_qhandler = "botright copen 15"
 " ==== ctrlp T =========================
 " 寻找目录：c 当前文件所在目录 r .git 等的最近公共祖先
 let g:ctrlp_working_path_mode = 'rc'
+" 扫描隐藏文件和目录
+let g:ctrlp_show_hidden = 0
 " 最大查找深度
 let g:ctrlp_max_depth = 10
 " 用pymatcher作为匹配方法 显著提升匹配速度
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 
-" 启用缓存
+" 启用缓存 不用每次都重新加载
 let g:ctrlp_use_caching = 1
 " 退出文件不删除缓存
 let g:ctrlp_clear_cache_on_exit = 0
 " 缓存文件存储目录
 let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
 
-" <C-o>  选择打开方式
-" <C-c>  退出
-" <C-k>  向上选择
-" <C-j>  向下选择
-" <C-y>  输入不存在的文件 会打开这个文件
-" ..<CR> 跳转到上级目录 ...<CR> 上上级 类推
+" 重新定义快捷键
+let g:ctrlp_prompt_mappings = {
+            \ 'PrtCurLeft()':         ['<c-h>', '<left>'],  
+            \ 'PrtCurRight()':        ['<c-l>', '<right>'],
+            \ 'PrtCurStart()':        ['<c-a>'],
+            \ 'PrtCurEnd()':          ['<c-e>'],
+            \ 'PrtClear()':           ['<c-u>'],
+            \ 'PrtDeleteWord()':      ['<c-w>'],
+            \
+            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
+            \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+            \ 'PrtSelectMove("t")':   ['<Home>'],
+            \ 'PrtSelectMove("b")':   ['<End>'],
+            \ 'PrtSelectMove("u")':   ['<PageUp>'],
+            \ 'PrtSelectMove("d")':   ['<PageDown>'],
+            \
+            \ 'AcceptSelection("v")': ['<c-v>'],
+            \ 'AcceptSelection("h")': ['<c-x>'], 
+            \ 'AcceptSelection("t")': ['<c-t>'],
+            \ 'AcceptSelection("e")': ['<cr>'],
+            \
+            \ 'ToggleRegex()':        ['<c-r>'],
+            \ 'PrtExpandDir()':       ['<tab>'],
+            \ 'CreateNewFile()':      ['<c-y>'],
+            \ 'MarkToOpen()':         ['<c-z>'],
+            \ 'OpenMulti()':          ['<c-o>'],
+            \
+            \ 'ToggleType(1)':        ['<c-f>'],
+            \ 'ToggleType(-1)':       ['<c-b>'],
+            \
+            \ 'PrtClearCache()':      ['<F5>'],
+            \ 'PrtExit()':            ['<esc>', '<c-c>'],
+            \ }
+" 快捷键对应解释
+" <-
+" ->
 
-" 另外两个模式 :CtrlPBuffer(buffer) :CtrlPMRU(most recently used)
-" 可自行map
+" ..<CR> 跳转到上级目录 ...<CR> 上上级 类推
 
 " ==== coc T ========================
 nmap <Leader>c <plug>(coc-fix-current)
@@ -380,8 +425,8 @@ set hlsearch
 " 增量搜索 increase search 边输入边搜索
 set incsearch
 " 搜索时大小写不敏感
-set ignorecase "设置默认大小写不敏感查找
-set smartcase  "如果有大写字母，则切换到大小写敏感查找
+set ignorecase " 设置默认大小写不敏感查找
+set smartcase  " 如果有大写字母，则切换到大小写敏感查找
 
 " ==== map T (快捷键) ======================================
 " ==== ban map T =======================
@@ -410,14 +455,11 @@ nnoremap ? <nop>
 " 未解之迷 [ ]
 " 还可以用来组合其它快捷键 直接按出的
 nnoremap t <nop>
-nnoremap m <nop>
 nnoremap q <nop>
 nnoremap " <nop>
 nnoremap \ <nop>
-" nnoremap , <nop>
 nnoremap . <nop>
-nnoremap ` <nop>
-nnoremap - <nop>
+" nnoremap - <nop>
 
 " ==== file opention T =================
 " 关闭当前窗口
@@ -494,6 +536,9 @@ nmap <Leader>f <C-f>
 nmap <Leader>b <C-b>
 nmap <Leader>u <C-u> 
 nmap <Leader>d <C-d>
+
+" 退出并删除buffer
+nmap <Leader>- :bd <CR>
 
 " ==== autocmd T ===========================================
 " c++ 花括号自动格式化，首行一个tab
@@ -592,7 +637,7 @@ endif
 " do (diff obtain) 以对面文件为准 obtain过来
 
 " 替换反悔
-" ,u 先跳到对方文件中
+" ,u 要先跳到对方文件中
 
 " 手动更新状态 (有时候自动更新失败)
 " :diffupdate  
@@ -605,6 +650,14 @@ endif
 " 缺省相同行数
 " 相同的上下文 默认只展示6行 可以改变其行数
 set diffopt=context:6
+
+" ==== mark ============================
+" ma            设置标签a
+" `a            跳转到标签a
+" :marks        查看所有标签
+" ``            回到跳转前的位置
+" delmarks a    删除标签a
+" delmarks!     删除所有标签 不包含 [A-Z] [0-9]
 
 " ==== map =============================
 " n/i/c   nore    map    <silent>        src-cmd    dst-cmd
