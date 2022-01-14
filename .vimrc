@@ -222,19 +222,32 @@ let g:cpp_experimental_template_highlight = 1
 " 选举word，输入后将 当前页面的候选词 标记上不同的字母，输入对应位置字母将光标跳转过去
 " 绑定回leader
 map <Leader> <Plug>(easymotion-prefix)
-" 绑定按键 与vim自带搜索混用 
+" 绑定按键 与vim自带搜索混用 但enter后会多一个候选的状态 然后才能n/N
 map  / <Plug>(easymotion-sn)
 map  n <Plug>(easymotion-next)
 map  N <Plug>(easymotion-prev)
 " 单字母搜索 <Leader>s
 
-" ==== terminal help T ===================
+" ==== terminal help T =================
 " 内置terminal开关
+" 打开后再次按只是隐藏 必须输入exit退出terminal 不然退出vim时会进入此terminal
 let g:terminal_key = '<c-c>'
+" 输入exit后退出窗口
+let g:terminal_close = 1
 
 " drop a.txt 将文件打开到当前打开的vim中
 
-" ==== surround T ===================
+" ==== taglist T (跳转) ================
+" taglist 查看符号列表
+nnoremap <Leader>m :TagbarToggle <CR>
+" 打ctag
+nnoremap <leader>tg :!ctags -R --fields=+aS --extra=+q<CR>
+" 跳转到光标所在关键词的定义处
+nnoremap <Leader>gt g<C-]>
+" 跳回原关键词 与 ;gt 合使用
+nnoremap <Leader>gr <C-T>
+
+" ==== surround T ======================
 " 都是nmap 都是pair操作
 " 在一对标志 前/中 释放，都会操作到这对标志
 " 左括号 ( 都会在两端加空格，右括号 ) 则不会
@@ -326,7 +339,6 @@ let g:ctrlp_prompt_mappings = {
             \ 'AcceptSelection("v")': ['<c-v>'],
             \ 'AcceptSelection("h")': ['<c-x>'], 
             \ 'AcceptSelection("t")': ['<c-t>'],
-            \ 'AcceptSelection("e")': ['<cr>'],
             \
             \ 'ToggleRegex()':        ['<c-r>'],
             \ 'PrtExpandDir()':       ['<tab>'],
@@ -341,10 +353,10 @@ let g:ctrlp_prompt_mappings = {
             \ 'PrtExit()':            ['<esc>', '<c-c>'],
             \ }
 " === 解释 ===
-" 光标移动: 左 右 开头 结尾 删除到开头 删除前一个单词
+" 光标移动: left right begin end 删除到开头 删除前一个单词
 " 选择移动: up down top bottom pageup pagedown 
-" 打开方式: vertical分屏 horizon分屏 tab ..
-" 一些开关: 正则 补齐目录 打开不存在的文件 mark 选择打开方式
+" 打开方式: vertical分屏 horizon分屏 tab(enter) 
+" 一些开关: 正则 补齐 打开不存在的文件 mark 选择打开方式
 " 模式切换: 前进 后退
 " 结束    : 清除缓存 退出
 
@@ -502,7 +514,7 @@ nnoremap \ <nop>
 nnoremap . <nop>
 " nnoremap - <nop>
 
-" ==== file opention T =================
+" ==== file opention map T =============
 " 关闭当前窗口
 nnoremap <Leader>q :q<CR>
 " 保存
@@ -542,35 +554,26 @@ inoremap <C-v> <Esc>:r ~/tmp/clipboard.txt <CR>
 nnoremap <Leader>[ :mksession! ~/.session.vim  <CR>
 nnoremap <Leader>] :source ~/.session.vim      <CR>   " 可在未进入vim时输入 vim -S session.vim
 
-" ==== taglist T (跳转) ================
-" taglist 查看符号列表
-nnoremap <Leader>m :TagbarToggle <CR>
-" 打ctag
-nnoremap <leader>tg :!ctags -R --fields=+aS --extra=+q<CR>
-" 跳转到光标所在关键词的定义处
-nnoremap <Leader>gt g<C-]>
-" 跳回原关键词 与 ;gt 合使用
-nnoremap <Leader>gr <C-T>
-
-" ==== Window T ========================
+" ==== window map T ====================
 " 窗口大小调整
-" 高
+" 更高
 " nnoremap <Leader>1 <ESC><C-W>15+
-" 大
+" 更宽
 nmap <Leader>3 <ESC><C-W>15>
 
-" 窗口移动
+" 窗口选择
 " h左 l右 k上 j下
 nnoremap <leader>h <C-W><C-H>
 nnoremap <leader>l <C-W><C-L>
 nnoremap <Leader>k <C-W><C-K>
 nnoremap <Leader>j <C-W><C-J>
 
-" 窗口交换 针对sp分屏 依次向后
+" 窗口交换 
+" 针对sp分屏 依次向后
 nnoremap <Leader>r <ESC><C-W>r
 
-" 安装了smoothie插件，以下按键被自动顺滑
-let g:smoothie_enabled = 0 " smoothie开关
+" 翻页
+let g:smoothie_enabled = 0 " smoothie翻页顺滑插件开关
 nmap <Leader>f <C-f>
 nmap <Leader>b <C-b>
 nmap <Leader>u <C-u> 
@@ -579,6 +582,7 @@ nmap <Leader>d <C-d>
 " 退出并删除buffer
 nmap <Leader>- :bd <CR>
 
+" ==== plug map T ======================
 " accelerated-jk 插件  加快jk操作 
 nmap j <Plug>(accelerated_jk_gj)
 nmap k <Plug>(accelerated_jk_gk)
@@ -667,8 +671,7 @@ if (empty($TMUX))
   endif
 endif
 
-
-" ==== teaching (教学) =======================================
+" ==== teaching T (教学) ===================================
 " ==== vimdiff =========================
 " 对比两个文件的差异 删除 增加 修改 三种颜色不同，删除有--- 修改部分高亮
 " 外部打开 vimdiff a.txt b.txt
