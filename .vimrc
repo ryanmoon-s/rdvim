@@ -1,7 +1,7 @@
 " 定义快捷键前缀，即<Leader> 不要用在数字上
 let mapleader=";"
-" z             - ;; quickmenu
-" a             - jump .h .cpp
+" z             - quickmenu
+" a             - jump between .h and .cpp
 " e             - new file
 " d u b f
 " h j k l
@@ -11,9 +11,9 @@ let mapleader=";"
 " ,             - jump to another brackets(括号)
 " 1 2 / 3       - buffer switch / widen
 " r             - rotate window    
-" q w Q         - quit write q!
-" s             - source ~/.vimrc
-" [ ]           - vim jsession
+" q w Q         - :q :w :q!
+" s             - easymotion single letter
+" [ ]           - vim-session make load
 " gf gw         - ack file word
 " tg gt gr      - tag goto goreturn
 
@@ -69,6 +69,17 @@ Plug 'mileszs/ack.vim'
 Plug 'ctrlpvim/ctrlp.vim'
 " 显著提升ctrlp的查找速度
 Plug 'FelikZ/ctrlp-py-matcher'
+" 选举式搜索 与vim自带搜索混用
+Plug 'easymotion/vim-easymotion'
+" 加快jk的移动速度
+Plug 'rhysd/accelerated-jk'
+" f 行内跳转的高亮
+Plug 'hrsh7th/vim-eft'
+" 内置terminal的优化
+Plug 'skywind3000/vim-terminal-help'
+" 光标所在单词(屏幕中所有相同单词) 增加下划线 类似于idea
+Plug 'itchyny/vim-cursorword'
+
 
 " 语法补全专题
 " 1、ycm 参考sh ycm_install.sh安装
@@ -207,14 +218,37 @@ let g:cpp_class_decl_highlight = 1
 let g:cpp_posix_standard = 1
 let g:cpp_experimental_template_highlight = 1
 
+" ==== easy motion T ===================
+" 选举word，输入后将 当前页面的候选词 标记上不同的字母，输入对应位置字母将光标跳转过去
+" 绑定回leader
+map <Leader> <Plug>(easymotion-prefix)
+" 绑定按键 与vim自带搜索混用 
+map  / <Plug>(easymotion-sn)
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
+" 单字母搜索 <Leader>s
+
+" ==== terminal help T ===================
+" 内置terminal开关
+let g:terminal_key = '<c-c>'
+
+" drop a.txt 将文件打开到当前打开的vim中
+
 " ==== surround T ===================
 " 都是nmap 都是pair操作
 " 在一对标志 前/中 释放，都会操作到这对标志
-"
-" ds (  : 删除(
-" cs ([ : 将( 替换成[   
-"       特别是html中的<a>会被变成</a> 所有标签类比
-"       有方向区别的括号：[ 会将文字与括号间加上空格，] 则不会
+" 左括号 ( 都会在两端加空格，右括号 ) 则不会
+" html中的<a>会被变成</a> 所有标签类比
+
+" 删除
+" ds (       : 删除(
+
+" 替换
+" cs ([      : 将( 替换成[   
+
+" 增加
+" yss(       : 给这行加上(
+" ysiw(      : 给当前单词加上(
 
 " ==== quickmenu T =====================
 " 开启
@@ -492,8 +526,6 @@ nnoremap <Leader>, :noh<CR>
 nnoremap e $
 " 括号匹配
 nnoremap , %
-"r source .vimrc
-nnoremap <Leader>s :source ~/.vimrc <CR>
 
 " 输入括号时 括号匹配 ESC光标会向前移一格
 inoremap ( ()<ESC>i
@@ -546,6 +578,13 @@ nmap <Leader>d <C-d>
 
 " 退出并删除buffer
 nmap <Leader>- :bd <CR>
+
+" accelerated-jk 插件  加快jk操作 
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
+
+" eft 插件 高亮f下一个能到达的字母 且尽量是单词首尾
+nmap f <Plug>(eft-f)
 
 " ==== autocmd T ===========================================
 " c++ 花括号自动格式化，首行一个tab
@@ -723,6 +762,6 @@ set diffopt=context:6
 " 以上都能可视选择 + 按键
 " 组合使用: y2w d2w
 
-" yi(  解释:y inner  作用:复制光标所在的 括号 内的所有内容
+" yi(  解释:y inner  作用: [复制] 光标所在的 括号 内的所有内容
 " 变种: y d c  +  i  +  ( [ {
 
