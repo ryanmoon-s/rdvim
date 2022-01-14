@@ -282,8 +282,8 @@ let g:ctrlp_prompt_mappings = {
             \ 'PrtClear()':           ['<c-u>'],
             \ 'PrtDeleteWord()':      ['<c-w>'],
             \
-            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
             \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
             \ 'PrtSelectMove("t")':   ['<Home>'],
             \ 'PrtSelectMove("b")':   ['<End>'],
             \ 'PrtSelectMove("u")':   ['<PageUp>'],
@@ -303,12 +303,16 @@ let g:ctrlp_prompt_mappings = {
             \ 'ToggleType(1)':        ['<c-f>'],
             \ 'ToggleType(-1)':       ['<c-b>'],
             \
-            \ 'PrtClearCache()':      ['<F5>'],
+            \ 'PrtClearCache()':      ['<c-q>'],
             \ 'PrtExit()':            ['<esc>', '<c-c>'],
             \ }
-" 快捷键对应解释
-" <-
-" ->
+" === 解释 ===
+" 光标移动: 左 右 开头 结尾 删除到开头 删除前一个单词
+" 选择移动: up down top bottom pageup pagedown 
+" 打开方式: vertical分屏 horizon分屏 tab ..
+" 一些开关: 正则 补齐目录 打开不存在的文件 mark 选择打开方式
+" 模式切换: 前进 后退
+" 结束    : 清除缓存 退出
 
 " ..<CR> 跳转到上级目录 ...<CR> 上上级 类推
 
