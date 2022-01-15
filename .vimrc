@@ -255,10 +255,10 @@ map  N <Plug>(easymotion-prev)
 let g:terminal_key = '<c-c>'
 " 输入exit后退出窗口
 let g:terminal_close = 1
-
-" drop a.txt 将文件打开到当前打开的vim中
+" 在此vim中打开文件 drop a.txt
 
 " ==== tagbar T ========================
+" 右侧tag窗口 高亮光标所在的tag
 " 打开后光标跳回文件 因为lens.vim的原因会卡 窗口还没打开完就跳转光标
 " nnoremap <silent> <Leader>m :TagbarToggle <CR>
 " 打开后光标留在tagbar 选择后自动关闭 否则只能;q关闭
