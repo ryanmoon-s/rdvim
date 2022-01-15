@@ -358,11 +358,11 @@ let g:ack_qhandler = "botright copen 15"
 
 " 默认条件下:Tabularize /, 为/,/l1
 
-" = 对齐
-noremap <Leader>= :Tabularize /= <CR>
+" = 对齐 <CR>前加空格会被匹配 影响结果
+noremap <Leader>= :Tabularize /=<CR>
 
 " // 对齐
-noremap <Leader>/ :Tabularize /\/\/ <CR>
+noremap <Leader>/ :Tabularize /\/\/<CR>
 
 " ==== ctrlp T =========================
 " 寻找目录：c 当前文件所在目录 r .git 等的最近公共祖先
@@ -545,13 +545,14 @@ set smartcase  " 如果有大写字母，则切换到大小写敏感查找
 
 " ==== map T (快捷键) ================================================
 " ==== ban map T =======================
+" 只是禁用按键触发 map里面编码触发是可以的
 " 禁用快捷键 需要shift+ 才能按出的
 nnoremap R <nop>
 nnoremap Q <nop>
 nnoremap T <nop>
 nnoremap S <nop>
 nnoremap F <nop>
-" nnoremap J <nop> 下面一行移上来
+nnoremap J <nop> " 下面一行移上来
 nnoremap Z <nop>
 nnoremap B <nop>
 nnoremap E <nop>
@@ -573,7 +574,7 @@ nnoremap q <nop>
 nnoremap " <nop>
 nnoremap \ <nop>
 nnoremap . <nop>
-" nnoremap - <nop>
+nnoremap - <nop>
 
 " ==== file opention map T =============
 " 关闭当前窗口
@@ -810,8 +811,9 @@ set diffopt=context:6
 " ' `               跳转前的位置
 
 " ==== map teach =======================
-" n/i/c   nore    map    <silent>        src-cmd    dst-cmd
+" n/i/v   nore    map    <silent>        src-cmd    dst-cmd
 " mode    非递归  映射   不显示提示信息
+" 可无    可无
 
 " <CR>      carriage-return 回车
 " <ESC>     esc
@@ -826,8 +828,7 @@ set diffopt=context:6
 " 绑定fx，就不要绑定f了，想要f出效果，会等待一段时间 以确认用户不输入第二个字母
 " 已有的按键 o d 等 要用nore不然会触发
 
-" nmap 模式的空格需要用<silent>转义
-" imap 模式的空格起作用
+" dst-cmd中的空格是生效的 <Space> 只是让人看得出这是有空格的
 
 " ==== system map teach ================
 " 一、NORMAL模式快捷键
