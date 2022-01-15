@@ -19,6 +19,8 @@ let mapleader=";"
 " tg gt gr      - tag goto goreturn
 " o p           - close other win / close other buf
 " -             - buffer delete
+" =             - align with =     记得选择限定范围 否则全文件对齐
+" /             - align with //    记得选择限定范围 否则全文件对齐
  
 " ==== Theme  ========================================================
 " 紫蓝 default
