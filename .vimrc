@@ -1,10 +1,11 @@
+" ==== Leader ==============================================
 " 定义快捷键前缀，即<Leader> 不要用在数字上
 let mapleader=";"
 " z             - quickmenu
 " a             - jump between .h and .cpp
 " e             - new file
-" d u b f
-" h j k l
+" d u b f       - turn pages
+" h j k l       - jump to another win
 " n m           - nerd taglist
 " z             - quickmenu
 " v             - :G blame
@@ -16,8 +17,9 @@ let mapleader=";"
 " [ ]           - vim-session make load
 " gf gw         - ack file word
 " tg gt gr      - tag goto goreturn
+" o p           - close other win / close other buf
 
-" ==== theme (主题) ========================================
+" ==== Theme  ==============================================
 " 紫蓝 default
 " set background=dark
 " colorscheme onedark
@@ -94,6 +96,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " << git >>
 " 状态栏branch 文件内执行git命令 方便的diff 
 Plug 'tpope/vim-fugitive'
+" git graph
+Plug 'rbong/vim-flog'
 " 状态栏变更显示 左侧变更显示
 Plug 'airblade/vim-gitgutter'
 
@@ -154,6 +158,23 @@ autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTa
 
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" 文件打开方式
+" o         open in buf / open or close dir
+" go        preview
+" v         vertical split
+" i         horizon  split
+
+" 导航
+" p         go to parent
+" P         go to root 
+
+" 文件
+" C         change tree root to the selected dir
+
+" 过滤开关
+" I         hidden files
+" B         bookmarparentks
 
 " ==== airline T =======================
 " 永远显示状态栏
@@ -293,7 +314,7 @@ noremap <silent><Leader>z :call quickmenu#toggle(0)<cr>
 let g:quickmenu_options = "LH"
 call g:quickmenu#reset()
 " 修改标题
-call g:quickmenu#header('QuickMenu')
+call g:quickmenu#header('" 直到相思了无益 未妨难过是情狂 "')
 
 " 添加项 append(show text, cmd, help message, filetype filter)
 call g:quickmenu#append('# Git', '')
@@ -302,24 +323,14 @@ call g:quickmenu#append('Git blame', 'Git blame', "Git blame")
 call g:quickmenu#append('Git diff  tool', 'Git difftool', "Git difftool")
 call g:quickmenu#append('Git merge tool', 'Git mergetool', "Git mergetool")
 
-call g:quickmenu#append('# Paste', '')
+call g:quickmenu#append('# Copy', '')
 call g:quickmenu#append('paste-copy on', 'call M_paste_copy()', 'cleanly paste and copy')
 call g:quickmenu#append('paste-copy off', 'call M_no_paste_copy()', 'recovery')
 
-" 粘贴复制模式：进入paste模式 取消行号 关闭对齐线
-func M_paste_copy()
-    set paste
-    set nonu
-    :GitGutterSignsDisable
-	:IndentLinesDisable
-endfunc
-
-func M_no_paste_copy()
-    set nopaste
-    set nu
-    :GitGutterSignsEnable
-	:IndentLinesEnable
-endfunc
+call g:quickmenu#append('# Plug', '')
+call g:quickmenu#append('Plug Install', 'PlugInstall', 'PlugInstall')
+call g:quickmenu#append('Plug Clean', 'PlugClean!', 'PlugClean!')
+call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 
 " ==== ack T ===========================
 " 高亮搜索关键词
@@ -542,24 +553,28 @@ nnoremap . <nop>
 
 " ==== file opention map T =============
 " 关闭当前窗口
-nnoremap <Leader>q :q<CR>
+nnoremap <Leader>q :q <CR>
+" 关闭当前窗口外的所有窗口
+nnoremap <leader>o :only <CR>
+" 关闭当前buf外的所有buf
+map <Leader>p :call BufCloseOthers() <CR>
 " 保存
-nnoremap <Leader>w :w<CR>
+nnoremap <Leader>w :w <CR>
 " 不保存强制退出
-nnoremap <Leader>Q :q!<CR>
+nnoremap <Leader>Q :q! <CR>
 " 快速切换头/源文件 需要a.vim插件支持
 nnoremap <Leader>a :A <CR>
 " 打开文件
-nnoremap <Leader>e :e<Space>
+nnoremap <Leader>e :e <Space>
 
 " Ack搜索 不自动打开第一个文件
 nnoremap <Leader>gw :Ack! <Space>
 " AckFile搜索 不自动打开第一个文件
-nnoremap <Leader>gf :AckFile!<Space>
+nnoremap <Leader>gf :AckFile! <Space>
 
 " ==== other map T =====================
 " 去除搜索高亮
-nnoremap <Leader>, :noh<CR>
+nnoremap <Leader>, :noh <CR>
 " 行尾
 nnoremap e $
 " 括号匹配
@@ -578,7 +593,7 @@ inoremap <C-v> <Esc>:r ~/tmp/clipboard.txt <CR>
 
 " 会话 记录当前vim所有状态
 nnoremap <Leader>[ :mksession! ~/.session.vim  <CR>
-nnoremap <Leader>] :source ~/.session.vim      <CR>   " 可在未进入vim时输入 vim -S session.vim
+nnoremap <Leader>] :source     ~/.session.vim  <CR>   " 可在未进入vim时输入 vim -S session.vim
 
 " ==== window map T ====================
 " 窗口选择
@@ -588,8 +603,7 @@ nnoremap <leader>l <C-W><C-L>
 nnoremap <Leader>k <C-W><C-K>
 nnoremap <Leader>j <C-W><C-J>
 
-" 窗口交换 
-" 针对sp分屏 依次向后
+" 窗口交换 针对分屏 依次向后
 nnoremap <Leader>r <ESC><C-W>r
 
 " 翻页
@@ -614,7 +628,19 @@ nmap f <Plug>(eft-f)
 " c++ 花括号自动格式化，首行一个tab
 autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
 
-" 注释针对不同语言的注释方法 需要vim-commentary插件支持
+" 新建文件 自动插入文件头 .cpp .c .h .sh .java .go
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.Java,*.go exec ":call SetTitle()"
+
+" 新建文件后 自动定位到文件末尾
+autocmd BufNewFile * normal G
+
+" 插入 时间
+nnoremap tm :call SetTime() <CR> 0
+
+" 插入 lorem 凑位词
+nnoremap mm :call Lorem() <CR> 0
+
+" vim-commentary插件 注释针对不同语言的注释方法
 autocmd FileType cpp set commentstring=//\ %s
 autocmd FileType vim set commentstring=\"\ %s
 autocmd FileType shell set commentstring=#\ %s
@@ -624,28 +650,18 @@ autocmd filetype python nnoremap <F1> :w <bar> exec '!python '.shellescape('%')<
 autocmd filetype cpp nnoremap <F1> :w <bar> exec '!g++ --std=c++11 -pthread '.shellescape('%').' -o ./bin/'.shellescape('%:r').' && ./bin/'.shellescape('%:r')<CR>
 
 " 进入窗口高亮 todo TODO
-augroup HiglightTODO
-    autocmd!
-    autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'TODO', -1)
-    autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'todo', -1)
-augroup END
+autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'TODO', -1)
+autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'todo', -1)
 
 " ==== function T ==========================================
-
-" 当前位置 插入 时间
-nnoremap tm :call SetTime() <CR> 0
 func SetTime()
         call append(line("."), "\# ".strftime('%c'))
 endfunc
 
-" 当前位置 插入 lorem 凑位词
-nnoremap mm :call Lorem() <CR> 0
 func Lorem()
         call append(line("."), "Lorem ipsum dolor sit amet, consectetur adipisicing elit dolore magna aliqua.")
 endfunc
 
-" 新建文件 自动插入文件头 .cpp .c .h .sh .java .go
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.Java,*.go exec ":call SetTitle()"
 func SetTitle()
     if &filetype == 'sh'
         call setline(1,"\#########################################################################")
@@ -668,8 +684,33 @@ func SetTitle()
     endif
 endfunc
 
-" 新建文件后 自动定位到文件末尾
-autocmd BufNewFile * normal G
+" 关闭当前buf外的所有buf
+func! BufCloseOthers()
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
+    for i in range(1,bufnr("$"))
+        if buflisted(i)
+            if i!=l:currentBufNum 
+                execute("bdelete ".i)
+            endif
+        endif
+    endfor
+endfunc
+
+" 粘贴复制模式：进入paste模式 取消行号 关闭对齐线
+func M_paste_copy()
+    set paste
+    set nonu
+    :GitGutterSignsDisable
+	:IndentLinesDisable
+endfunc
+
+func M_no_paste_copy()
+    set nopaste
+    set nu
+    :GitGutterSignsEnable
+	:IndentLinesEnable
+endfunc
 
 " ==== block T =============================================
 
@@ -738,10 +779,10 @@ set diffopt=context:6
 " <Space>  space
 " <Leader> mapleader
 
-" <Plug> 类型的不能加 nore 否则不起作用、与数字组合的不能加nore 否则3 G等不起作用
+" <Plug> 类型的不能加 nore 否则不起作用
+" 与数字组合的不能加nore 否则 数字+跳转 不起作用
 " 绑定fx，就不要绑定f了，想要f出效果，会等待一段时间 以确认用户不输入第二个字母
-" 绑定l， 就不要绑定lx， l会被暂存，下次与其它按键一起出来
-" 即 两个键的和一个键的不要重合
+" 已有的按键 o d 等 要用nore不然会触发
 
 " ==== system map ======================
 " 一、NORMAL模式快捷键

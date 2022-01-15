@@ -34,10 +34,15 @@ ln -s ${vimdir}/.vim .vim
 
 # install plug
 vim +PlugInstall +qall
-vim +PlugInstall +qall
 
 # finish
 
 echo ""
-echo "** 原来的文件已经备份成   ~/.vim*.xxxxxxxx **"
-echo "** 请先安装插件->进入vim输入  :PlugInstall **"
+echo "** 原来的文件已经备份成         ~/.vim*.xxxxxxxx **"
+echo "** 请先安装插件 -> 进入vim输入  :PlugInstall **"
+
+echo "         _       _ "
+echo " _ __ __| |_   _(_)_ __ ___ "
+echo "| '__/ _\` \ \ / / | '_ \` _ \ "
+echo "| | | (_| |\ V /| | | | | | | "
+echo "|_|  \__,_| \_/ |_|_| |_| |_| "
