@@ -34,7 +34,7 @@ colorscheme nord
 " ==== junegunn/vim-plug ===============
 call plug#begin('~/.vim/plugged')
 
-" 美化专题
+" << 美化 >>
 " 状态栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -49,10 +49,10 @@ Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp a
 Plug 'arcticicestudio/nord-vim', {'do': 'cp colors/nord.vim ~/.vim/colors'}
 
 
-" 导航专题
+" << 导航 >>
 " 文件窗口
 Plug 'preservim/nerdtree'
-" 文件窗口显示git 文件状态
+" git 文件状态
 Plug 'Xuyuanp/nerdtree-git-plugin'
 " 基于ctag 用于跳转
 Plug 'preservim/tagbar'
@@ -60,10 +60,10 @@ Plug 'preservim/tagbar'
 Plug 'skywind3000/quickmenu.vim'
 
 
-" 实用工具专题
+" <<  工具 >>
 " 快捷注释 行:gcc  块: gc
 Plug 'tpope/vim-commentary'
-" 快捷使用ack 前提是已经安装ack
+" 可视化ack 前提是已经安装ack
 Plug 'mileszs/ack.vim'
 " 文件模糊搜索 ctrl + p
 Plug 'ctrlpvim/ctrlp.vim'
@@ -81,7 +81,7 @@ Plug 'skywind3000/vim-terminal-help'
 Plug 'itchyny/vim-cursorword'
 
 
-" 语法补全专题
+" << 补全 >>
 " 1、ycm 参考sh ycm_install.sh安装
 " Plug 'ryanmoon-s/YouCompleteMe'
 " 帮助项目生成 .ycm_extra_conf.py，支持make cmake qmake autotools
@@ -91,14 +91,14 @@ Plug 'itchyny/vim-cursorword'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 
-" git插件 
+" << git >>
 " 状态栏branch 文件内执行git命令 方便的diff 
 Plug 'tpope/vim-fugitive'
 " 状态栏变更显示 左侧变更显示
 Plug 'airblade/vim-gitgutter'
 
 
-" c++ 开发专题
+" << cpp >>
 " c++ 语法高亮
 Plug 'octol/vim-cpp-enhanced-highlight'
 " 对齐线 for if ...
@@ -109,23 +109,28 @@ Plug 'vim-scripts/a.vim'
 Plug 'tpope/vim-surround'
 
 
-" 未来可能用上专题
+" << discard >>
 " 文本对齐
 " Plug 'godlygeek/tabular'
 
 call plug#end()
 
 " ==== NERD T ==========================
-" 为剩下的唯一窗口时自动关闭
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q |
-" 打开文件自动关闭
-let NERDTreeQuitOnOpen=1
-" 子窗口位置
-let NERDTreeWinPos="left"
-" 忽略的文件
-let NERDTreeIgnore=['\.vim$', '\~$', '\.o$', '\.d$', '\.a$', '\.out$', '\.tgz$']
-" 打开快捷键
+" 开关
 nnoremap <silent> <Leader>n :NERDTreeToggle <CR>
+" 打开文件自动关闭
+let NERDTreeQuitOnOpen = 1
+" 子窗口位置
+let NERDTreeWinPos = "left"
+" 忽略的文件 正则
+let NERDTreeIgnore = ['\.vim$', '\.git$', '\~$', '\.o$', '\.d$', '\.a$', '\.out$', '\.tgz$']
+" 显示隐藏文件
+let NERDTreeShowHidden = 1
+" 显示数字
+let NERDTreeShowLineNumbers=1
+
+" git 隐藏[]括号 1隐藏
+let g:NERDTreeGitStatusConcealBrackets = 1
 " git 文件状态
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'✹',
@@ -139,11 +144,16 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Clean'     :'✔︎',
                 \ 'Unknown'   :'?',
                 \ }
-" 隐藏[] 1隐藏
-let g:NERDTreeGitStatusConcealBrackets = 1
 
-" lens.vim
-" let g:lens#disabled_filetypes = ['[quickmenu][-]']
+" Start NERDTree when Vim is started without file arguments.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 " ==== airline T =======================
 " 永远显示状态栏
@@ -185,6 +195,17 @@ let g:airline_symbols.branch = ' '
 
 " 关闭white space 提示
 let g:airline#extensions#whitespace#enabled = 0
+
+" ==== animate lens T =====================
+" 窗口大小 手动调整 带动画
+" nnoremap <silent> <Up>    :call animate#window_delta_height(10)<CR>
+" nnoremap <silent> <Down>  :call animate#window_delta_height(-10)<CR>
+" nnoremap <silent> <Left>  :call animate#window_delta_width(-10)<CR>
+" nnoremap <silent> <Right> :call animate#window_delta_width(+10)<CR>
+nnoremap <silent> <Leader>3 :call animate#window_delta_width(+10)<CR>
+
+" 窗口大小 自动调整 
+" let g:lens#disabled = 1
 
 " ==== gitgutter T =====================
 " 更新间隔
@@ -237,14 +258,17 @@ let g:terminal_close = 1
 
 " drop a.txt 将文件打开到当前打开的vim中
 
-" ==== taglist T (跳转) ================
-" taglist 查看符号列表
-nnoremap <Leader>m :TagbarToggle <CR>
+" ==== tagbar T ========================
+" 打开后光标跳回文件 因为lens.vim的原因会卡 窗口还没打开完就跳转光标
+" nnoremap <silent> <Leader>m :TagbarToggle <CR>
+" 打开后光标留在tagbar 选择后自动关闭 否则只能;q关闭
+nnoremap <silent> <Leader>m :TagbarOpenAutoClose <CR>
+
 " 打ctag
 nnoremap <leader>tg :!ctags -R --fields=+aS --extra=+q<CR>
 " 跳转到光标所在关键词的定义处
 nnoremap <Leader>gt g<C-]>
-" 跳回原关键词 与 ;gt 合使用
+" 跳回原关键词 与 ;gt 配合使用
 nnoremap <Leader>gr <C-T>
 
 " ==== surround T ======================
@@ -367,7 +391,7 @@ nmap <Leader>c <plug>(coc-fix-current)
 
 " ==== ycm T ========================
 " 全局文件配置
-let g:ycm_global_ycm_extra_conf='~/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py'
 " 关闭补全预览
 let g:ycm_add_preview_to_completeopt = 0
 " 允许vim加载.ycm_extra_conf.py文件，不再提示
@@ -375,13 +399,13 @@ let g:ycm_confirm_extra_conf = 0
 " 补全内容不以分割子窗口形式出现，只显示补全列表
 set completeopt-=preview
 " 补全功能在注释中同样有效
-let g:ycm_complete_in_comments=1
+let g:ycm_complete_in_comments = 1
 " 开启 YCM 标签补全引擎
-let g:ycm_collect_identifiers_from_tags_files=1
+let g:ycm_collect_identifiers_from_tags_files = 1
 " 从第一个键入字符就开始罗列匹配项
-let g:ycm_min_num_of_chars_for_completion=1
+let g:ycm_min_num_of_chars_for_completion = 1
 " 语法关键字补全
-let g:ycm_seed_identifiers_with_syntax=1
+let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_semantic_triggers =  {
   \   'c' : ['->', '.','re![_a-zA-z0-9]'],
   \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
@@ -465,6 +489,8 @@ syntax on
 set shortmess=atI
 " 不显示底部的 --插入-- 等模式文字
 set noshowmode
+" 关闭折叠代码功能 大文件打开所有折叠 卡顿
+set nofoldenable
 
 " 开启文件类型侦测
 filetype on
@@ -555,12 +581,6 @@ nnoremap <Leader>[ :mksession! ~/.session.vim  <CR>
 nnoremap <Leader>] :source ~/.session.vim      <CR>   " 可在未进入vim时输入 vim -S session.vim
 
 " ==== window map T ====================
-" 窗口大小调整
-" 更高
-" nnoremap <Leader>1 <ESC><C-W>15+
-" 更宽
-nmap <Leader>3 <ESC><C-W>15>
-
 " 窗口选择
 " h左 l右 k上 j下
 nnoremap <leader>h <C-W><C-H>
