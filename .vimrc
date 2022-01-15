@@ -1,4 +1,4 @@
-" ==== Leader ==============================================
+k ==== Leader ========================================================
 " 定义快捷键前缀，即<Leader> 不要用在数字上
 let mapleader=";"
 " z             - quickmenu
@@ -18,8 +18,8 @@ let mapleader=";"
 " gf gw         - ack file word
 " tg gt gr      - tag goto goreturn
 " o p           - close other win / close other buf
-
-" ==== Theme  ==============================================
+ 
+" ==== Theme  ========================================================
 " 紫蓝 default
 " set background=dark
 " colorscheme onedark
@@ -32,7 +32,7 @@ colorscheme nord
 " set background=dark
 " colorscheme gruvbox
 
-" ==== Plug config T =======================================
+" ==== Plug config T =================================================
 " ==== junegunn/vim-plug ===============
 call plug#begin('~/.vim/plugged')
 
@@ -96,7 +96,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " << git >>
 " 状态栏branch 文件内执行git命令 方便的diff 
 Plug 'tpope/vim-fugitive'
-" git graph
+" git graph  :Flog -max-count=100
 Plug 'rbong/vim-flog'
 " 状态栏变更显示 左侧变更显示
 Plug 'airblade/vim-gitgutter'
@@ -217,7 +217,7 @@ let g:airline_symbols.branch = ' '
 " 关闭white space 提示
 let g:airline#extensions#whitespace#enabled = 0
 
-" ==== animate lens T =====================
+" ==== animate lens T ==================
 " 窗口大小 手动调整 带动画
 " nnoremap <silent> <Up>    :call animate#window_delta_height(10)<CR>
 " nnoremap <silent> <Down>  :call animate#window_delta_height(-10)<CR>
@@ -442,8 +442,7 @@ let g:ycm_enable_diagnostic_signs = 0
 let g:ycm_show_diagnostics_ui = 0
 let g:ycm_enable_diagnostic_highlighting = 0
 
-" ==== VIM Config T =========================================
-" ==== other ===========================
+" ==== VIM Config T ==================================================
 " 点亮光标所在行列
 set cursorline
 set cursorcolumn
@@ -518,7 +517,7 @@ set incsearch
 set ignorecase " 设置默认大小写不敏感查找
 set smartcase  " 如果有大写字母，则切换到大小写敏感查找
 
-" ==== map T (快捷键) ======================================
+" ==== map T (快捷键) ================================================
 " ==== ban map T =======================
 " 禁用快捷键 需要shift+ 才能按出的
 nnoremap R <nop>
@@ -624,7 +623,7 @@ nmap k <Plug>(accelerated_jk_gk)
 " eft 插件 高亮f下一个能到达的字母 且尽量是单词首尾
 nmap f <Plug>(eft-f)
 
-" ==== autocmd T ===========================================
+" ==== autocmd T =====================================================
 " c++ 花括号自动格式化，首行一个tab
 autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
 
@@ -653,7 +652,7 @@ autocmd filetype cpp nnoremap <F1> :w <bar> exec '!g++ --std=c++11 -pthread '.sh
 autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'TODO', -1)
 autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'todo', -1)
 
-" ==== function T ==========================================
+" ==== function T ====================================================
 func SetTime()
         call append(line("."), "\# ".strftime('%c'))
 endfunc
@@ -712,7 +711,7 @@ func M_no_paste_copy()
 	:IndentLinesEnable
 endfunc
 
-" ==== block T =============================================
+" ==== block T =======================================================
 
 " 重新打开文档时光标回到文档关闭前的位置
 if has("autocmd")
@@ -732,8 +731,8 @@ if (empty($TMUX))
   endif
 endif
 
-" ==== teaching T (教学) ===================================
-" ==== vimdiff =========================
+" ==== teaching T (教学) =============================================
+" ==== vimdiff teach ===================
 " 对比两个文件的差异 删除 增加 修改 三种颜色不同，删除有--- 修改部分高亮
 " 外部打开 vimdiff a.txt b.txt
 " 内部打开 vi a.txt   :vertical diffsplit b.txt
@@ -761,15 +760,29 @@ endif
 " 相同的上下文 默认只展示6行 可以改变其行数
 set diffopt=context:6
 
-" ==== mark ============================
-" ma            设置标签a
-" `a            跳转到标签a
-" :marks        查看所有标签
-" ``            回到跳转前的位置
-" delmarks a    删除标签a
-" delmarks!     删除所有标签 不包含 [A-Z] [0-9]
+" ==== mark teach ======================
+" 书签不会因退出vim而删除 
+" ' 跳到书签行首 ` 跳到书签标记的光标位置
+" 0-9 A-Z 全局 跨文件
+" a-z     本地 当前文件使用
 
-" ==== map =============================
+" ma                设置标签a
+" `a                跳转到标签a
+" :marks            查看所有标签
+" ``                回到跳转前的位置
+" delmarks a        删除标签a
+" delmarks!         删除所有标签 不包含 [A-Z] [0-9]
+" delmarks A-Z0-9   删除标签 [A-Z] [0-9]
+
+" 自动载入书签
+" "                 上次离开buf时光标的位置
+" <                 上次可视选择的 第一行
+" >                 上次可视选择的 最后一行
+" ^                 上次离开Insert模式时光标的位置
+" .                 上次改变 文本内容 的位置
+" ' `               跳转前的位置
+
+" ==== map teach =======================
 " n/i/c   nore    map    <silent>        src-cmd    dst-cmd
 " mode    非递归  映射   不显示提示信息
 
@@ -784,7 +797,7 @@ set diffopt=context:6
 " 绑定fx，就不要绑定f了，想要f出效果，会等待一段时间 以确认用户不输入第二个字母
 " 已有的按键 o d 等 要用nore不然会触发
 
-" ==== system map ======================
+" ==== system map teach ================
 " 一、NORMAL模式快捷键
  
 " 1. 施放后还在NORMAL模式
