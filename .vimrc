@@ -18,6 +18,7 @@ let mapleader=";"
 " gf gw         - ack file word
 " tg gt gr      - tag goto goreturn
 " o p           - close other win / close other buf
+" -             - buffer delete
  
 " ==== Theme  ========================================================
 " 紫蓝 default
@@ -115,7 +116,7 @@ Plug 'tpope/vim-surround'
 
 " << discard >>
 " 文本对齐
-" Plug 'godlygeek/tabular'
+Plug 'godlygeek/tabular', {'branch': 'master'}
 
 call plug#end()
 
@@ -286,27 +287,30 @@ let g:terminal_close = 1
 nnoremap <silent> <Leader>m :TagbarOpenAutoClose <CR>
 
 " 打ctag
-nnoremap <leader>tg :!ctags -R --fields=+aS --extra=+q<CR>
+nnoremap <Leader>tg :!ctags -R --fields=+aS --extra=+q<CR>
 " 跳转到光标所在关键词的定义处
 nnoremap <Leader>gt g<C-]>
 " 跳回原关键词 与 ;gt 配合使用
 nnoremap <Leader>gr <C-T>
 
 " ==== surround T ======================
-" 都是nmap 都是pair操作
-" 在一对标志 前/中 释放，都会操作到这对标志
-" 左括号 ( 都会在两端加空格，右括号 ) 则不会
+" 都是nmap 都是pair操作 不支持可视模式
+" 在一对surround 前/中 释放，都会操作到这对surround
+" 方向型surround 左括号会在两端加空格，右括号则不会
 " html中的<a>会被变成</a> 所有标签类比
 
-" 删除
+" 删除 surround
 " ds (       : 删除(
 
-" 替换
+" 替换 surround
 " cs ([      : 将( 替换成[   
 
-" 增加
+" 增加 surround
 " yss(       : 给这行加上(
 " ysiw(      : 给当前单词加上(
+
+" 删除/复制 surround 里面的内容 - vim自带功能
+" di( / yi"
 
 " ==== quickmenu T =====================
 " 开启
@@ -337,6 +341,26 @@ call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 let g:ackhighlight = 1
 " 修改快速预览窗口高度为15
 let g:ack_qhandler = "botright copen 15"
+
+" ==== tabular T =======================
+" :Tabularize /,/r0
+" / 为分隔符
+" , 为参考符
+" r 右对齐 可取: l 左 | r 右 | c 中
+" 0 为参考符左右空格个数if 1:     aaa , bbb
+
+" 对齐原则
+" 1 参考符 对齐
+" 2 其它文字左/中/右 对齐
+" 3 补充空格
+
+" 默认条件下:Tabularize /, 为/,/l1
+
+" = 对齐
+noremap <Leader>= :Tabularize /= <CR>
+
+" // 对齐
+noremap <Leader>/ :Tabularize /\/\/ <CR>
 
 " ==== ctrlp T =========================
 " 寻找目录：c 当前文件所在目录 r .git 等的最近公共祖先
@@ -525,7 +549,7 @@ nnoremap Q <nop>
 nnoremap T <nop>
 nnoremap S <nop>
 nnoremap F <nop>
-nnoremap J <nop>
+" nnoremap J <nop> 下面一行移上来
 nnoremap Z <nop>
 nnoremap B <nop>
 nnoremap E <nop>
@@ -541,8 +565,7 @@ nnoremap _ <nop>
 nnoremap # <nop>
 nnoremap ? <nop>
 
-" 未解之迷 [ ]
-" 还可以用来组合其它快捷键 直接按出的
+" 直接按出的 还可以用来组合其它快捷键 
 nnoremap t <nop>
 nnoremap q <nop>
 nnoremap " <nop>
@@ -587,12 +610,17 @@ inoremap ' ''<ESC>i
 inoremap " ""<ESC>i
 
 " 使用ctrl c,v实现vim之间的复制粘贴 非mac os实用
-vnoremap <C-c> :w! ~/tmp/clipboard.txt <CR>
+vnoremap <C-c> :w! ~/tmp/clipboard.txt     <CR>
 inoremap <C-v> <Esc>:r ~/tmp/clipboard.txt <CR>
 
 " 会话 记录当前vim所有状态
 nnoremap <Leader>[ :mksession! ~/.session.vim  <CR>
 nnoremap <Leader>] :source     ~/.session.vim  <CR>   " 可在未进入vim时输入 vim -S session.vim
+
+" 插入 时间
+nnoremap tm :call SetTime() <CR> 0
+" 插入 lorem 凑位词
+nnoremap mm :call Lorem()   <CR> 0
 
 " ==== window map T ====================
 " 窗口选择
@@ -624,20 +652,17 @@ nmap k <Plug>(accelerated_jk_gk)
 nmap f <Plug>(eft-f)
 
 " ==== autocmd T =====================================================
-" c++ 花括号自动格式化，首行一个tab
+" c++ 花括号 函数/类 格式化  autocmd优先于imap
 autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
+" 非以上类型 如 vector<int> v{1, 2}; 
+" 光标放到最上一行 连续将后面两行移上来
+autocmd FileType cpp nnoremap <Leader>J J J
 
 " 新建文件 自动插入文件头 .cpp .c .h .sh .java .go
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.Java,*.go exec ":call SetTitle()"
 
 " 新建文件后 自动定位到文件末尾
 autocmd BufNewFile * normal G
-
-" 插入 时间
-nnoremap tm :call SetTime() <CR> 0
-
-" 插入 lorem 凑位词
-nnoremap mm :call Lorem() <CR> 0
 
 " vim-commentary插件 注释针对不同语言的注释方法
 autocmd FileType cpp set commentstring=//\ %s
@@ -786,16 +811,21 @@ set diffopt=context:6
 " n/i/c   nore    map    <silent>        src-cmd    dst-cmd
 " mode    非递归  映射   不显示提示信息
 
-" <CR>     carriage-return 回车
-" <ESC>    esc
-" <C-w>    Ctrl + w 可跟大写
-" <Space>  space
-" <Leader> mapleader
+" <CR>      carriage-return 回车
+" <ESC>     esc
+" <C-w>     Ctrl + w 可跟大写
+" <Space>   space
+" <Leader>  mapleader
+" <silent>  静默 状态行不echo文字 
+" <space>   空格
 
 " <Plug> 类型的不能加 nore 否则不起作用
 " 与数字组合的不能加nore 否则 数字+跳转 不起作用
 " 绑定fx，就不要绑定f了，想要f出效果，会等待一段时间 以确认用户不输入第二个字母
 " 已有的按键 o d 等 要用nore不然会触发
+
+" nmap 模式的空格需要用<silent>转义
+" imap 模式的空格起作用
 
 " ==== system map teach ================
 " 一、NORMAL模式快捷键
@@ -819,6 +849,9 @@ set diffopt=context:6
 " zt 当前行作为屏幕顶行
 " zb 当前行作为屏幕底行
 
+" backspace 左移光标 会跨行
+" space     右移光标 会跨行
+
 " 2. 施放后进入INSERT模式
 
 " i 插入 a 光标后移插入
@@ -839,6 +872,7 @@ set diffopt=context:6
 " 以上都能可视选择 + 按键
 " 组合使用: y2w d2w
 
+" 2. surround 内容操作
 " yi(  解释:y inner  作用: [复制] 光标所在的 括号 内的所有内容
 " 变种: y d c  +  i  +  ( [ {
 
