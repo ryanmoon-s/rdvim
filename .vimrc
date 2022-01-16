@@ -48,15 +48,15 @@ let mapleader=";"
 " F1            - single file compile
 
 " ==== Theme  ========================================================
-" 紫蓝 default
-" set background=dark
-" colorscheme onedark
-
-" 灰蓝
+" 灰蓝 default
 set background=dark
 colorscheme nord 
 
-" 橙绿 不支持coc.nvim
+" 紫蓝
+" set background=dark
+" colorscheme onedark
+
+" 橙绿 - 不支持coc.nvim
 " set background=dark
 " colorscheme gruvbox
 
