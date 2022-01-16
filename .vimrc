@@ -33,7 +33,7 @@ let mapleader=";"
 " <c-p>         - ctrlp
 " <c-c>         - inner terminal
 
-" single
+" == single ==
 " ,             - brackets match
 " tm            - insert time
 " mm            - insert lorem
@@ -45,6 +45,7 @@ let mapleader=";"
 " g/            - align with //   (only in visual mode)
 " gcc           - (un)comment single line
 " gc            - (un)comment a block
+" F1            - single file compile
 
 " ==== Theme  ========================================================
 " 紫蓝 default
@@ -643,8 +644,8 @@ inoremap ' ''<ESC>i
 inoremap " ""<ESC>i
 
 " 使用ctrl c,v实现vim之间的复制粘贴 非mac os实用
-vnoremap <C-c> :w! ~/tmp/clipboard.txt     <CR>
-inoremap <C-v> <Esc>:r ~/tmp/clipboard.txt <CR>
+vnoremap <C-c> :w! ~/.vim/.clipboard.txt     <CR>
+nnoremap <C-v> <Esc>:r ~/.vim/.clipboard.txt <CR>
 
 " 会话 记录当前vim所有状态
 nnoremap <Leader>[ :mksession! ~/.session.vim  <CR>
