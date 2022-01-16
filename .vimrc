@@ -1,6 +1,6 @@
 " ==== Shortcuts =====================================================
 " ==== Leader ==========================
-" 定义快捷键前缀，即<Leader>
+" define prefix of map : <Leader>
 let mapleader=";"
 
 " 1  2  3                    -
