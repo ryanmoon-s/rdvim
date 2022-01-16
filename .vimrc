@@ -125,7 +125,7 @@ Plug 'itchyny/vim-cursorword'
 " Plug 'rdnetto/YCM-Generator'
 " ====
 " 2、coc 参考coc.sh安装依赖 一定要先阅读脚本
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 
 " << git >>
