@@ -1,5 +1,16 @@
-# vimrc 安装
+# rdvim 安装
+```bash
+cd ~
+git clone https://github.com/ryanmoon-s/rdvim.git
+cd rdvim
 sh ./install.sh
+```
+
+# rdvim 使用
+
+
+
+
 
 # 自动补全
 ## YouCompleteMe
@@ -57,8 +68,8 @@ vi ~/.vim/coc-setting.json
 现在可以补全了 但是只针对单层目录结构  项目里面那么多散落在各级目录下的头文件 它怎么知道去哪找？  
 参考：https://clangd.llvm.org/installation.html#project-setup  里面的Project setup一节  
 
-#### compile_commands.json
-需要我们先运行cmake bazel make来构建一遍项目，用特定工具跟踪编译过程 将所有用到的头文件生成一个compile_commands.json文件  
+#### 1. compile_commands.json
+需要我们先运行cmake/bazel/make来构建一遍项目，用特定工具跟踪编译过程 将所有用到的头文件生成一个compile_commands.json文件  
 就能让server知道去哪些地方找头文件  
 
 cmake 直接运行命令：
@@ -73,11 +84,11 @@ bear -- make
 ```
 
 bazel： 
-还没搞通 暂时用下面的方法 
+还没时间研究 暂时用下面的方法  
 
-#### compile_flags.txt
+#### 2. compile_flags.txt
 这是另一个不用这么麻烦的办法  
-1、:CocLocalConfig 在项目根目录生成一个局部的coc配置文件输入上方相同内容  
+1、:CocLocalConfig 在项目根目录生成一个局部的coc-setting.json配置文件输入上方相同内容  
 2、在根目录创建一个 compile_flags.txt 文件 输入要传给clangd的flag格式如下：  
 ```txt
 -std=c++11
