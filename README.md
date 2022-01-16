@@ -1,5 +1,5 @@
 # rdvim 简介
-鹅厂c++开发一枚，自用vim配置，不好用你来砍我。  
+鹅厂程序员自用vim配置，不好用你来砍我。  
 ```txt
 1. 对所有vim自带快捷键进行梳理，容易误触的不使用快捷键全部禁用。
 2. 实用的快捷键进行合理的映射，所有快捷键在.vimrc里面罗列展示，快捷查询。
@@ -18,7 +18,8 @@ sh ./install.sh
 
 # rdvim 使用
 ## 快捷键
-
+![avatar](.pic/Leader.png)
+![avatar2](.pic/Othermap.png)
 ## 插件
 
 
