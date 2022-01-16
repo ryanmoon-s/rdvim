@@ -18,8 +18,7 @@ sh ./install.sh
 
 # rdvim 使用
 ## 快捷键
-![avatar](https://github.com/ryanmoon-s/rdvim/blob/main/.screenshot/Leader.png)
-![avatar2](https://github.com/ryanmoon-s/rdvim/blob/main/.screenshot/Othermap.png)
+
 ## 插件
 
 
