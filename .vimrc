@@ -43,6 +43,8 @@ let mapleader=";"
 " tg gt gr      - ctag / go to / go return
 " g=            - align with =    (only in visual mode)
 " g/            - align with //   (only in visual mode)
+" gcc           - (un)comment single line
+" gc            - (un)comment a block
 
 " ==== Theme  ========================================================
 " 紫蓝 default
