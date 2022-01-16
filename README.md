@@ -1,5 +1,5 @@
 # rdvim 简介
-鹅厂c++后台开发一枚，自用vim配置，不好用你来砍我。  
+鹅厂c++开发一枚，自用vim配置，不好用你来砍我。  
 ```txt
 1. 对所有vim自带快捷键进行梳理，容易误触的不使用快捷键全部禁用。
 2. 实用的快捷键进行合理的映射，所有快捷键在.vimrc里面罗列展示，快捷查询。
@@ -56,7 +56,7 @@ sh ./glibc_install.sh
 再输入clangd --version 看是否异常
 ```
 
-#### 一、coc使用方法：
+#### coc 使用方法：
 ##### 注册language server
 vi ~/.vim/coc-setting.json   
 ```json
@@ -73,7 +73,7 @@ vi ~/.vim/coc-setting.json
 
 其它语言的注册参考: https://github.com/neoclide/coc.nvim/wiki/Language-servers
 
-#### 二、coc更智能的自动提示
+#### coc 更智能的自动提示
 
 现在可以补全了 但是只能在单目录结构下起作用 项目里面那么多散落在各级目录下的头文件 它怎么知道去哪找 ？  
 参考：https://clangd.llvm.org/installation.html#project-setup  里面的Project setup一节  
