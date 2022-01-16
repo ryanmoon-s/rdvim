@@ -1,0 +1,124 @@
+*vim-eft* *eft*
+
+E(nhanded) (f)/(t).
+
+This plugin provides f / t / F / T that matches only word boundaries.
+
+
+==============================================================================
+CONTENTS                                                        *eft-contents*
+
+INSTALL                                                          |eft-install|
+VARIABLE                                                        |eft-variable|
+MAPPING                                                          |eft-mapping|
+
+
+
+==============================================================================
+INSTALL                                                          *eft-install*
+
+You can use your favorite plugin manager.
+
+>
+  " dein.vim
+  call dein#add('hrsh7th/vim-eft')
+
+  " vim-plug
+  Plug 'hrsh7th/vim-eft'
+<
+
+
+==============================================================================
+VARIABLE                                                        *eft-variable*
+
+*g:eft_ignorecase*
+
+  Specify enable or disable ignorecase matching.
+
+
+*g:eft_highlight*
+
+  Specify highlight settings.
+>
+    let g:eft_highlight = {
+    \   '1': {
+    \     'highlight': 'EftChar',
+    \     'allow_space': v:true,
+    \     'allow_operator': v:true,
+    \   },
+    \   '2': {
+    \     'highlight': 'EftSubChar',
+    \     'allow_space': v:false,
+    \     'allow_operator': v:false,
+    \   },
+    \   'n': {
+    \     'highlight': 'EftSubChar',
+    \     'allow_space': v:false,
+    \     'allow_operator': v:false,
+    \   }
+    \ }
+
+    " if you want to disable highlights.
+    let g:eft_highlight = {}
+<
+
+  NOTE: You must set highlight group that has prefix `Eft`.
+
+
+*g:eft_index_function*
+
+  The index function can be customized as follows.
+>
+    let g:eft_index_function = {
+    \   'head': function('eft#index#head'),
+    \   'tail': function('eft#index#tail'),
+    \   'camel': function('eft#index#camel'),
+    \   'space': function('eft#index#space'),
+    \   'symbol': function('eft#index#symbol'),
+    \ }
+
+    or
+
+    let g:eft_index_function = {
+    \   'all': { -> v:true }
+    \ }
+<
+
+==============================================================================
+MAPPING                                                          *eft-mapping*
+
+>
+  " If you prefer ; as repeat.
+  nmap ; <Plug>(eft-repeat)
+  xmap ; <Plug>(eft-repeat)
+
+  nmap f <Plug>(eft-f)
+  xmap f <Plug>(eft-f)
+  omap f <Plug>(eft-f)
+  nmap F <Plug>(eft-F)
+  xmap F <Plug>(eft-F)
+  omap F <Plug>(eft-F)
+  
+  nmap t <Plug>(eft-t)
+  xmap t <Plug>(eft-t)
+  omap t <Plug>(eft-t)
+  nmap T <Plug>(eft-T)
+  xmap T <Plug>(eft-T)
+  omap T <Plug>(eft-T)
+
+  " If you prefer clever-f style repeat.
+  nmap f <Plug>(eft-f-repeatable)
+  xmap f <Plug>(eft-f-repeatable)
+  omap f <Plug>(eft-f-repeatable)
+  nmap F <Plug>(eft-F-repeatable)
+  xmap F <Plug>(eft-F-repeatable)
+  omap F <Plug>(eft-F-repeatable)
+  
+  nmap t <Plug>(eft-t-repeatable)
+  xmap t <Plug>(eft-t-repeatable)
+  omap t <Plug>(eft-t-repeatable)
+  nmap T <Plug>(eft-T-repeatable)
+  xmap T <Plug>(eft-T-repeatable)
+  omap T <Plug>(eft-T-repeatable)
+<
+
