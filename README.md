@@ -6,7 +6,7 @@ sh ./install.sh
 集成所有补全、跳转 等一套功能，但是能使用的语言有限  
 安装：
 ```txt
-1、打开.vimrc 里面的plug注释 :PlugInstall 安装plug
+1、打开.vimrc 取消plug注释  
 2、sh ./ycm_install.sh  
 ```
 
@@ -15,13 +15,12 @@ sh ./install.sh
 ## coc.nvim
 这是基于lsp(language server protocol)，不懂的可以百度
 ### 安装
-1、它依赖nodejs环境  
+1、它依赖nodejs环境   
 2、它需要一个language server来完成补全等功能，c++用的是clangd，其它语言自行下载对应的server  
 3、安装方式   
 ```txt
-1、打开.vimrc 里面的plug注释 :PlugInstall 安装plug
-2、linux：运行脚本 sh ./coc.sh 会同时安装nodejs、clangd
-3、mac：brew install nodejs; brew install llvm
+1、打开.vimrc 取消plug注释
+2、先浏览coc.sh脚本 再按照里面的指示进行安装
 ```
 
 ### linux可能会出现安装问题：
@@ -37,8 +36,8 @@ sh ./glibc_install.sh
 ```
 
 ### coc使用方法：
-进入vim，输入 :CocConfig  
-会进入编辑一个文件 coc-setting.json (coc的配置文件) 输入以下代码 注册language server  
+#### 注册language server
+vi ~/.vim/coc-setting.json   
 ```json
 {
 "languageserver": {
