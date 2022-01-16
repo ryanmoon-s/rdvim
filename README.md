@@ -22,7 +22,7 @@ sh ./install.sh
 ## 插件
 
 
-## 自动补全
+## 语法补全
 ### YouCompleteMe
 集成所有补全、跳转 等一套功能，但是能使用的语言有限  
 安装：
@@ -56,7 +56,7 @@ sh ./glibc_install.sh
 再输入clangd --version 看是否异常
 ```
 
-#### coc使用方法：
+#### 一、coc使用方法：
 ##### 注册language server
 vi ~/.vim/coc-setting.json   
 ```json
@@ -73,7 +73,7 @@ vi ~/.vim/coc-setting.json
 
 其它语言的注册参考: https://github.com/neoclide/coc.nvim/wiki/Language-servers
 
-#### coc更智能的自动提示
+#### 二、coc更智能的自动提示
 
 现在可以补全了 但是只能在单目录结构下起作用 项目里面那么多散落在各级目录下的头文件 它怎么知道去哪找 ？  
 参考：https://clangd.llvm.org/installation.html#project-setup  里面的Project setup一节  
