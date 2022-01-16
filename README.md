@@ -1,3 +1,12 @@
+# rdvim 简介
+鹅厂c++后台开发一枚，自用vim配置，不好用你来砍我。  
+优点:
+```txt
+1. 对所有vim自带快捷键进行梳理，容易误触的不使用快捷键全部禁用。
+2. 实用的快捷键进行合理的映射，所有快捷键在.vimrc里面罗列展示。
+2. 集成了30多个实用插件，所有插件都能在.vimrc里面找到精简教学。
+```
+
 # rdvim 安装
 ```bash
 cd ~
@@ -64,7 +73,7 @@ vi ~/.vim/coc-setting.json
 
 #### coc更智能的自动提示
 
-现在可以补全了 但是只能在单文件里起作用 项目里面那么多散落在各级目录下的头文件 它怎么知道去哪找？  
+现在可以补全了 但是只能在单目录结构下起作用 项目里面那么多散落在各级目录下的头文件 它怎么知道去哪找 ？  
 参考：https://clangd.llvm.org/installation.html#project-setup  里面的Project setup一节  
 
 ##### 1. compile_commands.json
