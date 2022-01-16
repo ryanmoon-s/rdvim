@@ -7,9 +7,8 @@ sh ./install.sh
 ```
 
 # rdvim 使用
-
-
-
+## 快捷键
+## 插件
 
 
 ## 自动补全
@@ -65,7 +64,7 @@ vi ~/.vim/coc-setting.json
 
 #### coc更智能的自动提示
 
-现在可以补全了 但是只针对单层目录结构  项目里面那么多散落在各级目录下的头文件 它怎么知道去哪找？  
+现在可以补全了 但是只能在单文件里起作用 项目里面那么多散落在各级目录下的头文件 它怎么知道去哪找？  
 参考：https://clangd.llvm.org/installation.html#project-setup  里面的Project setup一节  
 
 ##### 1. compile_commands.json
