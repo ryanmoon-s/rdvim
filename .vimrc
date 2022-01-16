@@ -352,11 +352,12 @@ noremap <silent><Leader>z :call quickmenu#toggle(0)<cr>
 let g:quickmenu_options = "LH"
 call g:quickmenu#reset()
 " 修改标题
-call g:quickmenu#header('" 直到相思了无益 未妨难过是情狂 "')
+call g:quickmenu#header('" 直道相思了无益 未妨惆怅是清狂 "')
 
 " 添加项 append(show text, cmd, help message, filetype filter)
 call g:quickmenu#append('# Git', '')
 call g:quickmenu#append('Git', 'Git', 'Git base message')
+call g:quickmenu#append('Git flog', ':Flog -max-count=100', "Git commit message with graph")
 call g:quickmenu#append('Git blame', 'Git blame', "Git blame")
 call g:quickmenu#append('Git diff  tool', 'Git difftool', "Git difftool")
 call g:quickmenu#append('Git merge tool', 'Git mergetool', "Git mergetool")
