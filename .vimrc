@@ -45,7 +45,7 @@ let mapleader=";"
 " g/            - align with //   (only in visual mode)
 " gcc           - (un)comment single line
 " gc            - (un)comment a block
-" F1            - single file compile
+" F5            - single file compile
 
 " ==== Theme  ========================================================
 " 灰蓝 default
@@ -715,8 +715,8 @@ autocmd FileType vim set commentstring=\"\ %s
 autocmd FileType shell set commentstring=#\ %s
 
 " 编译 需要当前目录下有 .bin文件夹
-autocmd filetype python nnoremap <F1> :w <bar> exec '!python '.shellescape('%')<CR> autocmd filetype c nnoremap <F1> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
-autocmd filetype cpp nnoremap <F1> :w <bar> exec '!g++ --std=c++11 -pthread '.shellescape('%').' -o ./bin/'.shellescape('%:r').' && ./bin/'.shellescape('%:r')<CR>
+autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR> autocmd filetype c nnoremap <F5> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
+autocmd filetype cpp nnoremap <F5> :w <bar> exec '!g++ --std=c++11 -pthread '.shellescape('%').' -o ./bin/'.shellescape('%:r').' && ./bin/'.shellescape('%:r')<CR>
 
 " 进入窗口高亮 todo TODO
 autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'TODO', -1)
