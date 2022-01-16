@@ -3,10 +3,10 @@
 " 定义快捷键前缀，即<Leader>
 let mapleader=";"
 
-" 1  2  3                     -
-"  q  w  e  r       u     o  p  [  ]
-"   a  s  d  f     h  j  k  l
-"    z     c  v  b  n  m  ,
+" 1  2  3                    -
+"  q  w  e  r       u    o  p  [  ]
+"   a  s  d  f    h  j  k  l
+"    z     c  v  b  n  m  ,  .  /
 
 " 1 2 / 3       - buffer switch / widen
 " -             - buffer delete
@@ -24,6 +24,7 @@ let mapleader=";"
 " v             - :G blame
 " n m           - nerd taglist
 " ,             - :noh
+" /             - produce a bak line
 
 " Q             - :q!
 " J             - J J (only in cpp)
@@ -38,8 +39,10 @@ let mapleader=";"
 " mm            - insert lorem
 " 'j            - next git hunk
 " 'k            - prev git hunk
-" gf gw         - ack file / ack word
-" tg gt gr      - tag / goto / goreturn
+" gw gf         - ack word / ack file
+" tg gt gr      - ctag / go to / go return
+" g=            - align with =    (only in visual mode)
+" g/            - align with //   (only in visual mode)
 
 " ==== Theme  ========================================================
 " 紫蓝 default
