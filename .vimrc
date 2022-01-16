@@ -1,27 +1,46 @@
-" ==== Leader ========================================================
-" 定义快捷键前缀，即<Leader> 不要用在数字上
+" ==== Shortcuts =====================================================
+" ==== Leader ==========================
+" 定义快捷键前缀，即<Leader>
 let mapleader=";"
-" z             - quickmenu
-" a             - jump between .h and .cpp
+
+" 1  2  3                     -
+"  q  w  e  r       u     o  p  [  ]
+"   a  s  d  f     h  j  k  l
+"    z     c  v  b  n  m  ,
+
+" 1 2 / 3       - buffer switch / widen
+" -             - buffer delete
+" q w           - :q :w
 " e             - new file
+" r             - rotate window    
+" o p           - close other win / close other buf
+" [ ]           - vim-session make load
+" a             - jump between .h and .cpp
+" s             - easymotion single letter
 " d u b f       - turn pages
 " h j k l       - jump to another win
-" n m           - nerd taglist
 " z             - quickmenu
+" c             - coc.nvim quickfix
 " v             - :G blame
-" ,             - jump to another brackets(括号)
-" 1 2 / 3       - buffer switch / widen
-" r             - rotate window    
-" q w Q         - :q :w :q!
-" s             - easymotion single letter
-" [ ]           - vim-session make load
-" gf gw         - ack file word
-" tg gt gr      - tag goto goreturn
-" o p           - close other win / close other buf
-" -             - buffer delete
-" =             - align with =     记得选择限定范围 否则全文件对齐
-" /             - align with //    记得选择限定范围 否则全文件对齐
+" n m           - nerd taglist
+" ,             - :noh
+
+" Q             - :q!
+" J             - J J (only in cpp)
  
+" ==== other ===========================
+" <c-p>         - ctrlp
+" <c-c>         - inner terminal
+
+" single
+" ,             - brackets match
+" tm            - insert time
+" mm            - insert lorem
+" 'j            - next git hunk
+" 'k            - prev git hunk
+" gf gw         - ack file / ack word
+" tg gt gr      - tag / goto / goreturn
+
 " ==== Theme  ========================================================
 " 紫蓝 default
 " set background=dark
@@ -185,10 +204,11 @@ set laststatus=2
 " tab
 let g:airline#extensions#tabline#enabled = 1              " 是否打开tabline
 let g:airline#extensions#tabline#buffer_idx_mode = 1      " 切换模式
-nmap <Leader>1 <Plug>AirlineSelectPrevTab                 " 前一个tab <Plug>类型的只可nmap
-nmap <Leader>2 <Plug>AirlineSelectNextTab                 " 后一个tab
 let g:airline#extensions#tabline#left_sep = ''           " 分隔符
 let g:airline#extensions#tabline#left_alt_sep = '➤'
+" tab 切换
+nmap <Leader>1 <Plug>AirlineSelectPrevTab
+nmap <Leader>2 <Plug>AirlineSelectNextTab
 
 " fugitive support
 let g:airline#extensions#fugitiveline#enabled = 0
@@ -247,6 +267,8 @@ autocmd BufEnter,VimEnter * GitGutter
 nmap 'k <Plug>(GitGutterPrevHunk)
 nmap 'j <Plug>(GitGutterNextHunk)
 
+" # -> 这行有修改 + 下面有删除
+
 " ==== fugitive T ======================
 " blame D 缩小到时间维度
 nnoremap <Leader>v :Git blame <CR>
@@ -288,12 +310,16 @@ let g:terminal_close = 1
 " 打开后光标留在tagbar 选择后自动关闭 否则只能;q关闭
 nnoremap <silent> <Leader>m :TagbarOpenAutoClose <CR>
 
+" tags搜索路径 
+" . 会替换成当前工作目录   如果用 inner terminal 去其它目录打开文件
+" . 还是替换的当前工作目录 找的是当前工作目录下的tag 所以这种情况不要 gt
+set tags=./tags,tags
 " 打ctag
-nnoremap <Leader>tg :!ctags -R --fields=+aS --extra=+q<CR>
+nnoremap tg :!ctags -R --fields=+aS --extra=+q<CR>
 " 跳转到光标所在关键词的定义处
-nnoremap <Leader>gt g<C-]>
-" 跳回原关键词 与 ;gt 配合使用
-nnoremap <Leader>gr <C-T>
+nnoremap gt g<C-]>
+" 跳回原关键词 与 gt 配合使用
+nnoremap gr <C-T>
 
 " ==== surround T ======================
 " 都是nmap 都是pair操作 不支持可视模式
@@ -358,11 +384,13 @@ let g:ack_qhandler = "botright copen 15"
 
 " 默认条件下:Tabularize /, 为/,/l1
 
-" = 对齐 <CR>前加空格会被匹配 影响结果
-noremap <Leader>= :Tabularize /=<CR>
+" 限定可视模式使用 防止误用 导致全文件对齐
+" <CR>前加空格会被匹配 影响结果
+" =  对齐    
+vnoremap g= :Tabularize /=<CR>
 
 " // 对齐
-noremap <Leader>/ :Tabularize /\/\/<CR>
+vnoremap g/ :Tabularize /\/\/<CR>
 
 " ==== ctrlp T =========================
 " 寻找目录：c 当前文件所在目录 r .git 等的最近公共祖先
@@ -509,8 +537,6 @@ set expandtab
 set selectmode=mouse,key
 " 选择模式
 set selection=exclusive
-" tags搜索路径
-set tags=./.tags;,.tags "在每个目录下如果找不到tags就到上一层目录去找
 " 编码
 set encoding=utf-8
 set fileencoding=utf-8
@@ -552,7 +578,7 @@ nnoremap Q <nop>
 nnoremap T <nop>
 nnoremap S <nop>
 nnoremap F <nop>
-nnoremap J <nop> " 下面一行移上来
+nnoremap J <nop>
 nnoremap Z <nop>
 nnoremap B <nop>
 nnoremap E <nop>
@@ -593,15 +619,14 @@ nnoremap <Leader>a :A <CR>
 nnoremap <Leader>e :e <Space>
 
 " Ack搜索 不自动打开第一个文件
-nnoremap <Leader>gw :Ack! <Space>
+" nnoremap <Leader>gw :Ack! <Space>
+nnoremap gw :Ack! <Space>
 " AckFile搜索 不自动打开第一个文件
-nnoremap <Leader>gf :AckFile! <Space>
+nnoremap gf :AckFile! <Space>
 
 " ==== other map T =====================
 " 去除搜索高亮
 nnoremap <Leader>, :noh <CR>
-" 行尾
-nnoremap e $
 " 括号匹配
 nnoremap , %
 
@@ -653,6 +678,9 @@ nmap k <Plug>(accelerated_jk_gk)
 
 " eft 插件 高亮f下一个能到达的字母 且尽量是单词首尾
 nmap f <Plug>(eft-f)
+
+" 将当前行生成一个注释的副本
+nmap <Leader>/ yy P gcc j
 
 " ==== autocmd T =====================================================
 " c++ 花括号 函数/类 格式化  autocmd优先于imap
@@ -823,10 +851,13 @@ set diffopt=context:6
 " <silent>  静默 状态行不echo文字 
 " <space>   空格
 
-" <Plug> 类型的不能加 nore 否则不起作用
-" 与数字组合的不能加nore 否则 数字+跳转 不起作用
+" 不能加 nore :
+" 1. 需要跳到其它插件执行的
+" 2. 数字相关的 - 会导致数字不起作用
+" 必须加 nore :
+" 1. 已有的按键 o d 等 - 不然会触发原有按键
+
 " 绑定fx，就不要绑定f了，想要f出效果，会等待一段时间 以确认用户不输入第二个字母
-" 已有的按键 o d 等 要用nore不然会触发
 
 " dst-cmd中的空格是生效的 <Space> 只是让人看得出这是有空格的
 
@@ -840,10 +871,13 @@ set diffopt=context:6
 " D 删除至行尾 dd 删除当前行
 " x 删除光标上的符号 X 删除光标左边的符号
 
-" w 跳到后一单词 b 前一单词 e 词尾(映射成行尾)
+" w 跳到下个词首 dw 删除到下下词首前
+" e 跳到下个单尾
+" b 跳到上个词首
 " f + x 行内查找字符x 直接跳转 只能找到光标后面的字符
 " K 跳到 当前位置的单词 的help
-" { 跳到上一段 } 下一段 一般以空行为单位
+" { 跳到上一段 一般以空行为单位
+" } 跳到下一段
 
 " M 光标跳到当前屏幕中间行
 " H 光标跳到当前屏幕顶部行
@@ -866,14 +900,18 @@ set diffopt=context:6
 
 " 二、实用快速技巧
 
-" 1. 多行操作
+" 1. 复合操作
 " y: yy 、nyy 、 ygg yG yw y0 y$
 " 很多按键 [可以] -->  左接数字 || 右接跳转 || 可视选择
-" 只能左接数字 s x w b << >>
-" 只能右接跳转 v V
-" 左数字右跳转 y d c = v
-" 以上都能可视选择 + 按键
+" 只能左接数字 s x w b << >>       //它们是单按键 按下立即产生效果
+" 左数字右跳转 y d c = v V
+" 可视+按键    以上都可以
 " 组合使用: y2w d2w
+
+" 跳转: 0 $ gg G w e b
+" 特殊 w不包含光标字母 e包含光标字母
+" dw:  {$h}ello world  ->  {$}world    不包括w
+" de:  {$h}ello world  ->  {$} world     包括o
 
 " 2. surround 内容操作
 " yi(  解释:y inner  作用: [复制] 光标所在的 括号 内的所有内容
