@@ -1,9 +1,0 @@
-eft	eft.txt	/*eft*
-eft-contents	eft.txt	/*eft-contents*
-eft-install	eft.txt	/*eft-install*
-eft-mapping	eft.txt	/*eft-mapping*
-eft-variable	eft.txt	/*eft-variable*
-g:eft_highlight	eft.txt	/*g:eft_highlight*
-g:eft_ignorecase	eft.txt	/*g:eft_ignorecase*
-g:eft_index_function	eft.txt	/*g:eft_index_function*
-vim-eft	eft.txt	/*vim-eft*

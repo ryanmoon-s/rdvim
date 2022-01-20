@@ -16,7 +16,7 @@ let mapleader=";"
 " o p           - close other win / close other buf
 " [ ]           - vim-session make load
 " a             - jump between .h and .cpp
-" s             - easymotion single letter
+" s             - 
 " d u b f       - turn pages
 " h j k l       - jump to another win
 " z             - quickmenu
@@ -100,20 +100,17 @@ Plug 'skywind3000/quickmenu.vim'
 Plug 'tpope/vim-commentary'
 " 可视化ack 前提是已经安装ack
 Plug 'mileszs/ack.vim'
-" 文件模糊搜索 ctrl + p
-Plug 'ctrlpvim/ctrlp.vim'
-" 显著提升ctrlp的查找速度
-Plug 'FelikZ/ctrlp-py-matcher'
-" 选举式搜索 与vim自带搜索混用
-Plug 'easymotion/vim-easymotion'
 " 加快jk的移动速度
 Plug 'rhysd/accelerated-jk'
 " f 行内跳转的高亮
 Plug 'hrsh7th/vim-eft'
-" 内置terminal的优化
-Plug 'skywind3000/vim-terminal-help'
+" 内置terminal
+Plug 'voldikss/vim-floaterm'
 " 光标所在单词(屏幕中所有相同单词) 增加下划线 类似于idea
 Plug 'itchyny/vim-cursorword'
+
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 
 " << 补全 >> 
@@ -125,7 +122,7 @@ Plug 'itchyny/vim-cursorword'
 " Plug 'rdnetto/YCM-Generator'
 " ====
 " 2、coc 参考coc.sh安装依赖 一定要先阅读脚本
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 
 " << git >>
@@ -185,8 +182,8 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ }
 
 " Start NERDTree when Vim is started without file arguments.
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
 " Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
@@ -298,23 +295,35 @@ let g:cpp_class_decl_highlight = 1
 let g:cpp_posix_standard = 1
 let g:cpp_experimental_template_highlight = 1
 
-" ==== easy motion T ===================
-" 选举word，输入后将 当前页面的候选词 标记上不同的字母，输入对应位置字母将光标跳转过去
-" 绑定回leader
-map <Leader> <Plug>(easymotion-prefix)
-" 绑定按键 与vim自带搜索混用 但enter后会多一个候选的状态 然后才能n/N
-map  / <Plug>(easymotion-sn)
-map  n <Plug>(easymotion-next)
-map  N <Plug>(easymotion-prev)
-" 单字母搜索 <Leader>s
+" ==== floaterm T ======================
+" 总是自动关闭
+let g:floaterm_autoclose = 2
+" 内置term打开文件的方式: buffer中
+let g:floaterm_opener = 'edit'
+" 窗口类型: 浮动
+let g:floaterm_wintype = 'float'
+" 窗口宽度
+let g:floaterm_width = 0.7
+" 窗口高度
+let g:floaterm_height = 0.6
+" 标题
+let g:floaterm_title = '[ keep yourself ]'
 
-" ==== terminal help T =================
-" 内置terminal开关
-" 打开后再次按只是隐藏 必须输入exit退出terminal 不然退出vim时会进入此terminal
-let g:terminal_key = '<c-c>'
-" 输入exit后退出窗口
-let g:terminal_close = 1
-" 在此vim中打开文件 drop a.txt
+" 打开一次性窗口
+nnoremap <c-c> :FloatermNew --disposable <CR>
+
+" ==== fzf T ===========================
+" :Files        Files 
+" :BLines       lines in current buffer
+" :History      history open files 
+" :Commits      commit log
+" :BCommits     commit, show diff
+
+" :Files dir
+map <c-p> :Files ~/QQMail/wework<CR>
+
+" <c-x>         horizon分屏
+" <c-v>         vertical分屏
 
 " ==== tagbar T ========================
 " 右侧tag窗口 高亮光标所在的tag
@@ -405,65 +414,6 @@ vnoremap g= :Tabularize /=<CR>
 
 " // 对齐
 vnoremap g/ :Tabularize /\/\/<CR>
-
-" ==== ctrlp T =========================
-" 寻找目录：c 当前文件所在目录 r .git 等的最近公共祖先
-let g:ctrlp_working_path_mode = 'rc'
-" 扫描隐藏文件和目录
-let g:ctrlp_show_hidden = 0
-" 最大查找深度
-let g:ctrlp_max_depth = 10
-" 用pymatcher作为匹配方法 显著提升匹配速度
-let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-
-" 启用缓存 不用每次都重新加载
-let g:ctrlp_use_caching = 1
-" 退出文件不删除缓存
-let g:ctrlp_clear_cache_on_exit = 0
-" 缓存文件存储目录
-let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-
-" 重新定义快捷键
-let g:ctrlp_prompt_mappings = {
-            \ 'PrtCurLeft()':         ['<c-h>', '<left>'],  
-            \ 'PrtCurRight()':        ['<c-l>', '<right>'],
-            \ 'PrtCurStart()':        ['<c-a>'],
-            \ 'PrtCurEnd()':          ['<c-e>'],
-            \ 'PrtClear()':           ['<c-u>'],
-            \ 'PrtDeleteWord()':      ['<c-w>'],
-            \
-            \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
-            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
-            \ 'PrtSelectMove("t")':   ['<Home>'],
-            \ 'PrtSelectMove("b")':   ['<End>'],
-            \ 'PrtSelectMove("u")':   ['<PageUp>'],
-            \ 'PrtSelectMove("d")':   ['<PageDown>'],
-            \
-            \ 'AcceptSelection("v")': ['<c-v>'],
-            \ 'AcceptSelection("h")': ['<c-x>'], 
-            \ 'AcceptSelection("t")': ['<c-t>'],
-            \
-            \ 'ToggleRegex()':        ['<c-r>'],
-            \ 'PrtExpandDir()':       ['<tab>'],
-            \ 'CreateNewFile()':      ['<c-y>'],
-            \ 'MarkToOpen()':         ['<c-z>'],
-            \ 'OpenMulti()':          ['<c-o>'],
-            \
-            \ 'ToggleType(1)':        ['<c-f>'],
-            \ 'ToggleType(-1)':       ['<c-b>'],
-            \
-            \ 'PrtClearCache()':      ['<c-q>'],
-            \ 'PrtExit()':            ['<esc>', '<c-c>'],
-            \ }
-" === 解释 ===
-" 光标移动: left right begin end 删除到开头 删除前一个单词
-" 选择移动: up down top bottom pageup pagedown 
-" 打开方式: vertical分屏 horizon分屏 tab(enter) 
-" 一些开关: 正则 补齐 打开不存在的文件 mark 选择打开方式
-" 模式切换: 前进 后退
-" 结束    : 清除缓存 退出
-
-" ..<CR> 跳转到上级目录 ...<CR> 上上级 类推
 
 " ==== coc T ========================
 nmap <Leader>c <plug>(coc-fix-current)
@@ -587,34 +537,34 @@ set smartcase  " 如果有大写字母，则切换到大小写敏感查找
 " ==== ban map T =======================
 " 只是禁用按键触发 map里面编码触发是可以的
 " 禁用快捷键 需要shift+ 才能按出的
-nnoremap R <nop>
-nnoremap Q <nop>
-nnoremap T <nop>
-nnoremap S <nop>
-nnoremap F <nop>
-nnoremap J <nop>
-nnoremap Z <nop>
-nnoremap B <nop>
-nnoremap E <nop>
-nnoremap W <nop>
-nnoremap ~ <nop>
-nnoremap ! <nop>
-nnoremap @ <nop>
-nnoremap ^ <nop>
-nnoremap & <nop>
-nnoremap ( <nop>
-nnoremap ) <nop>
-nnoremap _ <nop>
-nnoremap # <nop>
-nnoremap ? <nop>
+noremap R <nop>
+noremap Q <nop>
+noremap T <nop>
+noremap S <nop>
+noremap F <nop>
+noremap J <nop>
+noremap Z <nop>
+noremap B <nop>
+noremap E <nop>
+noremap W <nop>
+noremap ~ <nop>
+noremap ! <nop>
+noremap @ <nop>
+noremap ^ <nop>
+noremap & <nop>
+noremap ( <nop>
+noremap ) <nop>
+noremap _ <nop>
+noremap # <nop>
+noremap ? <nop>
 
 " 直接按出的 还可以用来组合其它快捷键 
-nnoremap t <nop>
-nnoremap q <nop>
-nnoremap " <nop>
-nnoremap \ <nop>
-nnoremap . <nop>
-nnoremap - <nop>
+noremap t <nop>
+noremap q <nop>
+noremap " <nop>
+noremap \ <nop>
+noremap . <nop>
+noremap - <nop>
 
 " ==== file opention map T =============
 " 关闭当前窗口
