@@ -308,7 +308,7 @@ let g:floaterm_width = 0.7
 " 窗口高度
 let g:floaterm_height = 0.6
 " 标题
-let g:floaterm_title = '[ keep yourself ]'
+let g:floaterm_title = '[ What drive me crazy ? ]'
 
 " 打开一次性窗口
 nnoremap <c-c> :FloatermNew --disposable <CR>
