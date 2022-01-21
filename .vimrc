@@ -14,7 +14,8 @@ let mapleader=";"
 " e             - new file
 " r             - rotate window    
 " o p           - close other win / close other buf
-" [ ]           - vim-session make load
+" [1 / [2 / [3  - make vim session
+" ]1 / ]2 / ]3  - load vim session
 " a             - jump between .h and .cpp
 " s             - 
 " d u b f       - turn pages
@@ -34,6 +35,7 @@ let mapleader=";"
 " <c-c>         - inner terminal
 
 " == single ==
+" E             - $
 " ,             - brackets match
 " tm            - insert time
 " mm            - insert lorem
@@ -386,7 +388,6 @@ call g:quickmenu#append('Plug Install', 'PlugInstall', 'PlugInstall')
 call g:quickmenu#append('Plug Clean', 'PlugClean!', 'PlugClean!')
 call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 
-call g:quickmenu#append('# Plug', '')
 " ==== ack T ===========================
 " 高亮搜索关键词
 let g:ackhighlight = 1
@@ -416,6 +417,7 @@ vnoremap g= :Tabularize /=<CR>
 vnoremap g/ :Tabularize /\/\/<CR>
 
 " ==== coc T ========================
+" quick fix
 nmap <Leader>c <plug>(coc-fix-current)
 
 " ==== ycm T ========================
@@ -606,8 +608,18 @@ vnoremap <C-c> :w! ~/.vim/.clipboard.txt     <CR>
 nnoremap <C-v> <Esc>:r ~/.vim/.clipboard.txt <CR>
 
 " 会话 记录当前vim所有状态
-nnoremap <Leader>[ :mksession! ~/.session.vim  <CR>
-nnoremap <Leader>] :source     ~/.session.vim  <CR>   " 可在未进入vim时输入 vim -S session.vim
+" vi -> ;]1
+nmap <Leader>[1 :mksession! ~/.session1.vim  <CR>
+nmap <Leader>]1 :source     ~/.session1.vim  <CR>   
+
+nmap <Leader>[2 :mksession! ~/.session2.vim  <CR>
+nmap <Leader>]2 :source     ~/.session2.vim  <CR>   
+
+nmap <Leader>[3 :mksession! ~/.session3.vim  <CR>
+nmap <Leader>]3 :source     ~/.session3.vim  <CR>   
+
+" end of line
+noremap E $
 
 " 插入 时间
 nnoremap tm :call SetTime() <CR> 0
