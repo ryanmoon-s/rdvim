@@ -30,7 +30,7 @@ let mapleader=";"
 " J             - J J (only in cpp)
  
 " ==== other ===========================
-" <c-p>         - ctrlp
+" <c-p>         - fzf files
 " <c-c>         - inner terminal
 
 " == single ==
@@ -108,7 +108,7 @@ Plug 'hrsh7th/vim-eft'
 Plug 'voldikss/vim-floaterm'
 " 光标所在单词(屏幕中所有相同单词) 增加下划线 类似于idea
 Plug 'itchyny/vim-cursorword'
-
+" 模糊搜索
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
@@ -206,7 +206,6 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 
 " 过滤开关
 " I         hidden files
-" B         bookmarparentks
 
 " ==== airline T =======================
 " 永远显示状态栏
@@ -387,6 +386,7 @@ call g:quickmenu#append('Plug Install', 'PlugInstall', 'PlugInstall')
 call g:quickmenu#append('Plug Clean', 'PlugClean!', 'PlugClean!')
 call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 
+call g:quickmenu#append('# Plug', '')
 " ==== ack T ===========================
 " 高亮搜索关键词
 let g:ackhighlight = 1
@@ -545,7 +545,7 @@ noremap F <nop>
 noremap J <nop>
 noremap Z <nop>
 noremap B <nop>
-noremap E <nop>
+" noremap E <nop>
 noremap W <nop>
 noremap ~ <nop>
 noremap ! <nop>
