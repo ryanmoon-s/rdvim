@@ -313,6 +313,10 @@ let g:floaterm_title = '[ keep yourself ]'
 " 打开一次性窗口
 nnoremap <c-c> :FloatermNew --disposable <CR>
 
+" 终端中打开文件:   floaterm a.txt
+" 放在.zshrc中:     alias f=floaterm
+" 然后:             f s.txt
+
 " ==== fzf T ===========================
 " :Files        Files 
 " :BLines       lines in current buffer
@@ -662,7 +666,7 @@ nmap <Leader>/ yy P gcc j
 " c++ 花括号 函数/类 格式化  autocmd优先于imap
 autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
 " 非以上类型 如 vector<int> v{1, 2}; 
-" 光标放到最上一行 连续将后面两行移上来
+" 光标放到最上一行 - 连续将后面两行移上来
 autocmd FileType cpp nnoremap <Leader>J J J
 
 " 新建文件 自动插入文件头 .cpp .c .h .sh .java .go
