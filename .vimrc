@@ -80,6 +80,8 @@ Plug 'camspiers/lens.vim'     " 切换窗口时 自动调整大小
 Plug 'camspiers/animate.vim'  " 窗口调整时 动画效果
 " 使ctrl + d 翻页画面过渡流畅
 Plug 'psliwka/vim-smoothie'
+" vim 不带文件名参数时 展示 启动界面
+Plug 'mhinz/vim-startify'
 " vim 主题 包含airline主题
 Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
 Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
@@ -97,34 +99,29 @@ Plug 'preservim/tagbar'
 Plug 'skywind3000/quickmenu.vim'
 
 
-" <<  工具 >>
-" 快捷注释 行:gcc  块: gc
-Plug 'tpope/vim-commentary'
+" << 搜索 >>
 " 可视化ack 前提是已经安装ack
 Plug 'mileszs/ack.vim'
+" 内置terminal
+Plug 'voldikss/vim-floaterm'
+" 模糊搜索
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+" 光标所在单词(屏幕中所有相同单词) 增加下划线 类似于idea
+Plug 'itchyny/vim-cursorword'
 " 加快jk的移动速度
 Plug 'rhysd/accelerated-jk'
 " f 行内跳转的高亮
 Plug 'hrsh7th/vim-eft'
-" 内置terminal
-Plug 'voldikss/vim-floaterm'
-" 光标所在单词(屏幕中所有相同单词) 增加下划线 类似于idea
-Plug 'itchyny/vim-cursorword'
-" 模糊搜索
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 
 
-" << 补全 >> 
-" 选择其中一个打开注释即可
-" ====
-" 1、ycm 参考sh ycm_install.sh安装 一定要先阅读脚本
-" Plug 'ryanmoon-s/YouCompleteMe'
-" 帮助项目生成 .ycm_extra_conf.py，支持make cmake qmake autotools
-" Plug 'rdnetto/YCM-Generator'
-" ====
-" 2、coc 参考coc.sh安装依赖 一定要先阅读脚本
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" << 处理 >>
+" 括号处理
+Plug 'tpope/vim-surround'
+" 文本对齐
+Plug 'godlygeek/tabular', {'branch': 'master'}
+" 快捷注释 行:gcc  块: gc
+Plug 'tpope/vim-commentary'
 
 
 " << git >>
@@ -143,13 +140,19 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'Yggdroot/indentLine'
 " 在头/源文件之间快速跳转
 Plug 'vim-scripts/a.vim'
-" 括号处理
-Plug 'tpope/vim-surround'
 
 
-" << discard >>
-" 文本对齐
-Plug 'godlygeek/tabular', {'branch': 'master'}
+" << 补全 >> 
+" 选择其中一个打开注释即可
+" ====
+" 1、ycm 参考sh ycm_install.sh安装 一定要先阅读脚本
+" Plug 'ryanmoon-s/YouCompleteMe'
+" 帮助项目生成 .ycm_extra_conf.py，支持make cmake qmake autotools
+" Plug 'rdnetto/YCM-Generator'
+" ====
+" 2、coc 参考coc.sh安装依赖 一定要先阅读脚本
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 
 call plug#end()
 
@@ -329,6 +332,8 @@ map <c-p> :Files ~/QQMail/wework<CR>
 
 " <c-x>         horizon分屏
 " <c-v>         vertical分屏
+" <c-j> <c-n>   down
+" <c-k> <c-p>   up
 
 " ==== tagbar T ========================
 " 右侧tag窗口 高亮光标所在的tag
@@ -423,6 +428,9 @@ vnoremap g/ :Tabularize /\/\/<CR>
 " ==== coc T ========================
 " quick fix
 nmap <Leader>c <plug>(coc-fix-current)
+
+" <c-n>         next key
+" <c-p>         prev key
 
 " ==== ycm T ========================
 " 全局文件配置
