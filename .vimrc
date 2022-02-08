@@ -284,7 +284,7 @@ nmap 'j <Plug>(GitGutterNextHunk)
 " # -> 这行有修改 + 下面有删除
 
 " ==== fugitive T ======================
-" blame D 缩小到时间维度
+" blame - D 缩小到时间维度
 nnoremap <Leader>v :Git blame <CR>
 " :G            等于:Git 接git命令 不接则显示一些基本信息: Untracked Unstaged 
 " :G!           背后执行
