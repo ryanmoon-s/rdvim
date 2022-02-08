@@ -7,10 +7,13 @@
 #!/bin/bash
 
 # 此脚本安装nodejs clangd
-# mac    不用运行脚本   brew安装即可：brew install nodejs; brew install llvm
-# linux  如果商店能安装 也不用运行脚本 
+# mac    
+#   不用运行脚本   brew安装即可：brew install nodejs; brew install llvm
+# linux  
+#   如果商店能安装 就不用运行脚本 
+#   但是商店源可能太旧，会报错，也需要运行脚本
 
-# 若为 linux 且商店没有上面两种 
+# 运行脚本
 # 运行 sh / zsh coc.sh
 
 # 解释
@@ -40,6 +43,12 @@ fi
 
 mv $file nodejs
 
+dir=`pwd`
+echo -e "\n\nexport PATH=\$PATH:$dir/nodejs/bin:$dir/clangd/bin\n\n"
+echo "如果你用的是bash，请把上面这句话复制到 ~/.bashrc"
+echo "然后运行source ~/.bashrc"
+echo "其它shell脚本同理"
+
 # clangd
 ver=20211205
 clangd="clangd-linux-snapshot_"$ver".zip"
@@ -58,8 +67,8 @@ rm $clangd
 
 #source
 dir=`pwd`
-
 echo -e "\n\nexport PATH=\$PATH:$dir/nodejs/bin:$dir/clangd/bin\n\n"
 echo "如果你用的是bash，请把上面这句话复制到 ~/.bashrc"
 echo "然后运行source ~/.bashrc"
 echo "其它shell脚本同理"
+
