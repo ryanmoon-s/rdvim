@@ -24,6 +24,5 @@ cd build
 make -j 8
 sudo make install
 
-rm -rf glibc-2.18.tar.gz
-rm -rf glibc-2.18/
+rm -rf glibc-2.18*
 
