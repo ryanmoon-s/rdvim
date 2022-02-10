@@ -25,6 +25,7 @@ ver=20211205
 clangd="clangd-linux-snapshot_"$ver".zip"
 unzipclangd="clangd_snapshot_"$ver
 clangdurl="https://github.com/clangd/clangd/releases/download/snapshot_"$ver"/"$clangd
+# 下载url   https://github.com/clangd/clangd/releases/download/snapshot_20211205/clangd-linux-snapshot_20211205.zip
 
 # wget $clangdurl
 unzip $clangd
