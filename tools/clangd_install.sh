@@ -14,7 +14,7 @@
 #   不用运行脚本   brew安装即可：brew install llvm
 # linux  
 #   运行 sh clangd_install.sh
-#   但是下载较慢 可从其它渠道下载 注释掉 wget $clangdurl
+#   但是下载较慢 可从其它渠道下载 并注释掉 wget $clangdurl
 
 coc=coc_dependence
 if [[ ! -d $coc ]];then
@@ -29,12 +29,10 @@ clangd="clangd-linux-snapshot_"$ver".zip"
 unzipclangd="clangd_snapshot_"$ver
 clangdurl="https://github.com/clangd/clangd/releases/download/snapshot_"$ver"/"$clangd
 
-# wget $clangdurl
-unzip $clangd
+# 自行下载时 需注释掉下面这一行
+wget $clangdurl
 
-if [[ -d clangd ]];then
-    rm -rf clangd
-fi
+unzip $clangd
 
 mv $unzipclangd clangd
 rm $clangd
