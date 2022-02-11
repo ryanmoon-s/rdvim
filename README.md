@@ -18,7 +18,8 @@ sh ./install.sh
 
 # rdvim 使用
 ## 快捷键
-![Image](https://github.com/ryanmoon-s/rdvim/blob/main/.screenshot/Leader.png =100x100)  
+![Image](https://github.com/ryanmoon-s/rdvim/blob/main/.screenshot/Leader.png =100x100) 
+ <img src="https://github.com/ryanmoon-s/rdvim/blob/main/.screenshot/Leader.png" width = "300" height = "200" alt="图片名称" align=center />  
 ![Image](https://github.com/ryanmoon-s/rdvim/blob/main/.screenshot/Othermap.png =100x100)  
 
 ## 插件
