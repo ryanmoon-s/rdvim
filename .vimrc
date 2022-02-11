@@ -14,9 +14,10 @@ let mapleader=";"
 " e             - new file
 " r             - rotate window    
 " o p           - close other win / close other buf
-" [ ]           - vim-session make load
+" [1 / [2 / [3  - make vim session
+" ]1 / ]2 / ]3  - load vim session
 " a             - jump between .h and .cpp
-" s             - easymotion single letter
+" s             - 
 " d u b f       - turn pages
 " h j k l       - jump to another win
 " z             - quickmenu
@@ -30,10 +31,11 @@ let mapleader=";"
 " J             - J J (only in cpp)
  
 " ==== other ===========================
-" <c-p>         - ctrlp
+" <c-p>         - fzf files
 " <c-c>         - inner terminal
 
 " == single ==
+" E             - $
 " ,             - brackets match
 " tm            - insert time
 " mm            - insert lorem
@@ -78,6 +80,8 @@ Plug 'camspiers/lens.vim'     " 切换窗口时 自动调整大小
 Plug 'camspiers/animate.vim'  " 窗口调整时 动画效果
 " 使ctrl + d 翻页画面过渡流畅
 Plug 'psliwka/vim-smoothie'
+" vim 不带文件名参数时 展示 启动界面
+Plug 'mhinz/vim-startify'
 " vim 主题 包含airline主题
 Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
 Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
@@ -95,37 +99,29 @@ Plug 'preservim/tagbar'
 Plug 'skywind3000/quickmenu.vim'
 
 
-" <<  工具 >>
-" 快捷注释 行:gcc  块: gc
-Plug 'tpope/vim-commentary'
+" << 搜索 >>
 " 可视化ack 前提是已经安装ack
 Plug 'mileszs/ack.vim'
-" 文件模糊搜索 ctrl + p
-Plug 'ctrlpvim/ctrlp.vim'
-" 显著提升ctrlp的查找速度
-Plug 'FelikZ/ctrlp-py-matcher'
-" 选举式搜索 与vim自带搜索混用
-Plug 'easymotion/vim-easymotion'
+" 内置terminal
+Plug 'voldikss/vim-floaterm'
+" 模糊搜索
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+" 光标所在单词(屏幕中所有相同单词) 增加下划线 类似于idea
+Plug 'itchyny/vim-cursorword'
 " 加快jk的移动速度
 Plug 'rhysd/accelerated-jk'
 " f 行内跳转的高亮
 Plug 'hrsh7th/vim-eft'
-" 内置terminal的优化
-Plug 'skywind3000/vim-terminal-help'
-" 光标所在单词(屏幕中所有相同单词) 增加下划线 类似于idea
-Plug 'itchyny/vim-cursorword'
 
 
-" << 补全 >> 
-" 选择其中一个打开注释即可
-" ====
-" 1、ycm 参考sh ycm_install.sh安装 一定要先阅读脚本
-" Plug 'ryanmoon-s/YouCompleteMe'
-" 帮助项目生成 .ycm_extra_conf.py，支持make cmake qmake autotools
-" Plug 'rdnetto/YCM-Generator'
-" ====
-" 2、coc 参考coc.sh安装依赖 一定要先阅读脚本
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" << 处理 >>
+" 括号处理
+Plug 'tpope/vim-surround'
+" 文本对齐
+Plug 'godlygeek/tabular', {'branch': 'master'}
+" 快捷注释 行:gcc  块: gc
+Plug 'tpope/vim-commentary'
 
 
 " << git >>
@@ -144,13 +140,19 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'Yggdroot/indentLine'
 " 在头/源文件之间快速跳转
 Plug 'vim-scripts/a.vim'
-" 括号处理
-Plug 'tpope/vim-surround'
 
 
-" << discard >>
-" 文本对齐
-Plug 'godlygeek/tabular', {'branch': 'master'}
+" << 补全 >> 
+" 选择其中一个打开注释即可
+" ====
+" 1、ycm 参考sh ycm_install.sh安装 一定要先阅读脚本
+" Plug 'ryanmoon-s/YouCompleteMe'
+" 帮助项目生成 .ycm_extra_conf.py，支持make cmake qmake autotools
+" Plug 'rdnetto/YCM-Generator'
+" ====
+" 2、coc 参考coc.sh安装依赖 一定要先阅读脚本
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 
 call plug#end()
 
@@ -185,8 +187,8 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ }
 
 " Start NERDTree when Vim is started without file arguments.
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
 " Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
@@ -209,7 +211,6 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 
 " 过滤开关
 " I         hidden files
-" B         bookmarparentks
 
 " ==== airline T =======================
 " 永远显示状态栏
@@ -283,7 +284,7 @@ nmap 'j <Plug>(GitGutterNextHunk)
 " # -> 这行有修改 + 下面有删除
 
 " ==== fugitive T ======================
-" blame D 缩小到时间维度
+" blame - D 缩小到时间维度
 nnoremap <Leader>v :Git blame <CR>
 " :G            等于:Git 接git命令 不接则显示一些基本信息: Untracked Unstaged 
 " :G!           背后执行
@@ -298,23 +299,41 @@ let g:cpp_class_decl_highlight = 1
 let g:cpp_posix_standard = 1
 let g:cpp_experimental_template_highlight = 1
 
-" ==== easy motion T ===================
-" 选举word，输入后将 当前页面的候选词 标记上不同的字母，输入对应位置字母将光标跳转过去
-" 绑定回leader
-map <Leader> <Plug>(easymotion-prefix)
-" 绑定按键 与vim自带搜索混用 但enter后会多一个候选的状态 然后才能n/N
-map  / <Plug>(easymotion-sn)
-map  n <Plug>(easymotion-next)
-map  N <Plug>(easymotion-prev)
-" 单字母搜索 <Leader>s
+" ==== floaterm T ======================
+" 总是自动关闭
+let g:floaterm_autoclose = 2
+" 内置term打开文件的方式: buffer中
+let g:floaterm_opener = 'edit'
+" 窗口类型: 浮动
+let g:floaterm_wintype = 'float'
+" 窗口宽度
+let g:floaterm_width = 0.7
+" 窗口高度
+let g:floaterm_height = 0.6
+" 标题
+let g:floaterm_title = '[ What drive me crazy ? ]'
 
-" ==== terminal help T =================
-" 内置terminal开关
-" 打开后再次按只是隐藏 必须输入exit退出terminal 不然退出vim时会进入此terminal
-let g:terminal_key = '<c-c>'
-" 输入exit后退出窗口
-let g:terminal_close = 1
-" 在此vim中打开文件 drop a.txt
+" 打开一次性窗口
+nnoremap <c-c> :FloatermNew --disposable <CR>
+
+" 终端中打开文件:   floaterm a.txt
+" 放在.zshrc中:     alias f=floaterm
+" 然后:             f s.txt
+
+" ==== fzf T ===========================
+" :Files        Files 
+" :BLines       lines in current buffer
+" :History      history open files 
+" :Commits      commit log
+" :BCommits     commit, show diff
+
+" :Files dir
+map <c-p> :Files ~/QQMail/wework<CR>
+
+" <c-x>         horizon分屏
+" <c-v>         vertical分屏
+" <c-j> <c-n>   down
+" <c-k> <c-p>   up
 
 " ==== tagbar T ========================
 " 右侧tag窗口 高亮光标所在的tag
@@ -406,67 +425,12 @@ vnoremap g= :Tabularize /=<CR>
 " // 对齐
 vnoremap g/ :Tabularize /\/\/<CR>
 
-" ==== ctrlp T =========================
-" 寻找目录：c 当前文件所在目录 r .git 等的最近公共祖先
-let g:ctrlp_working_path_mode = 'rc'
-" 扫描隐藏文件和目录
-let g:ctrlp_show_hidden = 0
-" 最大查找深度
-let g:ctrlp_max_depth = 10
-" 用pymatcher作为匹配方法 显著提升匹配速度
-let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-
-" 启用缓存 不用每次都重新加载
-let g:ctrlp_use_caching = 1
-" 退出文件不删除缓存
-let g:ctrlp_clear_cache_on_exit = 0
-" 缓存文件存储目录
-let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-
-" 重新定义快捷键
-let g:ctrlp_prompt_mappings = {
-            \ 'PrtCurLeft()':         ['<c-h>', '<left>'],  
-            \ 'PrtCurRight()':        ['<c-l>', '<right>'],
-            \ 'PrtCurStart()':        ['<c-a>'],
-            \ 'PrtCurEnd()':          ['<c-e>'],
-            \ 'PrtClear()':           ['<c-u>'],
-            \ 'PrtDeleteWord()':      ['<c-w>'],
-            \
-            \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
-            \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
-            \ 'PrtSelectMove("t")':   ['<Home>'],
-            \ 'PrtSelectMove("b")':   ['<End>'],
-            \ 'PrtSelectMove("u")':   ['<PageUp>'],
-            \ 'PrtSelectMove("d")':   ['<PageDown>'],
-            \
-            \ 'AcceptSelection("v")': ['<c-v>'],
-            \ 'AcceptSelection("h")': ['<c-x>'], 
-            \ 'AcceptSelection("t")': ['<c-t>'],
-            \
-            \ 'ToggleRegex()':        ['<c-r>'],
-            \ 'PrtExpandDir()':       ['<tab>'],
-            \ 'CreateNewFile()':      ['<c-y>'],
-            \ 'MarkToOpen()':         ['<c-z>'],
-            \ 'OpenMulti()':          ['<c-o>'],
-            \
-            \ 'ToggleType(1)':        ['<c-f>'],
-            \ 'ToggleType(-1)':       ['<c-b>'],
-            \
-            \ 'PrtClearCache()':      ['<c-q>'],
-            \ 'PrtExit()':            ['<esc>', '<c-c>'],
-            \ }
-" === 解释 ===
-" 光标移动: left right begin end 删除到开头 删除前一个单词
-" 选择移动: up down top bottom pageup pagedown 
-" 打开方式: vertical分屏 horizon分屏 tab(enter) 
-" 一些开关: 正则 补齐 打开不存在的文件 mark 选择打开方式
-" 模式切换: 前进 后退
-" 结束    : 清除缓存 退出
-
-" ..<CR> 跳转到上级目录 ...<CR> 上上级 类推
-
 " ==== coc T ========================
+" quick fix
 nmap <Leader>c <plug>(coc-fix-current)
+
+" <c-n>         next key
+" <c-p>         prev key
 
 " ==== ycm T ========================
 " 全局文件配置
@@ -587,34 +551,34 @@ set smartcase  " 如果有大写字母，则切换到大小写敏感查找
 " ==== ban map T =======================
 " 只是禁用按键触发 map里面编码触发是可以的
 " 禁用快捷键 需要shift+ 才能按出的
-nnoremap R <nop>
-nnoremap Q <nop>
-nnoremap T <nop>
-nnoremap S <nop>
-nnoremap F <nop>
-nnoremap J <nop>
-nnoremap Z <nop>
-nnoremap B <nop>
-nnoremap E <nop>
-nnoremap W <nop>
-nnoremap ~ <nop>
-nnoremap ! <nop>
-nnoremap @ <nop>
-nnoremap ^ <nop>
-nnoremap & <nop>
-nnoremap ( <nop>
-nnoremap ) <nop>
-nnoremap _ <nop>
-nnoremap # <nop>
-nnoremap ? <nop>
+noremap R <nop>
+noremap Q <nop>
+noremap T <nop>
+noremap S <nop>
+noremap F <nop>
+noremap J <nop>
+noremap Z <nop>
+noremap B <nop>
+" noremap E <nop>
+noremap W <nop>
+noremap ~ <nop>
+noremap ! <nop>
+noremap @ <nop>
+noremap ^ <nop>
+noremap & <nop>
+noremap ( <nop>
+noremap ) <nop>
+noremap _ <nop>
+noremap # <nop>
+noremap ? <nop>
 
 " 直接按出的 还可以用来组合其它快捷键 
-nnoremap t <nop>
-nnoremap q <nop>
-nnoremap " <nop>
-nnoremap \ <nop>
-nnoremap . <nop>
-nnoremap - <nop>
+noremap t <nop>
+noremap q <nop>
+noremap " <nop>
+noremap \ <nop>
+noremap . <nop>
+noremap - <nop>
 
 " ==== file opention map T =============
 " 关闭当前窗口
@@ -656,8 +620,18 @@ vnoremap <C-c> :w! ~/.vim/.clipboard.txt     <CR>
 nnoremap <C-v> <Esc>:r ~/.vim/.clipboard.txt <CR>
 
 " 会话 记录当前vim所有状态
-nnoremap <Leader>[ :mksession! ~/.session.vim  <CR>
-nnoremap <Leader>] :source     ~/.session.vim  <CR>   " 可在未进入vim时输入 vim -S session.vim
+" vi -> ;]1
+nmap <Leader>[1 :mksession! ~/.session1.vim  <CR>
+nmap <Leader>]1 :source     ~/.session1.vim  <CR>   
+
+nmap <Leader>[2 :mksession! ~/.session2.vim  <CR>
+nmap <Leader>]2 :source     ~/.session2.vim  <CR>   
+
+nmap <Leader>[3 :mksession! ~/.session3.vim  <CR>
+nmap <Leader>]3 :source     ~/.session3.vim  <CR>   
+
+" end of line
+noremap E $
 
 " 插入 时间
 nnoremap tm :call SetTime() <CR> 0
@@ -700,7 +674,7 @@ nmap <Leader>/ yy P gcc j
 " c++ 花括号 函数/类 格式化  autocmd优先于imap
 autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
 " 非以上类型 如 vector<int> v{1, 2}; 
-" 光标放到最上一行 连续将后面两行移上来
+" 光标放到最上一行 - 连续将后面两行移上来
 autocmd FileType cpp nnoremap <Leader>J J J
 
 " 新建文件 自动插入文件头 .cpp .c .h .sh .java .go

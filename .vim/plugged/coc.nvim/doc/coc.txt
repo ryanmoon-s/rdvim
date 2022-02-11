@@ -133,7 +133,7 @@ The global configuration file can be created in another directory by setting
 
 When creating a local configuration file, it's possible to use
 |b:coc_root_patterns| for resolve the root directory from the filepath of
-opend buffer.
+opened buffer.
 
 Since the configuration files are all in JSON format, it's suggested to enable
 JSON completion and validation by install the `coc-json` extension: >
@@ -146,7 +146,7 @@ for more details.
 Built-in configurations:~
 
 							*coc-config-http*
-*http.proxy*
+"http.proxy":~
 
 	HTTP proxy URI, used for extensions that send request, default: `""`
 
@@ -165,6 +165,16 @@ Built-in configurations:~
 	CA (file) to use as Certificate Authority.
 
 							*coc-config-suggest*
+"suggest.selection":~
+
+	Controls how suggestions are pre-selected when showing the suggest
+	list. Default: "none".
+
+	Could be "none", "recentlyUsed" and "recentlyUsedByPrefix".
+
+	Note: the selected item would be moved to first place when
+	"suggest.enablePreselect" is not enabled.
+
 "suggest.enablePreselect":~
 
 	Enable preselect feature on Neovim, default: `false`
@@ -329,7 +339,7 @@ Built-in configurations:~
 
 "suggest.asciiCharactersOnly":~
 
-	Suggest ASCII characters only, default: `false`
+	Trigger suggest with ASCII characters only, default: `false`
 
 "suggest.completionItemKindLabels":~
 
@@ -366,6 +376,21 @@ Built-in configurations:~
 		"default": "\uf29c"
 	}
 <
+							*coc-config-documentHighlight*
+
+"documentHighlight.priority":~
+
+	Match priority used by document highlight, see ':h matchadd'.
+	Default `-1`
+
+							*coc-config-filetypes*
+"colors.filetypes":~
+
+	Filetypes that should enable colors highlight feature.
+	Use `*` for all filetypes.
+
+	Default: `[]`
+
 							*coc-config-diagnostic*
 "diagnostic.enable":~
 
@@ -376,7 +401,13 @@ Built-in configurations:~
 	Limit count for highlighted diagnostics, too many diagnostic
 	highlights could make vim stop responding.
 
-	default: `1000`
+	Default: `1000`
+
+"diagnostic.highlightPriority":~
+
+	Priority for diagnostic highlights, works on vim8 and neovim >= 0.6.0
+
+	Default: `4096`
 
 "diagnostic.autoRefresh":~
 
@@ -417,6 +448,18 @@ Built-in configurations:~
 	Filter diagnostics by severity, default: `"hint"`
 
 	Valid options: ["hint", "information", "warning", "error"]
+
+"diagnostic.locationlistLevel":~
+
+	Filter diagnostics in locationlist, default: `null`.
+
+"diagnostic.signLevel":~
+
+	Filter diagnostics in sign column, default: `null`.
+
+"diagnostic.messageLevel":~
+
+	Filter diagnostic message in float window/popup, default: `null`.
 
 "diagnostic.messageDelay":~
 
@@ -507,7 +550,7 @@ Built-in configurations:~
 "diagnostic.filetypeMap":~
 
 	A map between buffer filetype and the filetype assigned to diagnostics.
-	To syntax highlight diagnostics withs their parent buffer type use
+	To syntax highlight diagnostics with their parent buffer type use
 	`"default": "bufferType"`, default: `{}`
 
 "diagnostic.format":~
@@ -555,7 +598,7 @@ Built-in configurations:~
 							*coc-config-refactor*
 "refactor.saveToFile":~
 
-	Save chagnes to file when write refactor buffer with |:write| command,
+	Save changes to file when write refactor buffer with |:write| command,
 	set to false if you want save buffer by yourself.
 
 "refactor.openCommand":~
@@ -655,9 +698,14 @@ Built-in configurations:~
 	Enable `codeLens` feature. Requires Neovim with virtual text feature,
 	default: `false`.
 
+"codeLens.position":~
+
+	Position of codeLens, requires nvim >= 0.6.0, valid options ["top",
+	"eol", "right_align"], default: `top`.
+
 "codeLens.separator":~
 
-	Separator text for `codeLens` in virtual text, default: `"‣"`.
+	Separator text for `codeLens` in virtual text, default: `""`.
 
 "codeLens.subseparator":~
 
@@ -754,7 +802,7 @@ Built-in configurations:~
 
 "list.interactiveDebounceTime":~
 
-	Debouce time for input change on interactive mode, default: `100`
+	Debounce time for input change on interactive mode, default: `100`
 
 "list.previewSplitRight":~
 
@@ -762,7 +810,7 @@ Built-in configurations:~
 
 "list.source.symbols.excludes":~
 
-	Patterns of minimatch for filepath to execlude from symbols list,
+	Patterns of minimatch for filepath to exclude from symbols list,
 	default: `[]`
 
 "list.source.outline.ctagsFilestypes":~
@@ -806,7 +854,7 @@ Built-in configurations:~
 
 "coc.preferences.extensionUpdateCheck":~
 
-	Interval for checking extension updates, default: `"daily"`
+	Interval for checking extension updates, default: `"never"`
 
 	Valid options: ["daily","weekly","never"]
 
@@ -816,10 +864,6 @@ Built-in configurations:~
 	Check |coc-status| for statusline integration.
 
 	Default: `"SNIP"`
-
-"coc.preferences.colorSupport":~
-
-	Enable color highlight if Language Server support it, default: `true`
 
 "coc.preferences.currentFunctionSymbolAutoUpdate":~
 
@@ -939,12 +983,12 @@ Built-in configurations:~
 						*coc-config-tree*
 "tree.closedIcon": ~
 	
-	Closed icon of tree view, use '' to make it looks better when you
+	Closed icon of tree view, use '' to make it look better when you
 	have patched font, default: '+'.
 
 "tree.openedIcon": ~
 	
-	Opened icon of tree view, use '' to make it looks better when you
+	Opened icon of tree view, use '' to make it look better when you
 	have patched font, default: '-'
 
 "tree.key.toggleSelection":~
@@ -1127,7 +1171,7 @@ supported:
 
 Language server start with command:~
 
-	Additional fields can be used for command language server:
+	Additional fields can be used for a command languageserver:
 
 	- "command": Executable program name in $PATH or absolute path of
 	  executable used for start languageserver.
@@ -1140,7 +1184,7 @@ Language server start with command:~
 
 Language server start with module:~
 
-	Additional fields can be used forlanguage server started by node
+	Additional fields can be used for a languageserver started by node
 	module:
 
 	- "module": Absolute filepath of javascript file.
@@ -1328,7 +1372,7 @@ invoke |CocAction('refactor')|
 *<plug>(coc-command-repeat)* Repeat latest |CocCommand|.
 
 *<plug>(coc-codeaction)* Get and run code action(s) for current file, use
-|coc-codeaction-cursor| for same beharior as VSCode.
+|coc-codeaction-cursor| for same behavior as VSCode.
 
 *<plug>(coc-codeaction-line)* Get and run code action(s) for current line.
 
@@ -1454,6 +1498,12 @@ b:coc_suggest_disable					*b:coc_suggest_disable*
 	" Disable completion for python
 	autocmd FileType python let b:coc_suggest_disable = 1
 
+b:coc_disabled_sources 					 *b:coc_disabled_sources*
+
+	Disabled completion sources of current buffer. Example:
+>
+	let b:coc_disabled_sources = ['around', 'buffer', 'file']
+<
 b:coc_diagnostic_disable				*b:coc_diagnostic_disable*
 
 	Disable diagnostic support of current buffer.
@@ -1524,8 +1574,8 @@ g:coc_global_extensions					*g:coc_global_extensions*
 >
 	let g:coc_global_extensions = ['coc-json', 'coc-git']
 <
-	Note: coc.nvim would try to install extensions that not installed in
-	this list after initialization.
+	Note: coc.nvim will try to install extensions that are not installed
+	in this list after initialization.
 
 g:coc_uri_prefix_replace_patterns			*g:coc_uri_prefix_replace_patterns*
 
@@ -1616,18 +1666,6 @@ g:coc_node_args						*g:coc_node_args*
 <
 	Default: []
 
-g:coc_jump_locations					*g:coc_jump_locations*
-
-	This variable would be set to jump locations when the
-	|CocLocationsChange| autocmd is fired.
-
-	Each location item contains:
-
-	'filename': full file path.
-	'lnum': line number (1 based).
-	'col': column number(1 based).
-	'text':  line content of location.
-
 g:coc_status_error_sign					*g:coc_status_error_sign*
 
 	Error character used for statusline, default: `E`
@@ -1644,11 +1682,6 @@ g:coc_quickfix_open_command				*g:coc_quickfix_open_command*
 	let g:coc_quickfix_open_command = 'copen|cfirst'
 <
 	Default: |copen|
-
-g:WorkspaceFolders					*g:WorkspaceFolders*
-
-	Current workspace folders, used for restoring from a session file, add
-	`set sessionoptions+=globals` to vimrc for restoring globals.
 
 g:node_client_debug					*g:node_client_debug*
 
@@ -1677,13 +1710,6 @@ g:coc_data_home						*g:coc_data_home*
 	Windows: `~/AppData/Local/coc`
 	Other: `~/.config/coc`
 
-g:coc_sources_disable_map 				*g:coc_sources_disable_map*
-
-	Configure disabled sources for different filetypes.
-	Use `:CocList sources` for loaded complete sources. Example:
->
-	let g:coc_sources_disable_map = { \ 'python': ['omni', 'tag'] \ }
-
 g:coc_borderchars 					*g:coc_borderchars*
 
 	Border characters used by border window, default to:
@@ -1711,10 +1737,33 @@ g:coc_markdown_disabled_languages  		*g:coc_markdown_disabled_languages*
 
 	let g:coc_markdown_disabled_languages = ['html']
 
+g:coc_highlight_batch_lines 			*g:coc_highlight_batch_lines*
+
+	Maximum line count to perform highlights update each time, default:
+	`300`
+
 ------------------------------------------------------------------------------
 
-Some variables are provided by coc.nvim so you can use them in your
-statusline. See |coc-status| for detail.
+Some variables are provided by coc.nvim.
+
+
+g:WorkspaceFolders					*g:WorkspaceFolders*
+
+	Current workspace folders, used for restoring from a session file, add
+	`set sessionoptions+=globals` to vimrc for restoring globals on
+	session load.
+
+g:coc_jump_locations					*g:coc_jump_locations*
+
+	This variable would be set to jump locations when the
+	|CocLocationsChange| autocmd is fired.
+
+	Each location item contains:
+
+	'filename': full file path.
+	'lnum': line number (1 based).
+	'col': column number(1 based).
+	'text':  line content of location.
 
 g:coc_process_pid					*g:coc_process_pid*
 
@@ -3595,9 +3644,9 @@ A:	It means you don't have coc extension or languageserver that provide
 	languageserver.
 
 	Note some languageserver may not have that feature supported, please
-	checkout it's documentation.
+	checkout its documentation.
 
-Q:	Syntax highlight on float/popup doesn't looks right.
+Q:	Syntax highlight on float/popup doesn't look right.
 
 A:	On neovim, coc.nvim uses background neovim instance which load syntax
 	plugins only for generate highlights, it may not what you would expect.
