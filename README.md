@@ -25,10 +25,10 @@ sh ./install.sh
 
 
 ## 语法补全
+所有的脚本安装前务必先阅读一遍，里面都有遇到错误的解决办法  
 ### YouCompleteMe
 集成所有补全、跳转等一套功能，但是能使用的语言有限  
 本仓库自带其代码，直接安装即可  
-安装前务必先阅读一遍这个脚本，里面有遇到错误的解决办法  
   
 安装：
 ```txt
@@ -37,10 +37,9 @@ sh ./install.sh
 ```
 
 ### coc.nvim
-这是基于lsp(language server protocol)，不懂的可以百度 ~  
-它依赖nodejs环境   
-它需要一个language server来完成补全等功能，c++用的是clangd，其它语言自行下载对应的server
-安装前务必先阅读一遍每个脚本，里面有遇到错误的解决办法  
+基于lsp(language server protocol)，不懂的可以百度 ~  
+a. 依赖nodejs环境;  
+b. 需要一个language server来完成补全等功能，c++用的是clangd，其它语言自行下载对应的server;  
   
 ***coc 安装方式：***   
 ```txt
