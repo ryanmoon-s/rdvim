@@ -145,12 +145,10 @@ Plug 'vim-scripts/a.vim'
 " << 补全 >> 
 " 选择其中一个打开注释即可
 " ====
-" 1、ycm 参考sh ycm_install.sh安装 一定要先阅读脚本
+" 1、ycm - 打开注释后参考README里面的安装方式
 " Plug 'ryanmoon-s/YouCompleteMe'
-" 帮助项目生成 .ycm_extra_conf.py，支持make cmake qmake autotools
-" Plug 'rdnetto/YCM-Generator'
 " ====
-" 2、coc 参考coc.sh安装依赖 一定要先阅读脚本
+" 2、coc - 打开注释后参考README里面的安装方式
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 
