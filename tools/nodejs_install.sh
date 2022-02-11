@@ -13,7 +13,7 @@
 # mac    
 #   不用运行脚本   brew安装即可：brew install nodejs
 # linux  
-#   运行 sh / zsh coc.sh
+#   运行 sh / zsh nodejs_insatll.sh
 
 coc=coc_dependence
 if [[ ! -d $coc ]];then
