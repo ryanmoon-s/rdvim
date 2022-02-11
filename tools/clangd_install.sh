@@ -23,12 +23,13 @@ fi
 cd $coc
 
 # 完整url  https://github.com/clangd/clangd/releases/download/snapshot_20211205/clangd-linux-snapshot_20211205.zip
+# 自行下载时 请放在coc_dependence目录里面
 ver=20211205
 clangd="clangd-linux-snapshot_"$ver".zip"
 unzipclangd="clangd_snapshot_"$ver
 clangdurl="https://github.com/clangd/clangd/releases/download/snapshot_"$ver"/"$clangd
 
-wget $clangdurl
+# wget $clangdurl
 unzip $clangd
 
 if [[ -d clangd ]];then
