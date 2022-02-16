@@ -676,7 +676,7 @@ autocmd FileType cpp inoremap { {<CR>}<ESC>kA<CR>
 autocmd FileType cpp nnoremap <Leader>J J J
 
 " 新建文件 自动插入文件头 .cpp .c .h .sh .java .go
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.Java,*.go exec ":call SetTitle()"
+" autocmd BufNewFile *.cpp,*.[ch],*.sh,*.Java,*.go exec ":call SetTitle()"
 
 " 新建文件后 自动定位到文件末尾
 autocmd BufNewFile * normal G
