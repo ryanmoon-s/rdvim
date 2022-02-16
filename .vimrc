@@ -683,6 +683,7 @@ autocmd BufNewFile * normal G
 
 " vim-commentary插件 注释针对不同语言的注释方法
 autocmd FileType cpp set commentstring=//\ %s
+autocmd FileType proto set commentstring=//\ %s
 autocmd FileType vim set commentstring=\"\ %s
 autocmd FileType shell set commentstring=#\ %s
 
