@@ -891,7 +891,7 @@ set diffopt=context:6
 " y: yy 、nyy 、 ygg yG yw y0 y$
 " 很多按键 [可以] -->  左接数字 || 右接跳转 || 可视选择
 " 只能左接数字 s x w b << >>       //它们是单按键 按下立即产生效果
-" 左数字右跳转 y d c = v V
+" 左数字右跳转 y d c = v V         //哪yy y到哪
 " 可视+按键    以上都可以
 " 组合使用: y2w d2w
 
