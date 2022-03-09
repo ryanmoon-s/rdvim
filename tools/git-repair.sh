@@ -13,7 +13,7 @@ if [ $# -ne 1 ];then
     exit
 fi
 
-cd .vim/autoload/
+cd ~/.vim/autoload/
 
 if [ $1 -eq 1 ];then
     cp plug-git-repair.vim plug.vim
