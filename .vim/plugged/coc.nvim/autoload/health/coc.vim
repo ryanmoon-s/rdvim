@@ -1,4 +1,3 @@
-scriptencoding utf-8
 let s:root = expand('<sfile>:h:h:h')
 
 function! s:checkEnvironment() abort
@@ -7,23 +6,25 @@ function! s:checkEnvironment() abort
     let valid = 0
     call health#report_error('Neovim version not satisfied, 0.3.0 and above required')
   endif
-  let node = get(g:, 'coc_node_path', $COC_NODE_PATH == '' ? 'node' : $COC_NODE_PATH)
+  let node = get(g:, 'coc_node_path', 'node')
   if !executable(node)
     let valid = 0
     call health#report_error('Executable node.js not found, install node.js from http://nodejs.org/')
   endif
+  let yarncmd = coc#util#yarn_cmd()
+  if empty(yarncmd)
+    call health#report_warn('Environment executable yarnpkg & yarn not found, check https://yarnpkg.com/en/docs/install for installation.')
+    call health#report_info('yarn is required for install extensions.')
+  endif
   let output = system(node . ' --version')
   if v:shell_error && output !=# ""
-    let valid = 0
-    call health#report_error(output)
+    echohl Error | echom output | echohl None
+    return
   endif
   let ms = matchlist(output, 'v\(\d\+\).\(\d\+\).\(\d\+\)')
-  if empty(ms)
+  if empty(ms) || str2nr(ms[1]) < 8 || (str2nr(ms[1]) == 8 && str2nr(ms[2]) < 10)
     let valid = 0
-    call health#report_error('Unable to detect version of node, make sure your node executable is http://nodejs.org/')
-  elseif str2nr(ms[1]) < 12 || (str2nr(ms[1]) == 12 && str2nr(ms[2]) < 12)
-    let valid = 0
-    call health#report_warn('Node.js version '.trim(output).' < 12.12.0, please upgrade node.js')
+    call health#report_error('Node.js version '.output.' < 8.10.0, please upgrade node.js')
   endif
   if valid
     call health#report_ok('Environment check passed')
@@ -40,10 +41,15 @@ endfunction
 
 function! s:checkCommand()
   let file = s:root.'/build/index.js'
-  if filereadable(file)
-    call health#report_ok('Javascript bundle build/index.js found')
+  if filereadable(file) && !get(g:, 'coc_force_debug', 0)
+    call health#report_ok('Javascript bundle found')
+    return
+  endif
+  let file = s:root.'/lib/attach.js'
+  if !filereadable(file)
+    call health#report_error('Javascript entry not found, run ":call coc#util#install()" to fix it.')
   else
-    call health#report_error('Javascript entry not found, please compile coc.nvim by esbuild.')
+    call health#report_ok('Build javascript found')
   endif
 endfunction
 

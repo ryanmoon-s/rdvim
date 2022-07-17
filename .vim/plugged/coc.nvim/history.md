@@ -1,69 +1,3 @@
-# 2019-08-18 0.0.74
-
-- feat(cursors): support multiple cursors.
-- feat(extensions): install missing extensions by CocInstall.
-- feat(extensions): add command `extensions.forceUpdateAll`.
-- feat(completion): rework preselect feature.
-- feat(extension): use request for fetch package info.
-- feat(language-client): support disableDynamicRegister configuration.
-- feat(list): paste from vim register support on insert mode #1088.
-- feat(plugin): add CocHasProvider(), close #1087.
-- refactor(outline): not exclude variables and callback.
-- refactor(diagnostic): remove timeout on InsertLeave.
-
-# 2019-07-11 0.0.73
-
-- fix(completion): fix map of number select
-- fix(languages): fix cursor position with snippet
-- fix(completion): fix cursor position with additionalTextEdits
-- fix(position): fix rangeOverlap check #961
-- fix(list): not change guicursor when it's empty
-- fix(list): fix filter not work on loading
-- fix(list): fix custom location list command not work
-- fix(util): highlight & render on vim8
-- fix(handler): fix getCommands
-- fix(handler): not check lastInsert on trigger signatureHelp
-- fix(handler): fix check of signature help trigger
-- fix(language-client): configuration for configured server, closes #930
-- fix(diagnostic): clear diagnostics on filetype change
-- feat(plugin): add download & fetch modules
-- feat(plugin): add highligher module
-- feat(refactor): add `<Plug>(coc-refactor)` for refactor window
-- feat(extension): use mv module for folder rename
-- feat(extension): support install taged extension
-- feat(extension): support custom extension root `g:coc_extension_root`
-- feat(handler): close signature float window on ')'
-- feat(list): support `g:coc_quickfix_open_command`
-- feat(list): add eval action
-- feat(list): add --tab list option
-- feat(list): use highligher module for showHelp
-- feat(terminal): add noa on window jump
-- feat(terminal): support vim8
-- feat(diagnostic): add diagnosticRelated support
-- feat(diagnostic): use text properties on vim8
-- feat(handler): improve signature float window
-
-# 2019-07-01
-
-- feat(plugin): add CocStatusChange autocmd
-- feat(extension): support both npm and yarn.
-- feat(plugin): work on vim 8.0
-- feat(extensions): add lock & doc actions to extension source
-- feat(extension): add proxy auth support (#920)
-- feat(source): not change startcol for file source
-- feat(completion): no numberSelect for number input
-- feat(extensions): Use yarn when npm not found
-- feat(completion): no popup for command line buffer
-- feat(plugin): support only for codeActions action
-- feat(task): debounce stdout
-- feat(plugin): add keymaps for selection ranges
-- feat(plugin): add function textobj
-- feat(list): restore window height, closes #905
-- feat(handler): support signature.floatTimeout
-- feat(configuration): support change of workspace configuration
-- feat(diagnostic): add keymaps for jump error diagnostics
-- feat(plugin): delay start on gvim, fix #659
-
 # 2019-06-15
 
 - feat(plugin): add popup support of vim
@@ -106,7 +40,7 @@
 - Add `prompt.paste` action to list.
 - Add title as argument support for `codeAction` action.
 - Add `suggest.floatEnable` configuration.
-- Add `editor.action.organizeImport` command.
+- Add `editor.action.orgnizeImport` command.
 - Add `:CocAction` and `:CocFix` commands.
 - Add `codeActions` action.
 - Fix issues with list.
@@ -419,7 +353,7 @@
   extention snippets.
 - Add command: `coc.action.insertSnippet`
 - Fix position of snippets.
-- Fix modifier of registered keymaps.
+- Fix modifier of registed keymaps.
 - Fix completion triggered on complete done.
 - Fix closure function possible conflict.
 - Fix unexpected snippet cancel.
@@ -434,11 +368,11 @@
 # 2018-12-27
 
 - **Break change:** no more message on service ready.
-- **Break change:** vim source now registered as extention.
+- **Break change:** vim source now registed as extention.
 - **Break change:** complete item sort have reworked.
 - **Break change:** request send to coc would throw when service not ready.
 - Add support for check current state on diagnostic update.
-- Add `env` opinion for registered command languageserver.
+- Add `env` opinion for registed command languageserver.
 - Add outputChannel for watchman.
 - Add `coc#_select_confirm()` for trigger select and confirm.
 - Add `coc.preferences.numberSelect`.
@@ -468,7 +402,7 @@
 - Fix clients not restarted on CocRestart.
 - Fix `execArgv` and `runtime` not work for node language server.
 - Fix detail of complete item not echoed sometimes.
-- Fix actions missing when registered with same clientId.
+- Fix actions missing when registed with same clientId.
 - Fix issues with signature echo.
 - Fix uri is wrong with whitespace.
 - Improve highlight performance with `nvim_call_atomic`.
@@ -938,7 +872,7 @@
   Sometimes `bufReadPost` `BufEnter` could be not be fired on buffer create,
   check buffer on `CursorHold` and `TextChanged` to fix this issue.
 
-- Add tsserver features: `tsserver.formatOnSave` and `tsserver.organizeImportOnSave`
+- Add tsserver features: `tsserver.formatOnSave` and `tsserver.orgnizeImportOnSave`
 
   Both default to false.
 

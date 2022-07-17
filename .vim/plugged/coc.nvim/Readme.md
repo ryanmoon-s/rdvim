@@ -2,147 +2,247 @@
   <a href="https://www.vim.org/scripts/script.php?script_id=5779">
     <img alt="Coc Logo" src="https://user-images.githubusercontent.com/251450/55009068-f4ed2780-501c-11e9-9a3b-cf3aa6ab9272.png" height="160" />
   </a>
-  <p align="center">Make your Vim/Neovim as smart as VSCode.</p>
+  <p align="center">Make your vim/neovim as smart as VSCode.</p>
   <p align="center">
-    <a href="LICENSE.md"><img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
-    <a href="https://github.com/neoclide/coc.nvim/actions"><img alt="Actions" src="https://img.shields.io/github/workflow/status/neoclide/coc.nvim/coc.nvim%20CI?style=flat-square"></a>
-      <a href="https://codecov.io/gh/neoclide/coc.nvim"><img alt="Codecov Coverage Status" src="https://img.shields.io/codecov/c/github/neoclide/coc.nvim.svg?style=flat-square"></a>
-    <a href="doc/coc.txt"><img alt="Doc" src="https://img.shields.io/badge/doc-%3Ah%20coc.txt-brightgreen.svg?style=flat-square"></a>
+    <a href="/LICENSE.md"><img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
+    <a href="https://salt.bountysource.com/teams/coc-nvim"><img alt="Bountysource" src="https://img.shields.io/bountysource/team/coc-nvim/activity.svg?style=flat-square"></a>
+    <a href="https://travis-ci.org/neoclide/coc.nvim"><img alt="Travis" src="https://img.shields.io/travis/neoclide/coc.nvim/master.svg?style=flat-square"></a>
+    <a href="https://codecov.io/gh/neoclide/coc.nvim"><img alt="Coverage" src="https://img.shields.io/codecov/c/github/neoclide/coc.nvim.svg?style=flat-square"></a>
+    <a href="/doc/coc.txt"><img alt="Doc" src="https://img.shields.io/badge/doc-%3Ah%20coc.txt-red.svg?style=flat-square"></a>
     <a href="https://gitter.im/neoclide/coc.nvim"><img alt="Gitter" src="https://img.shields.io/gitter/room/neoclide/coc.nvim.svg?style=flat-square"></a>
   </p>
 </p>
 
 ---
 
+Coc is an intellisense engine for vim8 & neovim.
+
+It works on `vim >= 8.0.1453` and `neovim >= 0.3.1`.
+
+It's a completion framework and language server client which supports [extension features of VSCode](https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions).
+
 <img alt="Gif" src="https://user-images.githubusercontent.com/251450/55285193-400a9000-53b9-11e9-8cff-ffe4983c5947.gif" width="60%" />
 
 _True snippet and additional text editing support_
 
+Floating windows require nightly build of neovim or vim >= 8.1.1522, [follow steps in the faq](https://github.com/neoclide/coc.nvim/wiki/F.A.Q#how-to-make-preview-window-shown-aside-with-pum).
+
+Check out [doc/coc.txt](doc/coc.txt) for the vim interface.
+
 ## Why?
 
-- 🚀 **Fast**: [instant increment completion](https://github.com/neoclide/coc.nvim/wiki/Completion-with-sources), increment buffer sync using buffer update events.
+- 🚀 **Fast**: [instant increment completion](https://github.com/neoclide/coc.nvim/wiki/Completion-with-sources#highlights-of-coc-completion), increment buffer sync using buffer update events.
 - 💎 **Reliable**: typed language, tested with CI.
 - 🌟 **Featured**: [full LSP support](https://github.com/neoclide/coc.nvim/wiki/Language-servers#supported-features)
-- ❤️ **Flexible**: [configured like VSCode](https://github.com/neoclide/coc.nvim/wiki/Using-the-configuration-file), [extensions work like in VSCode](https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions)
+- ❤️ **Flexible**: [configured like VSCode](https://github.com/neoclide/coc.nvim/wiki/Using-configuration-file), [extensions work like in VSCode](https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions)
 
-**Gold Sponsors**
+<details><summary>Completion experience</summary>
+<p>
+You might be wondering why yet another completion engine since there is the already
+widely used [YouCompleteMe](https://github.com/Valloric/YouCompleteMe) and
+[deoplete.nvim](https://github.com/Shougo/deoplete.nvim).
 
-<a href="https://opencollective.com/cocnvim#platinum-sponsors">
-  <img src="https://opencollective.com/cocnvim/tiers/gold-sponsors.svg?avatarHeight=36&width=600">
-</a>
+Below are the reasons that led coc.nvim to build its own engine:
 
-**Silver Sponsors**
+- **Full LSP completion support**, especially snippet and `additionalTextEdit`
+  feature, you'll understand why it's awesome when you experience it with a
+  coc extension like `coc-tsserver`.
+- **Asynchronous and parallel completion request**, unless using vim sources,
+  your vim will never be blocked.
+- **Does completion resolving on completion item change**. The details from
+  completion items are echoed after being selected, this feature requires the
+  `CompleteChanged` autocmd to work.
+- **Incomplete request and cancel request support**, only incomplete completion
+  requests would be triggered on filtering completion items and cancellation
+  requests are sent to servers only when necessary.
+- **Start completion without timer**. The completion will start after you type the
+  first letter of a word by default and is filtered with new input after the completion
+  has finished. Other completion engines use a timer to trigger completion so you
+  always have to wait after the typed character.
+- **Realtime buffer keywords**. Coc will generate buffer keywords on buffer change in the
+  background (with debounce), while some completion engines use a cache which isn't always correct.
+  Plus, [Locality bonus feature](https://code.visualstudio.com/docs/editor/intellisense#_locality-bonus)
+  from VSCode is enabled by default.
+- **Filter completion items when possible.** When you do a fuzzy filter with
+  completion items, some completion engines will trigger a new completion, but
+  coc.nvim will filter the items when possible which makes it much faster. Filtering
+  completion items on backspace is also supported.
+  </p>
+  </details>
 
-<a href="https://opencollective.com/cocnvim#platinum-sponsors">
-  <img src="https://opencollective.com/cocnvim/tiers/silver-sponsors.svg?avatarHeight=36&width=600">
-</a>
+## Table of contents
 
-**Bronze Sponsors**
+- [Installation](https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim)
 
-<a href="https://opencollective.com/cocnvim#platinum-sponsors">
-  <img src="https://opencollective.com/cocnvim/tiers/bronze-sponsors.svg?avatarHeight=36&width=600">
-</a>
+  Install [nodejs](https://nodejs.org/en/download/):
 
-## Quick Start
+  ```sh
+  curl -sL install-node.now.sh/lts | bash
+  # Optional install yarn if you want install extension by CocInstall command
+  curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+  ```
 
-Install [nodejs](https://nodejs.org/en/download/) >= 12.12:
+  For [vim-plug](https://github.com/junegunn/vim-plug) users:
 
-```bash
-curl -sL install-node.vercel.app/lts | bash
-```
+  ```vim
+  " Use release branch
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " Or build from source code
+  Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+  ```
 
-For [vim-plug](https://github.com/junegunn/vim-plug) users:
+  in your `.vimrc` or `init.vim`, then restart vim and run `:PlugInstall`.
 
-```vim
-" Use release branch (recommend)
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  For other plugin managers, make sure use release branch.
 
-" Or build from source code by using yarn: https://yarnpkg.com
-Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
-```
+  **Note**: The first time building from source code may be slow.
 
-in your `.vimrc` or `init.vim`, then restart Vim and run `:PlugInstall`.
+  **Note**: NixOS users must follow these steps:
 
-Checkout [Install
-coc.nvim](https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim) for
-more info.
-
-You **have to** install coc extension or configure language servers for
-LSP support.
-
-Install extensions like:
-
-    :CocInstall coc-json coc-tsserver
-
-Or configure language server in `coc-settings.json` opened by
-`:CocConfig`, like:
-
-```json
-{
-  "languageserver": {
-    "go": {
-      "command": "gopls",
-      "rootPatterns": ["go.mod"],
-      "trace.server": "verbose",
-      "filetypes": ["go"]
-    }
-  }
-}
-```
-
-Checkout wiki for more details:
+  1. Install [nodejs](https://nodejs.org/en/download/) and [yarn](https://yarnpkg.com/en/docs/install) via `nix-env` or put them in `/etc/nixos/configuration.nix`
+  2. `sudo nixos-rebuild switch`
+  3. `Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}`
+  4. Don't forget to put: `set shell=/bin/sh` in your `init.vim`.
 
 - [Completion with sources](https://github.com/neoclide/coc.nvim/wiki/Completion-with-sources)
-- [Using the configuration file](https://github.com/neoclide/coc.nvim/wiki/Using-the-configuration-file)
-- [Using coc extensions](https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions)
-- [Configure language servers](https://github.com/neoclide/coc.nvim/wiki/Language-servers)
-- [F.A.Q](https://github.com/neoclide/coc.nvim/wiki/F.A.Q)
 
-Checkout `:h coc-nvim` for vim interface.
+- [Using snippets](https://github.com/neoclide/coc.nvim/wiki/Using-snippets)
+
+- [Using extensions](https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions)
+
+- [Using list](https://github.com/neoclide/coc.nvim/wiki/Using-coc-list)
+
+- [Using configuration file](https://github.com/neoclide/coc.nvim/wiki/Using-the-configuration-file)
+
+- [Using workspaceFolders](https://github.com/neoclide/coc.nvim/wiki/Using-workspaceFolders)
+
+- [Language servers](https://github.com/neoclide/coc.nvim/wiki/Language-servers)
+
+  - [Supported features](https://github.com/neoclide/coc.nvim/wiki/Language-servers#supported-features)
+  - [Register custom language servers](https://github.com/neoclide/coc.nvim/wiki/Language-servers#register-custom-language-servers)
+
+    - [Dart](https://github.com/neoclide/coc.nvim/wiki/Language-servers#dart)
+    - [C/C++/Objective-C](https://github.com/neoclide/coc.nvim/wiki/Language-servers#ccobjective-c)
+    - [Rust](https://github.com/neoclide/coc.nvim/wiki/Language-servers#rust)
+    - [Go](https://github.com/neoclide/coc.nvim/wiki/Language-servers#go)
+    - [PHP](https://github.com/neoclide/coc.nvim/wiki/Language-servers#php)
+    - [Dockerfile](https://github.com/neoclide/coc.nvim/wiki/Language-servers#dockerfile)
+    - [Bash](https://github.com/neoclide/coc.nvim/wiki/Language-servers#bash)
+    - [Lua](https://github.com/neoclide/coc.nvim/wiki/Language-servers#lua)
+    - [OCaml and ReasonML](https://github.com/neoclide/coc.nvim/wiki/Language-servers#ocaml-and-reasonml)
+    - [PureScript](https://github.com/neoclide/coc.nvim/wiki/Language-servers#purescript)
+    - [Flow](https://github.com/neoclide/coc.nvim/wiki/Language-servers#flow)
+    - [Haskell](https://github.com/neoclide/coc.nvim/wiki/Language-servers#haskell)
+    - [vim/erb/markdown](https://github.com/neoclide/coc.nvim/wiki/Language-servers#vimerbmarkdown)
+    - [Elixir](https://github.com/neoclide/coc.nvim/wiki/Language-servers#elixir)
+    - [Python](https://github.com/neoclide/coc.nvim/wiki/Language-servers#python)
+    - [Ruby](https://github.com/neoclide/coc.nvim/wiki/Language-servers#ruby)
+    - [Scala](https://github.com/neoclide/coc.nvim/wiki/Language-servers#scala)
+    - [Latex](https://github.com/neoclide/coc.nvim/wiki/Language-servers#latex)
+    - [Elm](https://github.com/neoclide/coc.nvim/wiki/Language-servers#elm)
+    - [Fortran](https://github.com/neoclide/coc.nvim/wiki/Language-servers#latex)
+    - [Clojure](https://github.com/neoclide/coc.nvim/wiki/Language-servers#clojure)
+    - [Julia](https://github.com/neoclide/coc.nvim/wiki/Language-servers#julia)
+
+* [Statusline integration](https://github.com/neoclide/coc.nvim/wiki/Statusline-integration)
+
+* [Debug language server](https://github.com/neoclide/coc.nvim/wiki/Debug-language-server)
+
+* [Debug coc.nvim](https://github.com/neoclide/coc.nvim/wiki/Debug-coc.nvim)
+
+* [F.A.Q](https://github.com/neoclide/coc.nvim/wiki/F.A.Q)
+
+## Completion sources
+
+Completion from words in buffers and file paths completions are supported by default.
+
+For other completion sources, check out:
+
+- [coc-sources](https://github.com/neoclide/coc-sources): includes some common
+  completion source extensions.
+- [coc-neco](https://github.com/neoclide/coc-neco): viml completion support.
+- [coc-vimtex](https://github.com/neoclide/coc-vimtex): vimtex integration.
+- [coc-neoinclude](https://github.com/jsfaint/coc-neoinclude): neoinclude
+  integration.
+- [coc-powershell](https://github.com/yatli/coc-powershell): PowerShellEditorService integration.
+- [coc-lbdbq](https://github.com/zidhuss/coc-lbdbq): email address completion.
+- [coc-browser](https://github.com/voldikss/coc-browser): web browser words completion.
+
+Or you can [create a custom source](https://github.com/neoclide/coc.nvim/wiki/Create-custom-source).
+
+## Extensions
+
+Extensions are more powerful than a configured language server. Check out
+[Using coc extensions](https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions).
+
+- **[coc-json](https://github.com/neoclide/coc-json)** for `json`.
+- **[coc-tsserver](https://github.com/neoclide/coc-tsserver)** for `javascript`
+  and `typescript`.
+- **[coc-html](https://github.com/neoclide/coc-html)** for `html`, `handlebars`
+  and `razor`.
+- **[coc-css](https://github.com/neoclide/coc-css)** for `css`, `scss` and `less`.
+- **[coc-vetur](https://github.com/neoclide/coc-vetur)** for `vue`, use [vetur](https://github.com/vuejs/vetur).
+- **[coc-phpls](https://github.com/marlonfan/coc-phpls)** for `php`, use [intelephense-docs](https://github.com/bmewburn/intelephense-docs).
+- **[coc-java](https://github.com/neoclide/coc-java)** for `java`, use [eclipse.jdt.ls](https://github.com/eclipse/eclipse.jdt.ls).
+- **[coc-solargraph](https://github.com/neoclide/coc-solargraph)** for `ruby`,
+  use [solargraph](http://solargraph.org/).
+- **[coc-rls](https://github.com/neoclide/coc-rls)** for `rust`, use
+  [Rust Language Server](https://github.com/rust-lang/rls)
+- **[coc-r-lsp](https://github.com/neoclide/coc-r-lsp)** for `r`, use [R languageserver](https://github.com/REditorSupport/languageserver).
+- **[coc-yaml](https://github.com/neoclide/coc-yaml)** for `yaml`
+- **[coc-python](https://github.com/neoclide/coc-python)** for `python`, extension forked from [vscode-python](https://github.com/Microsoft/vscode-python).
+- **[coc-highlight](https://github.com/neoclide/coc-highlight)** provides default
+  document symbol highlighting and color support.
+- **[coc-emmet](https://github.com/neoclide/coc-emmet)** provides emmet
+  suggestions in completion list.
+- **[coc-snippets](https://github.com/neoclide/coc-snippets)** provides snippets
+  solution.
+- **[coc-lists](https://github.com/neoclide/coc-lists)** provides some basic
+  lists like fzf.vim.
+- **[coc-git](https://github.com/neoclide/coc-git)** provides git integration.
+- **[coc-yank](https://github.com/neoclide/coc-yank)** provides yank highlights & history.
+- **[coc-fsharp](https://github.com/yatli/coc-fsharp)** for `fsharp`.
+- **[coc-svg](https://github.com/iamcco/coc-svg)** for `svg`.
+- **[coc-tailwindcss](https://github.com/iamcco/coc-tailwindcss)** for `tailwindcss`.
+- **[coc-angular](https://github.com/iamcco/coc-angular)** for `angular`.
+- **[coc-vimlsp](https://github.com/iamcco/coc-vimlsp)** for `viml`.
+
+Plus more! To get a full list of coc extensions, [search coc.nvim on npm](https://www.npmjs.com/search?q=keywords%3Acoc.nvim),
+or use [coc-marketplace](https://github.com/fannheyward/coc-marketplace), which can search and install extensions in coc.nvim directly.
+
+**Note:** use `:CocConfig` to edit the configuration file. Completion & validation are supported after `coc-json` is installed.
 
 ## Example vim configuration
 
-Configuration is required to make coc.nvim easier to work with, since it
-doesn't change your key-mappings or Vim options. This is done as much as
-possible to avoid conflict with your other plugins.
+Configuration is required to make coc.nvim easier to work with, since it doesn't
+change your key-mappings or vim options. This is done as much as possible to avoid conflict with your
+other plugins.
 
-**❗️Important**: Some Vim plugins could change key mappings. Please use
-command like`:verbose imap <tab>` to make sure that your keymap has taken effect.
+**❗️Important**: some vim plugins could change keymappings. Use a command like
+`:verbose imap <tab>` to make sure that your keymap has taken effect.
 
 ```vim
-" Set internal encoding of vim, not needed on neovim, since coc.nvim using some
-" unicode characters in the file autoload/float.vim
-set encoding=utf-8
-
-" TextEdit might fail if hidden is not set.
+" if hidden is not set, TextEdit might fail.
 set hidden
 
-" Some servers have issues with backup files, see #649.
+" Some servers have issues with backup files, see #649
 set nobackup
 set nowritebackup
 
-" Give more space for displaying messages.
+" Better display for messages
 set cmdheight=2
 
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
+" You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=300
 
-" Don't pass messages to |ins-completion-menu|.
+" don't give |ins-completion-menu| messages.
 set shortmess+=c
 
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+" always show signcolumns
+set signcolumn=yes
 
 " Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -155,48 +255,40 @@ function! s:check_back_space() abort
 endfunction
 
 " Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+inoremap <silent><expr> <c-space> coc#refresh()
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
-" GoTo code navigation.
+" Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window.
+" Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    call CocAction('doHover')
   endif
 endfunction
 
-" Highlight the symbol and its references when holding the cursor.
+" Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Symbol renaming.
+" Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 
-" Formatting selected code.
+" Remap for format selected region
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
@@ -204,158 +296,133 @@ augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
+  " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" Remap keys for applying codeAction to the current buffer.
+" Remap for do codeAction of current line
 nmap <leader>ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
+" Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Run the Code Lens action on the current line.
-nmap <leader>cl  <Plug>(coc-codelens-action)
+" Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+nmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
 
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
 
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
-
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of language server.
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocActionAsync('format')
-
-" Add `:Fold` command to fold current buffer.
+" Use `:Fold` to fold current buffer
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" Add diagnostic info for https://github.com/itchyny/lightline.vim
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
 
-" Mappings for CoCList
-" Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-" Show commands.
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols.
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 ```
-
-## Articles
-
-- [coc.nvim 插件体系介绍](https://zhuanlan.zhihu.com/p/65524706)
-- [CocList 入坑指南](https://zhuanlan.zhihu.com/p/71846145)
-- [Create coc.nvim extension to improve Vim experience](https://medium.com/@chemzqm/create-coc-nvim-extension-to-improve-vim-experience-4461df269173)
-- [How to write a coc.nvim extension (and why)](https://samroeca.com/coc-plugin.html)
 
 ## Trouble shooting
 
 Try these steps when you have problem with coc.nvim.
 
-- Make sure your Vim version >= 8.0 by command `:version`.
-- If service failed to start, use command `:CocInfo` or `:checkhealth` on Neovim.
+- Make sure your vim version >= 8.0.1453 by command `:version`.
+- If service failed to start, use command `:CocInfo` or `:checkhealth` on neovim.
 - Checkout the log of coc.nvim by command `:CocOpenLog`.
-- When you have issues with the language server, it's recommended to [checkout
-  the output](https://github.com/neoclide/coc.nvim/wiki/Debug-language-server#using-output-channel).
+- When you have issue with a languageserver, it's recommended to [checkout the output](https://github.com/neoclide/coc.nvim/wiki/Debug-language-server#using-output-channel)
+
+## Backers
+
+❤️ coc.nvim? Help us keep it alive by [donating funds](https://www.bountysource.com/teams/coc-nvim)😘!
+
+<a href="https://github.com/oblitum" target="_blank" title="oblitum">
+  <img src="https://github.com/oblitum.png?size=64" width="64" height="64" alt="oblitum">
+</a>
+<a href="https://github.com/free-easy" target="_blank" title="free-easy">
+  <img src="https://github.com/free-easy.png?size=64" width="64" height="64" alt="free-easy">
+</a>
+<a href="https://github.com/ruanyl" target="_blank" title="ruanyl">
+  <img src="https://github.com/ruanyl.png?size=64" width="64" height="64" alt="ruanyl">
+</a>
+<a href="https://github.com/robjuffermans" target="_blank" title="robjuffermans">
+  <img src="https://github.com/robjuffermans.png?size=64" width="64" height="64" alt="robjuffermans">
+</a>
+<a href="https://github.com/iamcco" target="_blank" title="iamcco">
+  <img src="https://github.com/iamcco.png?size=64" width="64" height="64" alt="iamcco">
+</a>
+<a href="https://github.com/phcerdan" target="_blank" title="phcerdan">
+  <img src="https://github.com/phcerdan.png?size=64" width="64" height="64" alt="phcerdan">
+</a>
+<a href="https://github.com/sarene" target="_blank" title="sarene">
+  <img src="https://github.com/sarene.png?size=64" width="64" height="64" alt="sarene">
+</a>
+<a href="https://github.com/robtrac" target="_blank" title="robtrac">
+  <img src="https://cloudinary-a.akamaihd.net/bountysource/image/upload/d_noaoqqwxegvmulwus0un.png,c_pad,w_400,h_400,b_white/Bountysource_Animals89_puer8v.png" width="64" height="64" alt="robtrac">
+</a>
+<a href="https://github.com/raidou" target="_blank" title="raidou">
+  <img src="https://github.com/raidou.png?size=64" width="64" height="64" alt="raidou">
+</a>
+<a href="https://github.com/tomspeak" target="_blank" title="tomspeak">
+  <img src="https://github.com/tomspeak.png?size=64" width="64" height="64" alt="tomspeak">
+</a>
+<a href="https://github.com/taigacute" target="_blank" title="taigacute">
+  <img src="https://github.com/taigacute.png?size=64" width="64" height="64" alt="taigacute">
+</a>
+<a href="https://github.com/weirongxu" target="_blank" title="weirongxu">
+  <img src="https://github.com/weirongxu.png?size=64" width="64" height="64" alt="weirongxu">
+</a>
+<a href="https://github.com/tbo" target="_blank" title="tbo">
+  <img src="https://github.com/tbo.png?size=64" width="64" height="64" alt="tbo">
+</a>
+<a href="https://github.com/darthShadow" target="_blank" title="darthShadow">
+  <img src="https://github.com/darthShadow.png?size=64" width="64" height="64" alt="darthShadow">
+</a>
 
 ## Feedback
 
 - If you think Coc is useful, consider giving it a star.
+
 - If you have a question, [ask on gitter](https://gitter.im/neoclide/coc.nvim)
-- 中文用户请到 [中文 gitter](https://gitter.im/neoclide/coc-cn) 讨论
-- If something is not working, [create an
-  issue](https://github.com/neoclide/coc.nvim/issues/new).
 
-## Backers
+- 中文用户请到 [中文 gitter](https://gitter.im/neoclide/coc-cn) 讨论。
 
-[Become a backer](https://opencollective.com/cocnvim#backer) and get your image on our README on Github with a link to your site.
+- If something is not working, [create an issue](https://github.com/neoclide/coc.nvim/issues/new).
 
-<a href="https://opencollective.com/cocnvim/backer/0/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/0/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/1/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/1/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/2/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/2/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/3/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/3/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/4/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/4/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/5/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/5/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/6/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/6/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/7/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/7/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/8/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/8/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/9/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/9/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/10/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/10/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/11/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/11/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/12/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/12/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/13/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/13/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/14/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/14/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/15/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/15/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/16/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/16/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/17/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/17/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/18/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/18/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/19/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/19/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/20/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/20/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/21/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/21/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/22/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/22/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/23/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/23/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/24/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/24/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/25/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/25/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/26/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/26/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/27/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/27/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/28/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/28/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/29/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/29/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/30/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/30/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/31/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/31/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/32/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/32/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/33/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/33/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/34/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/34/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/35/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/35/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/36/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/36/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/37/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/37/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/38/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/38/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/39/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/39/avatar.svg?requireActive=false"></a>
-<a href="https://opencollective.com/cocnvim/backer/40/website?requireActive=false" target="_blank"><img src="https://opencollective.com/cocnvim/backer/40/avatar.svg?requireActive=false"></a>
-
-<a href="https://opencollective.com/cocnvim#backer" target="_blank"><img src="https://images.opencollective.com/static/images/become_backer.svg"></a>
-
-## Support the project
-
-Buy cloud service from [www.vultr.com](https://www.vultr.com/?ref=8890170-6G)
+<img src="https://user-images.githubusercontent.com/251450/57566955-fb850200-7404-11e9-960f-711673f1a461.png" width="593" height="574">
 
 ## License
 

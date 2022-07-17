@@ -309,7 +309,7 @@ let g:floaterm_width = 0.7
 " 窗口高度
 let g:floaterm_height = 0.6
 " 标题
-let g:floaterm_title = '[ What drive me crazy ? ]'
+let g:floaterm_title = '[ what do you want to do ? ]'
 
 " 打开一次性窗口
 nnoremap <c-c> :FloatermNew --disposable <CR>
@@ -343,13 +343,13 @@ nnoremap <silent> <Leader>m :TagbarOpenAutoClose <CR>
 " tags搜索路径 
 " . 会替换成当前工作目录   如果用 inner terminal 去其它目录打开文件
 " . 还是替换的当前工作目录 找的是当前工作目录下的tag 所以这种情况不要 gt
-set tags=./tags,tags
+" set tags=./tags,tags
 " 打ctag
-nnoremap tg :!ctags -R --fields=+aS --extra=+q<CR>
+" nnoremap tg :!ctags -R --fields=+aS --extra=+q<CR>
 " 跳转到光标所在关键词的定义处
-nnoremap gt g<C-]>
+" nnoremap gt g<C-]>
 " 跳回原关键词 与 gt 配合使用
-nnoremap gr <C-T>
+" nnoremap gr <C-T>
 
 " ==== surround T ======================
 " 都是nmap 都是pair操作 不支持可视模式
@@ -376,7 +376,7 @@ noremap <silent><Leader>z :call quickmenu#toggle(0)<cr>
 let g:quickmenu_options = "LH"
 call g:quickmenu#reset()
 " 修改标题
-call g:quickmenu#header('" 直道相思了无益 未妨惆怅是清狂 "')
+call g:quickmenu#header('" 蒙多 想去哪就去哪~ "')
 
 " 添加项 append(show text, cmd, help message, filetype filter)
 call g:quickmenu#append('# Git', '')
@@ -429,6 +429,39 @@ nmap <Leader>c <plug>(coc-fix-current)
 
 " <c-n>         next key
 " <c-p>         prev key
+
+" keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json,cc,c++ setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " ==== ycm T ========================
 " 全局文件配置
@@ -598,7 +631,7 @@ nnoremap <Leader>e :e <Space>
 " nnoremap <Leader>gw :Ack! <Space>
 nnoremap gw :Ack! <Space>
 " AckFile搜索 不自动打开第一个文件
-nnoremap gf :AckFile! <Space>
+" nnoremap gf :AckFile! <Space>
 
 " ==== other map T =====================
 " 去除搜索高亮
@@ -649,10 +682,10 @@ nnoremap <Leader>r <ESC><C-W>r
 
 " 翻页
 let g:smoothie_enabled = 0 " smoothie翻页顺滑插件开关
-nmap <Leader>f <C-f>
-nmap <Leader>b <C-b>
-nmap <Leader>u <C-u> 
-nmap <Leader>d <C-d>
+" nmap <Leader>f <C-f>
+" nmap <Leader>b <C-b>
+" nmap <Leader>u <C-u> 
+" nmap <Leader>d <C-d>
 
 " 退出并删除buffer
 nmap <Leader>- :bd <CR>
@@ -704,27 +737,27 @@ func Lorem()
         call append(line("."), "Lorem ipsum dolor sit amet, consectetur adipisicing elit dolore magna aliqua.")
 endfunc
 
-func SetTitle()
-    if &filetype == 'sh'
-        call setline(1,"\#########################################################################")
-        call append(line("."),   "\# File Name:    ".expand("%"))
-        call append(line(".")+1, "\# Author:       arashi")
-        call append(line(".")+2, "\# mail:         arashi@tencent.com")
-        call append(line(".")+3, "\# Created Time: ".strftime("%c"))
-        call append(line(".")+4, "\#########################################################################")
-        call append(line(".")+5, "\#!/bin/bash")
-        call append(line(".")+6, "")
-    else
-        call setline(1, "/* ************************************************************************")
-        call append(line("."),   "> File Name:     ".expand("%"))
-        call append(line(".")+1, "> Author:        arashi")
-        call append(line(".")+2, "> mail:          arashi@tencent.com")
-        call append(line(".")+3, "> Created Time:  ".strftime("%c"))
-        call append(line(".")+4, "> Description:   ")
-        call append(line(".")+5, " ************************************************************************/")
-        call append(line(".")+6, "")
-    endif
-endfunc
+" func SetTitle()
+"     if &filetype == 'sh'
+"         call setline(1,"\#########################################################################")
+"         call append(line("."),   "\# File Name:    ".expand("%"))
+"         call append(line(".")+1, "\# Author:       arashi")
+"         call append(line(".")+2, "\# mail:         arashi@tencent.com")
+"         call append(line(".")+3, "\# Created Time: ".strftime("%c"))
+"         call append(line(".")+4, "\#########################################################################")
+"         call append(line(".")+5, "\#!/bin/bash")
+"         call append(line(".")+6, "")
+"     else
+"         call setline(1, "/* ************************************************************************")
+"         call append(line("."),   "> File Name:     ".expand("%"))
+"         call append(line(".")+1, "> Author:        arashi")
+"         call append(line(".")+2, "> mail:          arashi@tencent.com")
+"         call append(line(".")+3, "> Created Time:  ".strftime("%c"))
+"         call append(line(".")+4, "> Description:   ")
+"         call append(line(".")+5, " ************************************************************************/")
+"         call append(line(".")+6, "")
+"     endif
+" endfunc
 
 " 关闭当前buf外的所有buf
 func! BufCloseOthers()
