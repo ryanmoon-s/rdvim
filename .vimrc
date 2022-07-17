@@ -440,8 +440,8 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
 
 " format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>t  <Plug>(coc-format-selected)
+nmap <leader>t  <Plug>(coc-format-selected)
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s).
@@ -451,6 +451,7 @@ augroup mygroup
 augroup end
 
 " Use K to show documentation in preview window
+" 如果没有man page就用cocAction显示
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -682,10 +683,10 @@ nnoremap <Leader>r <ESC><C-W>r
 
 " 翻页
 let g:smoothie_enabled = 0 " smoothie翻页顺滑插件开关
-" nmap <Leader>f <C-f>
-" nmap <Leader>b <C-b>
-" nmap <Leader>u <C-u> 
-" nmap <Leader>d <C-d>
+nmap <Leader>f <C-f>
+nmap <Leader>b <C-b>
+nmap <Leader>u <C-u> 
+nmap <Leader>d <C-d>
 
 " 退出并删除buffer
 nmap <Leader>- :bd <CR>
