@@ -50,17 +50,18 @@ let mapleader=";"
 " F5            - single file compile
 
 " ==== Theme  ========================================================
+
 " 灰蓝 default
-set background=dark
-colorscheme nord 
+" set background=dark
+" colorscheme nord 
 
 " 紫蓝
 " set background=dark
 " colorscheme onedark
 
 " 橙绿 - 不支持coc.nvim
-" set background=dark
-" colorscheme gruvbox
+set background=dark
+colorscheme gruvbox
 
 " ==== Plug config T =================================================
 " ==== junegunn/vim-plug ===============
@@ -86,7 +87,6 @@ Plug 'mhinz/vim-startify'
 Plug 'morhetz/gruvbox', {'do': 'cp colors/gruvbox.vim ~/.vim/colors'}
 Plug 'joshdick/onedark.vim', {'do': 'cp colors/onedark.vim ~/.vim/colors \| cp autoload/onedark.vim ~/.vim/autoload'}
 Plug 'arcticicestudio/nord-vim', {'do': 'cp colors/nord.vim ~/.vim/colors'}
-
 
 " << 导航 >>
 " 文件窗口
