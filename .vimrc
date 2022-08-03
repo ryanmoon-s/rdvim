@@ -806,14 +806,11 @@ if has("autocmd")
 \ endif
 endif
 
-" onedark 在非tmux下打开24-bit模式
-if (empty($TMUX))
-  if (has("nvim"))
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  if (has("termguicolors"))
-    set termguicolors
-  endif
+" use 256 colors in terminal
+" vim theme in tmux ; fix
+if !has("gui_running")
+    set t_Co=256
+    set term=screen-256color
 endif
 
 " ==== teaching T (教学) =============================================
