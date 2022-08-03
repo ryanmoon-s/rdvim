@@ -376,7 +376,7 @@ noremap <silent><Leader>z :call quickmenu#toggle(0)<cr>
 let g:quickmenu_options = "LH"
 call g:quickmenu#reset()
 " 修改标题
-call g:quickmenu#header('" 蒙多 想去哪就去哪~ "')
+call g:quickmenu#header('" 学吧，学无止境 "')
 
 " 添加项 append(show text, cmd, help message, filetype filter)
 call g:quickmenu#append('# Git', '')
