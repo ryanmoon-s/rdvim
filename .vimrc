@@ -217,7 +217,7 @@ set laststatus=2
 let g:airline#extensions#tabline#enabled = 1              " 是否打开tabline
 let g:airline#extensions#tabline#buffer_idx_mode = 1      " 切换模式
 " let g:airline#extensions#tabline#left_sep = ''           " 分隔符
-let g:airline#extensions#tabline#left_sep = '░'           " 分隔符
+" let g:airline#extensions#tabline#left_sep = '░'           " 分隔符
 let g:airline#extensions#tabline#left_alt_sep = '➤'
 " tab 切换
 nmap <Leader>1 <Plug>AirlineSelectPrevTab
@@ -244,9 +244,9 @@ endif
 " let g:airline_right_sep = ''
 " let g:airline_right_alt_sep = '❮'
 
-let g:airline_left_sep = '░'
+" let g:airline_left_sep = '░'
 let g:airline_left_alt_sep = '❯'
-let g:airline_right_sep = '░'
+" let g:airline_right_sep = '░'
 let g:airline_right_alt_sep = '❮'
 
 let g:airline_symbols.linenr = '  ｢'
@@ -255,7 +255,8 @@ let g:airline_symbols.colnr = '   ❤ '
 let g:airline_symbols.paste = '｢paste｣'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
-let g:airline_symbols.branch = ' '
+" let g:airline_symbols.branch = ' '
+let g:airline_symbols.branch = '  →✒'
 
 " 关闭white space 提示
 let g:airline#extensions#whitespace#enabled = 0
@@ -408,6 +409,9 @@ call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 let g:ackhighlight = 1
 " 修改快速预览窗口高度为15
 let g:ack_qhandler = "botright copen 15"
+
+" quickfix窗口可做的操作
+" O 关闭窗口
 
 " ==== tabular T =======================
 " :Tabularize /,/r0
@@ -737,6 +741,9 @@ autocmd filetype cpp nnoremap <F5> :w <bar> exec '!g++ --std=c++11 -pthread '.sh
 autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'TODO', -1)
 autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'todo', -1)
 
+" 只剩下help/quickfix/nerd/tag_list等等窗口时直接关闭vim
+autocmd BufEnter * call CheckLeftBuffers()
+
 " ==== function T ====================================================
 func SetTime()
         call append(line("."), "\# ".strftime('%c'))
@@ -795,6 +802,28 @@ func M_no_paste_copy()
     :GitGutterSignsEnable
 	:IndentLinesEnable
 endfunc
+
+" 剩下这些窗口时：直接关闭vim
+function! CheckLeftBuffers()
+  if tabpagenr('$') == 1
+    let i = 1
+    while i <= winnr('$')
+      if getbufvar(winbufnr(i), '&buftype') == 'help' ||
+          \ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
+          \ exists('t:NERDTreeBufName') &&
+          \   bufname(winbufnr(i)) == t:NERDTreeBufName ||
+          \ bufname(winbufnr(i)) == '__Tag_List__'
+        let i += 1
+      else
+        break
+      endif
+    endwhile
+    if i == winnr('$') + 1
+      qall
+    endif
+    unlet i
+  endif
+endfunction
 
 " ==== block T =======================================================
 
