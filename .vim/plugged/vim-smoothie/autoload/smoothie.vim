@@ -1,22 +1,19 @@
-""
-" This variable is used to inform the s:step_*() functions about whether the
-" current movement is a cursor movement or a scroll movement.  Used for
-" motions like gg and G
-let s:cursor_movement = v:false
+function! s:editor_supports_fast_redraw() abort
+  " Currently enabled only for Neovim, because it causes screen flickering on
+  " regular Vim.
+  return has('nvim')
+endfunction
+
+function! s:terminal_supports_fast_redraw() abort
+  " Currently only Kitty is known not to cause any flickering when calling
+  " `:mode`.
+  return $TERM ==# 'xterm-kitty'
+endfunction
 
 ""
-" This variable is needed to let the s:step_down() function know whether to
-" continue scrolling after reaching EOL (as in ^F) or not (^B, ^D, ^U, etc.)
-"
-" NOTE: This variable "MUST" be set to v:false in "every" function that
-" invokes motion (except smoothie#forwards, where it must be set to v:true)
-let s:ctrl_f_invoked = v:false
-
-if !exists('g:smoothie_enabled')
-  ""
-  " Set it to 0 to disable vim-smoothie.  Useful for very slow connections.
-  let g:smoothie_enabled = 1
-endif
+" Note: the configuration options mentioned there are intentionally hidden
+" from the user, since they're not guaranteed to be backward-compatible with
+" future releases of the plugin. Change them at your own risk!
 
 if !exists('g:smoothie_update_interval')
   ""
@@ -48,142 +45,50 @@ if !exists('g:smoothie_speed_exponentiation_factor')
   let g:smoothie_speed_exponentiation_factor = 0.9
 endif
 
-if !exists('g:smoothie_break_on_reverse')
+if !exists('g:smoothie_redraw_at_finish')
   ""
-  " Stop immediately if we're moving and the user requested moving in opposite
-  " direction.  It's mostly useful at very low scrolling speeds, hence
-  " disabled by default.
-  let g:smoothie_break_on_reverse = 0
+  " Force screen redraw when the animation is finished, which clears sporadic
+  " display artifacts which I encountered f.ex. when scrolling through buffers
+  " containing emoji. Enabled by default only if both editor and terminal
+  " supports doing this in a glitch-free way.
+  let g:smoothie_redraw_at_finish = s:editor_supports_fast_redraw() && s:terminal_supports_fast_redraw()
 endif
 
-""
-" Execute {command}, but saving 'scroll' value before, and restoring it
-" afterwards.  Useful for some commands (such as ^D or ^U), which overwrite
-" 'scroll' permanently if used with a [count].
-"
-" Additionally, this function temporarily clears 'scrolloff' and resets it
-" after command execution. This is workaround for a bug described in
-" https://github.com/psliwka/vim-smoothie/issues/18
-function s:execute_preserving_scroll(command)
-  let l:saved_scroll = &scroll
-  let l:saved_scrolloff = 0
-  if &scrolloff
-    let l:saved_scrolloff = &scrolloff
-    let &scrolloff = 0
-  endif
-  execute a:command
-  let &scroll = l:saved_scroll
-  if l:saved_scrolloff
-    let &scrolloff = l:saved_scrolloff
-  endif
-endfunction
+let s:target_view = {}
 
-""
-" Scroll the window up by one line, or move the cursor up if the window is
-" already at the top.  Return 1 if cannot move any higher.
-function s:step_up()
-  if line('.') > 1
-    if s:cursor_movement
-      exe 'normal! k'
-      return 0
-    endif
-    call s:execute_preserving_scroll("normal! 1\<C-U>")
-    return 0
-  else
-    return 1
-  endif
-endfunction
+let s:subline_progress_view = {}
 
-""
-" Scroll the window down by one line, or move the cursor down if the window is
-" already at the bottom.  Return 1 if cannot move any lower.
-function s:step_down()
-  let l:initial_winline = winline()
-
-  if line('.') < line('$')
-    if s:cursor_movement
-      exe 'normal! j'
-      return 0
-    endif
-    " NOTE: the three lines of code following this comment block
-    " have been implemented as a temporary workaround for a vim issue
-    " regarding Ctrl-D and folds.
-    "
-    " See: neovim/neovim#13080
-    if foldclosedend('.') != -1
-      call cursor(foldclosedend('.'), col('.'))
-    endif
-    call s:execute_preserving_scroll("normal! 1\<C-D>")
-    if s:ctrl_f_invoked && winline() > l:initial_winline
-      " ^F is pressed, and the last motion caused cursor postion to change
-      " scroll window to keep cursor position fixed
-      call s:execute_preserving_scroll("normal! \<C-E>")
-    endif
-    return 0
-
-  elseif s:ctrl_f_invoked && winline() > 1
-    " cursor is already on last line of buffer, but not on last line of window
-    " ^F can scroll more
-    call s:execute_preserving_scroll("normal! \<C-E>")
-    return 0
-
-  else
-    return 1
-  endif
-endfunction
-
-""
-" Perform as many steps up or down to move {lines} lines from the starting
-" position (negative {lines} value means to go up).  Return 1 if hit either
-" top or bottom, and cannot move further.
-function s:step_many(lines)
-  let l:remaining_lines = a:lines
-  while 1
-    if l:remaining_lines < 0
-      if s:step_up()
-        return 1
-      endif
-      let l:remaining_lines += 1
-    elseif l:remaining_lines > 0
-      if s:step_down()
-        return 1
-      endif
-      let l:remaining_lines -= 1
-    else
-      return 0
-    endif
-  endwhile
-endfunction
-
-""
-" A Number indicating how many lines do we need yet to move down (or up, if
-" it's negative), to achieve what the user wants.
-let s:target_displacement = 0
-
-""
-" A Float between -1.0 and 1.0 keeping our position between integral lines,
-" used to make the animation smoother.
-let s:subline_position = 0.0
+let s:animated_view_elements = ['lnum', 'topline']
 
 ""
 " Start the animation timer if not already running.  Should be called when
 " updating the target, when there's a chance we're not already moving.
-function s:start_moving()
-  if ((s:target_displacement < 0) ? line('.') == 1 : (line('.') == line('$') && (s:ctrl_f_invoked ? winline() == 1 : v:true)))
-    " Invalid command
-    call s:ring_bell()
-  endif
+function! s:start_moving() abort
+  call s:ensure_subline_progress_view_initialized()
   if !exists('s:timer_id')
-    let s:timer_id = timer_start(g:smoothie_update_interval, function('s:movement_tick'), {'repeat': -1})
+    let s:timer_id = timer_start(g:smoothie_update_interval, function('s:animation_tick'), {'repeat': -1})
+    let s:last_tick_time = reltime()
+  endif
+endfunction
+
+function! s:ensure_subline_progress_view_initialized() abort
+  if empty(s:subline_progress_view)
+    for key in s:animated_view_elements
+      let s:subline_progress_view[key] = 0.0
+    endfor
   endif
 endfunction
 
 ""
-" Stop any movement immediately, and disable the animation timer to conserve
-" power.
-function s:stop_moving()
-  let s:target_displacement = 0
-  let s:subline_position = 0.0
+" Ensure the window and the cursor is positioned at their final destinations,
+" and disable the animation timer to conserve power.
+function! s:finish_moving() abort
+  call winrestview(s:target_view)
+  if g:smoothie_redraw_at_finish
+    mode
+  endif
+  let s:target_view = {}
+  let s:subline_progress_view = {}
   if exists('s:timer_id')
     call timer_stop(s:timer_id)
     unlet s:timer_id
@@ -191,226 +96,188 @@ function s:stop_moving()
 endfunction
 
 ""
-" Calculate optimal movement velocity (in lines per second, negative value
-" means to move upwards) for the next animation frame.
-"
+" Skip animation and jump to target position immediately if we're moving and
+" the user is about to leave the window or switch to a different buffer.
+function! s:handle_leave_event() abort
+  if !empty(s:target_view)
+    call s:finish_moving()
+  endif
+endfunction
+
+augroup smoothie_leave_handlers
+  autocmd!
+  autocmd WinLeave,BufLeave * call s:handle_leave_event()
+augroup end
+
+""
 " TODO: current algorithm is rather crude, would be good to research better
 " alternatives.
-function s:compute_velocity()
-  let l:absolute_speed = g:smoothie_speed_constant_factor + g:smoothie_speed_linear_factor * pow(abs(s:target_displacement - s:subline_position), g:smoothie_speed_exponentiation_factor)
-  if s:target_displacement < 0
+function! s:compute_velocity_element(target_distance_element) abort
+  let l:absolute_speed = g:smoothie_speed_constant_factor + g:smoothie_speed_linear_factor * pow(abs(a:target_distance_element), g:smoothie_speed_exponentiation_factor)
+  if a:target_distance_element < 0
     return -l:absolute_speed
   else
     return l:absolute_speed
   endif
 endfunction
 
+function! s:compute_target_distance() abort
+  let l:result = {}
+  for [key, value] in items(s:filter_dict(winsaveview(), s:animated_view_elements))
+    let l:result[key] = s:target_view[key] - value - s:subline_progress_view[key]
+  endfor
+  return l:result
+endfunction
+
+function! s:compute_velocity(target_distance) abort
+  let l:result = {}
+  for [key, value] in items(a:target_distance)
+    let l:result[key] = s:compute_velocity_element(value)
+  endfor
+  return l:result
+endfunction
+
+function! s:compute_animation_step(target_distance, step_duration) abort
+  let l:result = {}
+  for [key, value] in items(s:compute_velocity(a:target_distance))
+    let l:result[key] = value * a:step_duration
+    if abs(l:result[key]) > abs(a:target_distance[key])
+      " clamp step size to prevent overshooting the target
+      let l:result[key] = a:target_distance[key]
+    end
+  endfor
+  return l:result
+endfunction
+
+function! s:filter_dict(source, persisted_keys) abort
+  let l:result = {}
+  for key in a:persisted_keys
+    let l:result[key] = a:source[key]
+  endfor
+  return result
+endfunction
+
+""
+" Equivalent to winrestview(), but tries to avoid actually calling
+" winrestview() and tries to restore the view using normal mode commands if
+" possible.  This improves redraw smoothness and minimises glitches,
+" especially on slow terminals.
+function! s:winrestview_optimized(new_view) abort
+  for key in ['topline', 'lnum']
+    let l:distance = a:new_view[key] - winsaveview()[key]
+    if l:distance == 0
+      continue
+    endif
+    if key ==# 'topline'
+      if l:distance > 0
+        execute 'normal! ' . l:distance . "\<C-E>"
+      else
+        execute 'normal! ' . -l:distance . "\<C-Y>"
+      endif
+    elseif key ==# 'lnum'
+      if l:distance > 0
+        execute 'normal! ' . l:distance . 'j'
+      else
+        execute 'normal! ' . -l:distance . 'k'
+      endif
+    endif
+  endfor
+  let l:view_after_optimization = s:filter_dict(winsaveview(), keys(a:new_view))
+  let l:remaining_view_changes = {}
+  for [key, value] in items(view_after_optimization)
+    if a:new_view[key] != value
+      let l:remaining_view_changes[key] = a:new_view[key]
+    endif
+  endfor
+  if !empty(l:remaining_view_changes)
+    call winrestview(l:remaining_view_changes)
+  endif
+endfunction
+
+""
+" Stop moving and jump to target immediately if we detect the animation is
+" stuck. This is a workaround to partially mitigate
+" https://github.com/psliwka/vim-smoothie/issues/40
+function! s:abort_if_stuck(desired_new_position) abort
+  let l:current_position = s:filter_dict(winsaveview(), s:animated_view_elements)
+  for key in s:animated_view_elements
+    if l:current_position[key] != a:desired_new_position[key]
+      call s:finish_moving()
+    endif
+  endfor
+endfunction
+
+function! s:perform_animation_step(step_duration) abort
+  let l:target_distance = s:compute_target_distance()
+  let l:new_position = s:filter_dict(winsaveview(), s:animated_view_elements)
+  let l:animation_step = s:compute_animation_step(l:target_distance, a:step_duration)
+  let l:finished_moving = v:true
+  for [key, value] in items(l:animation_step)
+    if l:new_position[key] == s:target_view[key]
+      continue
+    else
+      let l:finished_moving = v:false
+    endif
+    let l:integer_step_size = float2nr(trunc(value+s:subline_progress_view[key]))
+    if l:integer_step_size != 0
+      let l:new_position[key] = l:new_position[key] + l:integer_step_size
+    endif
+    let s:subline_progress_view[key] += value - l:integer_step_size
+  endfor
+  call s:winrestview_optimized(l:new_position)
+  call s:abort_if_stuck(l:new_position)
+  return l:finished_moving
+endfunction
+
 ""
 " Execute single animation frame.  Called periodically by a timer.  Accepts a
 " throwaway parameter: the timer ID.
-function s:movement_tick(_)
-  if s:target_displacement == 0
-    call s:stop_moving()
-    return
-  endif
-
-  let l:subline_step_size = s:subline_position + (g:smoothie_update_interval/1000.0 * s:compute_velocity())
-  let l:step_size = float2nr(trunc(l:subline_step_size))
-
-  if abs(l:step_size) > abs(s:target_displacement)
-    " clamp step size to prevent overshooting the target
-    let l:step_size = s:target_displacement
-  end
-
-  if s:step_many(l:step_size)
-    " we've collided with either buffer end
-    call s:stop_moving()
-  else
-    let s:target_displacement -= l:step_size
-    let s:subline_position = l:subline_step_size - l:step_size
-  endif
-
-  if l:step_size
-    " Usually Vim handles redraws well on its own, but without explicit redraw
-    " I've encountered some sporadic display artifacts.  TODO: debug further.
-    redraw
+function! s:animation_tick(_) abort
+  let l:current_step_duration = reltimefloat(reltime(s:last_tick_time))
+  let s:last_tick_time = reltime()
+  let l:finished_moving = s:perform_animation_step(l:current_step_duration)
+  if l:finished_moving
+    call s:finish_moving()
   endif
 endfunction
 
-""
-" Set a new target where we should move to (in lines, relative to our current
-" position).  If we're already moving, try to do the smart thing, taking into
-" account our progress in reaching the target set previously.
-function s:update_target(lines)
-  if g:smoothie_break_on_reverse && s:target_displacement * a:lines < 0
-    call s:stop_moving()
+function! s:update_target(command, count) abort
+  let l:current_view = winsaveview()
+  if !empty(s:target_view)
+    call winrestview(s:target_view)
+  endif
+  execute 'normal! ' . a:count . a:command
+  let s:target_view = winsaveview()
+  call winrestview(l:current_view)
+endfunction
+
+function! smoothie#do(command) abort
+  if v:count == 0
+    let l:count = ''
   else
-    " Cursor movements are very delicate. Since the displacement for cursor
-    " movements is calulated from the "current" line, so immediately stop
-    " moving, otherwise we will end up at the wrong line.
-    if s:cursor_movement
-      call s:stop_moving()
-    endif
-    let s:target_displacement += a:lines
+    let l:count = v:count
+  endif
+  if g:smoothie_enabled
+    call s:update_target(a:command, l:count)
     call s:start_moving()
+  else
+    execute 'normal! ' . l:count . a:command
   endif
 endfunction
 
 ""
-" Helper function to calculate the actual number of screen lines from a line
-" to another.  Useful for properly handling folds in case of cursor movements.
-function s:calculate_screen_lines(from, to)
-  let l:from = a:from
-  let l:to = a:to
-  let l:from = (foldclosed(l:from) != -1 ? foldclosed(l:from) : l:from)
-  let l:to = (foldclosed(l:to) != -1 ? foldclosed(l:to) : l:to)
-  if l:from == l:to
-    return 0
-  endif
-  let l:lines = 0
-  let l:linenr = l:from
-  while l:linenr != l:to
-    if l:linenr < l:to
-      let l:lines +=1
-      let l:linenr = (foldclosedend(l:linenr) != -1 ? foldclosedend(l:linenr) : l:linenr)
-      let l:linenr += 1
-    elseif l:linenr > l:to
-      let l:lines -= 1
-      let l:linenr = (foldclosed(l:linenr) != -1 ? foldclosed(l:linenr) : l:linenr)
-      let l:linenr -= 1
-    endif
-  endwhile
-  return l:lines
+" Old interface kept for backward compatibility with legacy configurations
+function! smoothie#downwards() abort
+  call smoothie#do("\<C-D>")
 endfunction
-
-""
-" Helper function to set 'scroll' to [count], similarly to what native ^U and
-" ^D commands do.
-function s:count_to_scroll()
-  if v:count
-    let &scroll=v:count
-  end
+function! smoothie#upwards() abort
+  call smoothie#do("\<C-U>")
 endfunction
-
-""
-" Helper function to ring bell.
-function s:ring_bell()
-  if !(&belloff =~# 'all\|error')
-    let l:belloff = &belloff
-    set belloff=
-    exe "normal \<Esc>"
-    let &belloff = l:belloff
-  endif
+function! smoothie#forwards() abort
+  call smoothie#do("\<C-F>")
 endfunction
-
-""
-" Smooth equivalent to ^D.
-function smoothie#downwards()
-  if !g:smoothie_enabled
-    exe "normal! \<C-d>"
-    return
-  endif
-  let s:ctrl_f_invoked = v:false
-  call s:count_to_scroll()
-  call s:update_target(&scroll)
-endfunction
-
-""
-" Smooth equivalent to ^U.
-function smoothie#upwards()
-  if !g:smoothie_enabled
-    exe "normal! \<C-u>"
-    return
-  endif
-  let s:ctrl_f_invoked = v:false
-  call s:count_to_scroll()
-  call s:update_target(-&scroll)
-endfunction
-
-""
-" Smooth equivalent to ^F.
-function smoothie#forwards()
-  if !g:smoothie_enabled
-    exe "normal! \<C-f>"
-    return
-  endif
-  let s:ctrl_f_invoked = v:true
-  call s:update_target(winheight(0) * v:count1)
-endfunction
-
-""
-" Smooth equivalent to ^B.
-function smoothie#backwards()
-  if !g:smoothie_enabled
-    exe "normal! \<C-b>"
-    return
-  endif
-  let s:ctrl_f_invoked = v:false
-  call s:update_target(-winheight(0) * v:count1)
-endfunction
-
-""
-" Smoothie equivalent for G and gg
-" NOTE: I have also added - movement to dempnstrate how to add more new
-"       movements in the future
-function smoothie#cursor_movement(movement)
-  let l:movements = {
-        \'gg': {
-                \'target_expr':   'v:count1',
-                \'startofline':   &startofline,
-                \'jump_commmand': v:true,
-                \},
-        \'G' :  {
-                \'target_expr':   "(v:count ? v:count : line('$'))",
-                \'startofline':   &startofline,
-                \'jump_commmand': v:true,
-                \},
-        \'-' :  {
-                \'target_expr':   "line('.') - v:count1",
-                \'startofline':   v:true,
-                \'jump_commmand': v:false,
-                \},
-        \}
-  if !has_key(l:movements, a:movement)
-    return 1
-  endif
-  call s:do_vertical_cursor_movement(a:movement, l:movements[a:movement])
-endfunction
-
-""
-" Helper function to preform cursor movements
-function s:do_vertical_cursor_movement(movement, properties)
-  let s:cursor_movement = v:true
-  let s:ctrl_f_invoked = v:false
-  " If in operator pending mode, disable vim-smoothie and use the normal
-  " non-smoothie version of the movement
-  if !g:smoothie_enabled || mode(1) =~# 'o' && mode(1) =~? 'no'
-    " If in operator-pending mode, prefer the movement to be linewise
-    exe 'normal! ' . (mode(1) ==# 'no' ? 'V' : '') . v:count . a:movement
-    return
-  endif
-  let l:target = eval(a:properties['target_expr'])
-  let l:target = (l:target > line('$') ? line('$') : l:target)
-  let l:target = (foldclosed(l:target) != -1 ? foldclosed(l:target) : l:target)
-  if foldclosed('.') == l:target
-    let s:cursor_movement = v:false
-    return
-  endif
-  " if this is a jump command, append current position to the jumplist
-  if a:properties['jump_commmand']
-    execute "normal! m'"
-  endif
-  call s:update_target(s:calculate_screen_lines(line('.'), l:target))
-  " suspend further commands till the destination is reached
-  " see point (3) of https://github.com/psliwka/vim-smoothie/issues/1#issuecomment-560158642
-  while line('.') != l:target
-    exe 'sleep ' . g:smoothie_update_interval . ' m'
-  endwhile
-  let s:cursor_movement = v:false   " reset s:cursor_movement to false
-  if a:properties['startofline']
-    " move cursor to the first non-blank character of the line
-    call cursor(line('.'), match(getline('.'),'\S')+1)
-  endif
+function! smoothie#backwards() abort
+  call smoothie#do("\<C-B>")
 endfunction
 
 " vim: et ts=2

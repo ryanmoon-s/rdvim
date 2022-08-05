@@ -18,7 +18,9 @@ let s:focusgained_ignore_time = 0
 " actually changed.
 function! airline#util#winwidth(...) abort
   let nr = get(a:000, 0, 0)
-  if get(g:, 'airline_statusline_ontop', 0)
+  " When statusline is on top, or using global statusline for Neovim
+  " always return the number of columns
+  if get(g:, 'airline_statusline_ontop', 0) || &laststatus > 2
     return &columns
   else
     return winwidth(nr)
@@ -142,7 +144,7 @@ endfunction
 
 function! airline#util#has_fugitive()
   if !exists("s:has_fugitive")
-    let s:has_fugitive = exists('*fugitive#head') || exists('*FugitiveHead')
+    let s:has_fugitive = exists('*FugitiveHead')
   endif
   return s:has_fugitive
 endfunction

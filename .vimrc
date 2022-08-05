@@ -734,8 +734,8 @@ autocmd FileType vim set commentstring=\"\ %s
 autocmd FileType shell set commentstring=#\ %s
 
 " 编译 需要当前目录下有 .bin文件夹
-autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR> autocmd filetype c nnoremap <F5> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
-autocmd filetype cpp nnoremap <F5> :w <bar> exec '!g++ --std=c++11 -pthread '.shellescape('%').' -o ./bin/'.shellescape('%:r').' && ./bin/'.shellescape('%:r')<CR>
+" autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR> autocmd filetype c nnoremap <F5> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
+" autocmd filetype cpp nnoremap <F5> :w <bar> exec '!g++ --std=c++11 -pthread '.shellescape('%').' -o ./bin/'.shellescape('%:r').' && ./bin/'.shellescape('%:r')<CR>
 
 " 进入窗口高亮 todo TODO
 autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'TODO', -1)
@@ -753,27 +753,27 @@ func Lorem()
         call append(line("."), "Lorem ipsum dolor sit amet, consectetur adipisicing elit dolore magna aliqua.")
 endfunc
 
-" func SetTitle()
-"     if &filetype == 'sh'
-"         call setline(1,"\#########################################################################")
-"         call append(line("."),   "\# File Name:    ".expand("%"))
-"         call append(line(".")+1, "\# Author:       arashi")
-"         call append(line(".")+2, "\# mail:         arashi@tencent.com")
-"         call append(line(".")+3, "\# Created Time: ".strftime("%c"))
-"         call append(line(".")+4, "\#########################################################################")
-"         call append(line(".")+5, "\#!/bin/bash")
-"         call append(line(".")+6, "")
-"     else
-"         call setline(1, "/* ************************************************************************")
-"         call append(line("."),   "> File Name:     ".expand("%"))
-"         call append(line(".")+1, "> Author:        arashi")
-"         call append(line(".")+2, "> mail:          arashi@tencent.com")
-"         call append(line(".")+3, "> Created Time:  ".strftime("%c"))
-"         call append(line(".")+4, "> Description:   ")
-"         call append(line(".")+5, " ************************************************************************/")
-"         call append(line(".")+6, "")
-"     endif
-" endfunc
+func SetTitle()
+    if &filetype == 'sh'
+        call setline(1,"\#########################################################################")
+        call append(line("."),   "\# File Name:    ".expand("%"))
+        call append(line(".")+1, "\# Author:       arashi")
+        call append(line(".")+2, "\# mail:         arashi@tencent.com")
+        call append(line(".")+3, "\# Created Time: ".strftime("%c"))
+        call append(line(".")+4, "\#########################################################################")
+        call append(line(".")+5, "\#!/bin/bash")
+        call append(line(".")+6, "")
+    else
+        call setline(1, "/* ************************************************************************")
+        call append(line("."),   "> File Name:     ".expand("%"))
+        call append(line(".")+1, "> Author:        arashi")
+        call append(line(".")+2, "> mail:          arashi@tencent.com")
+        call append(line(".")+3, "> Created Time:  ".strftime("%c"))
+        call append(line(".")+4, "> Description:   ")
+        call append(line(".")+5, " ************************************************************************/")
+        call append(line(".")+6, "")
+    endif
+endfunc
 
 " 关闭当前buf外的所有buf
 func! BufCloseOthers()

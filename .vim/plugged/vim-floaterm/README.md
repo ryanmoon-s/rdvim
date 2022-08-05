@@ -278,7 +278,7 @@ Type `Number`. Whether to close floaterm window once the job gets finished.
   like `[Process exited 101]`
 - `2`: Always close floaterm window
 
-Default: `0`.
+Default: `1`.
 
 #### **`g:floaterm_autohide`**
 
@@ -371,8 +371,8 @@ no-current-focused window(`:help NormalNC`).
 ```vim
 " Configuration example
 
-" Set floaterm window background to gray once the cursor moves out from it
-hi FloatermNC guibg=gray
+" Set floaterm window foreground to gray once the cursor moves out from it
+hi FloatermNC guifg=gray
 ```
 
 <details>
@@ -400,7 +400,7 @@ would get another nvim/vim instance running in the subprocess.
 
 [Floaterm](https://github.com/voldikss/vim-floaterm/tree/master/bin), which is
 a builtin script in this plugin, allows you to open files from within `: terminal`
-without starting a nested nvim. To archive that, just literally replace
+without starting a nested nvim. To achieve that, just literally replace
 `vim/nvim` with `floaterm`, e.g. `floaterm somefile.txt`
 
 P.S.

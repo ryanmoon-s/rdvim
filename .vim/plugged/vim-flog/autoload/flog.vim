@@ -170,37 +170,28 @@ endfunction
 " Fugitive interface {{{
 
 function! flog#is_fugitive_buffer() abort
-  try
-    call fugitive#repo()
-  catch /not a Git repository/
-    return v:false
-  endtry
-  return v:true
+  return FugitiveIsGitDir()
 endfunction
 
 function! flog#resolve_fugitive_path_arg(path) abort
-  return flog#resolve_path(a:path, fugitive#repo().tree())
-endfunction
-
-function! flog#get_initial_fugitive_repo() abort
-  return fugitive#repo()
-endfunction
-
-function! flog#get_fugitive_workdir() abort
-  return flog#get_state().fugitive_repo.tree()
+  return flog#resolve_path(a:path, FugitiveFind(':/'))
 endfunction
 
 function! flog#get_fugitive_git_command() abort
   return FugitiveShellCommand()
 endfunction
 
+function! flog#get_initial_workdir() abort
+  return FugitiveFind(':/')
+endfunction
+
 function! flog#get_fugitive_git_dir() abort
-  return flog#get_state().fugitive_repo.git_dir
+  return FugitiveGitDir()
 endfunction
 
 function! flog#trigger_fugitive_git_detection() abort
   let b:git_dir = flog#get_fugitive_git_dir()
-  let l:workdir = flog#get_fugitive_workdir()
+  let l:workdir = flog#get_state().workdir
   call FugitiveDetect(l:workdir)
 endfunction
 
@@ -727,7 +718,7 @@ endfunction
 function! flog#get_initial_state(parsed_args, original_file) abort
   return extend(copy(a:parsed_args), {
         \ 'instance': flog#instance(),
-        \ 'fugitive_repo': flog#get_initial_fugitive_repo(),
+        \ 'workdir': flog#get_initial_workdir(),
         \ 'original_file': a:original_file,
         \ 'graph_window_id': v:null,
         \ 'tmp_cmd_window_ids': [],
@@ -1394,7 +1385,7 @@ function! flog#populate_graph_buffer() abort
 endfunction
 
 function! flog#graph_buffer_settings() abort
-  exec 'lcd ' . flog#get_fugitive_workdir()
+  exec 'lcd ' . flog#get_state().workdir
   set filetype=floggraph
 endfunction
 
@@ -1945,6 +1936,15 @@ function! flog#cmd_convert_path(cache, item) abort
   return join(map(l:state.path, 'fnameescape(v:val)'), ' ')
 endfunction
 
+function! flog#cmd_convert_tree(cache, item) abort
+  if empty(a:cache.index_tree)
+    let l:cmd = flog#get_fugitive_git_command()
+    let l:cmd .= ' write-tree'
+    let a:cache.index_tree = flog#systemlist(l:cmd)[0]
+  endif
+  return a:cache.index_tree
+endfunction
+
 function! flog#convert_command_format_item(cache, item) abort
   let l:item_cache = a:cache['items']
 
@@ -1975,6 +1975,8 @@ function! flog#convert_command_format_item(cache, item) abort
     let l:converted_item = flog#cmd_convert_commit_mark(a:cache, a:item, function('flog#cmd_convert_local_branch'))
   elseif a:item =~# 'p'
     let l:converted_item = flog#cmd_convert_path(a:cache, a:item)
+  elseif a:item ==# 't'
+    let l:converted_item = flog#cmd_convert_tree(a:cache, a:item)
   else
     echoerr printf('error converting %s', a:item)
     throw g:flog_unsupported_command_format_item
@@ -2000,7 +2002,8 @@ function! flog#format_command(format) abort
   " memoized data
   let l:cache = {
         \ 'items': {},
-        \ 'refs': {}
+        \ 'refs': {},
+        \ 'index_tree': ''
         \ }
 
   " return data
