@@ -101,7 +101,7 @@ Plug 'skywind3000/quickmenu.vim'
 
 " << 搜索 >>
 " 可视化ack 前提是已经安装ack
-Plug 'mileszs/ack.vim'
+Plug 'mileszs/ack.vim', {'branch': 'preserve-list-size'}
 " 内置terminal
 Plug 'voldikss/vim-floaterm'
 " 模糊搜索
@@ -407,11 +407,21 @@ call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 " ==== ack T ===========================
 " 高亮搜索关键词
 let g:ackhighlight = 1
-" 修改快速预览窗口高度为15
-let g:ack_qhandler = "botright copen 15"
+" 修改快速预览窗口高度为15 ;  不可改 会导致quickfix不可以使用快捷键 !
+" let g:ack_qhandler = "botright copen 15"
 
 " quickfix窗口可做的操作
-" O 关闭窗口
+" *?:*  a quick summary of these keys, repeat to close
+" *o:*  to open (same as Enter)
+" *O:*  to open and close the quickfix window
+" *go:*  to preview file, open but maintain focus on ack.vim results
+" *t:*  to open in new tab
+" *T:*  to open in new tab without moving to it
+" *h:*  to open in horizontal split
+" *H:*  to open in horizontal split, keeping focus on the results
+" *v:*  to open in vertical split
+" *gv:*  to open in vertical split, keeping focus on the results
+" *q:*  to close the quickfix window
 
 " ==== tabular T =======================
 " :Tabularize /,/r0
