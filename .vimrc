@@ -4,7 +4,7 @@
 let mapleader=";"
 
 " 1  2  3                    -
-"  q  w  e  r       u    o  p  [  ]
+"  q  w  e  r  t    u    o  p  [  ]
 "   a  s  d  f    h  j  k  l
 "    z     c  v  b  n  m  ,  .  /
 
@@ -13,6 +13,7 @@ let mapleader=";"
 " q w           - :q :w
 " e             - new file
 " r             - rotate window    
+" t             - insert not exists \n words into next line
 " o p           - close other win / close other buf
 " [1 / [2 / [3  - make vim session
 " ]1 / ]2 / ]3  - load vim session
@@ -22,7 +23,7 @@ let mapleader=";"
 " h j k l       - jump to another win
 " z             - quickmenu
 " c             - coc.nvim quickfix
-" v             - :G blame
+" v             - :Git blame; preview
 " n m           - nerd taglist
 " ,             - :noh
 " /             - produce a bak line
@@ -34,7 +35,6 @@ let mapleader=";"
 " <c-p>         - fzf files
 " <c-c>         - inner terminal
 
-" == single ==
 " E             - $
 " ,             - brackets match
 " tm            - insert time
@@ -416,8 +416,15 @@ call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 
 " ==== ack T ===========================
 
+" Ack搜索 不自动打开第一个文件
+nnoremap gw :Ack! --smart-case<Space>
+
+" AckFile搜索 不自动打开第一个文件
+" nnoremap gf :AckFile! <Space>
+
 " 高亮搜索关键词
 let g:ackhighlight = 1
+
 " 修改快速预览窗口高度为15 ;  不可改 会导致quickfix不可以使用快捷键 !
 " let g:ack_qhandler = "botright copen 15"
 
@@ -636,7 +643,7 @@ noremap # <nop>
 noremap ? <nop>
 
 " 直接按出的 还可以用来组合其它快捷键 
-noremap t <nop>
+" noremap t <nop>
 noremap q <nop>
 noremap " <nop>
 noremap \ <nop>
@@ -658,12 +665,6 @@ nnoremap <Leader>Q :q! <CR>
 nnoremap <Leader>a :A <CR>
 " 打开文件
 nnoremap <Leader>e :e <Space>
-
-" Ack搜索 不自动打开第一个文件
-" nnoremap <Leader>gw :Ack! <Space>
-nnoremap gw :Ack! <Space>
-" AckFile搜索 不自动打开第一个文件
-" nnoremap gf :AckFile! <Space>
 
 " ==== other map T =====================
 " 去除搜索高亮
@@ -749,7 +750,7 @@ autocmd FileType cpp nnoremap <Leader>J J J
 " 新建文件后 自动定位到文件末尾
 autocmd BufNewFile * normal G
 
-" 切换workspace; ack时就可以找到此文件目录下的东西了 
+" 自动切换当前文件的workspace; ack时就可以找到此文件目录下的东西了 
 autocmd BufEnter * silent! lcd %:p:h
 
 " vim-commentary插件 注释针对不同语言的注释方法
