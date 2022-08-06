@@ -101,7 +101,7 @@ Plug 'skywind3000/quickmenu.vim'
 
 " << 搜索 >>
 " 可视化ack 前提是已经安装ack
-Plug 'mileszs/ack.vim', {'branch': 'preserve-list-size'}
+Plug 'mileszs/ack.vim', {'branch': 'master'}
 " 内置terminal
 Plug 'voldikss/vim-floaterm'
 " 模糊搜索
@@ -127,10 +127,11 @@ Plug 'tpope/vim-commentary'
 " << git >>
 " 状态栏branch 文件内执行git命令 方便的diff 
 Plug 'tpope/vim-fugitive'
-" git graph  :Flog -max-count=100
-Plug 'rbong/vim-flog'
+" 用Git Blame时，在底部显示 info message
+Plug 'tommcdo/vim-fugitive-blame-ext'
 " 状态栏变更显示 左侧变更显示
 Plug 'airblade/vim-gitgutter'
+Plug 'rhysd/git-messenger.vim'
 
 
 " << cpp >>
@@ -263,13 +264,14 @@ let g:airline#extensions#whitespace#enabled = 0
 
 " ==== animate lens T ==================
 " 窗口大小 手动调整 带动画
-" nnoremap <silent> <Up>    :call animate#window_delta_height(10)<CR>
-" nnoremap <silent> <Down>  :call animate#window_delta_height(-10)<CR>
-" nnoremap <silent> <Left>  :call animate#window_delta_width(-10)<CR>
-" nnoremap <silent> <Right> :call animate#window_delta_width(+10)<CR>
+nnoremap <silent> <Up>    :call animate#window_delta_height(10)<CR>
+nnoremap <silent> <Down>  :call animate#window_delta_height(-10)<CR>
+nnoremap <silent> <Left>  :call animate#window_delta_width(-10)<CR>
+nnoremap <silent> <Right> :call animate#window_delta_width(+10)<CR>
+
 nnoremap <silent> <Leader>3 :call animate#window_delta_width(+10)<CR>
 
-" 窗口大小 自动调整 
+" 窗口大小 自动调整 是否关闭
 " let g:lens#disabled = 1
 
 " ==== gitgutter T =====================
@@ -390,7 +392,6 @@ call g:quickmenu#header('" 学吧，学无止境 "')
 " 添加项 append(show text, cmd, help message, filetype filter)
 call g:quickmenu#append('# Git', '')
 call g:quickmenu#append('Git', 'Git', 'Git base message')
-call g:quickmenu#append('Git flog', ':Flog -max-count=100', "Git commit message with graph")
 call g:quickmenu#append('Git blame', 'Git blame', "Git blame")
 call g:quickmenu#append('Git diff  tool', 'Git difftool', "Git difftool")
 call g:quickmenu#append('Git merge tool', 'Git mergetool', "Git mergetool")
@@ -413,15 +414,19 @@ let g:ackhighlight = 1
 " quickfix窗口可做的操作
 " *?:*  a quick summary of these keys, repeat to close
 " *o:*  to open (same as Enter)
-" *O:*  to open and close the quickfix window
-" *go:*  to preview file, open but maintain focus on ack.vim results
 " *t:*  to open in new tab
-" *T:*  to open in new tab without moving to it
-" *h:*  to open in horizontal split
-" *H:*  to open in horizontal split, keeping focus on the results
-" *v:*  to open in vertical split
-" *gv:*  to open in vertical split, keeping focus on the results
 " *q:*  to close the quickfix window
+
+" bug
+" *O:*  to open and close the quickfix window
+
+" *h:*  to open in horizontal split
+" *v:*  to open in vertical split
+
+" *go:*  to preview file, open but maintain focus on ack.vim results
+" *gv:*  to open in vertical split, keeping focus on the results
+" *H:*  to open in horizontal split, keeping focus on the results
+" *T:*  to open in new tab without moving to it
 
 " ==== tabular T =======================
 " :Tabularize /,/r0
@@ -457,6 +462,8 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+" go back: <C-o>
+nnoremap gr <C-o>
 
 " rename current word
 nmap <leader>rn <Plug>(coc-rename)
