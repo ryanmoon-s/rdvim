@@ -294,7 +294,18 @@ nmap 'j <Plug>(GitGutterNextHunk)
 
 " ==== fugitive T ======================
 " blame - D 缩小到时间维度
-nnoremap <Leader>v :Git blame <CR>
+" nnoremap <Leader>v :Git blame <CR>
+
+" git blame info message
+nmap <Leader>v <Plug>(git-messenger)
+
+" 自动切换目录到当前文件
+autocmd BufEnter * silent! lcd %:p:h
+
+" git blame info msg : popup window
+" nmap <silent><Leader>v :call setbufvar(winbufnr(popup_atcursor(split(system("git log -n 1 -L " . line(".") . ",+1:" . expand("%:p")), "\n"), { "padding": [1,1,1,1], "pos": "botleft", "wrap": 0 })), "&filetype", "git")<CR>
+
+
 " :G            等于:Git 接git命令 不接则显示一些基本信息: Untracked Unstaged 
 " :G!           背后执行
 " :G difftool   将所有hunk展示 每个hunk显示文件名、开始的行号
