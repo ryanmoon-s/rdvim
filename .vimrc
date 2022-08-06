@@ -47,7 +47,6 @@ let mapleader=";"
 " g/            - align with //   (only in visual mode)
 " gcc           - (un)comment single line
 " gc            - (un)comment a block
-" F5            - single file compile
 
 " ==== Theme  ========================================================
 
@@ -296,15 +295,11 @@ nmap 'j <Plug>(GitGutterNextHunk)
 " blame - D 缩小到时间维度
 " nnoremap <Leader>v :Git blame <CR>
 
-" git blame info message
+" git blame info msg
 nmap <Leader>v <Plug>(git-messenger)
 
-" 自动切换目录到当前文件
-autocmd BufEnter * silent! lcd %:p:h
-
-" git blame info msg : popup window
+" git blame info msg : popup window ; only workspace can work
 " nmap <silent><Leader>v :call setbufvar(winbufnr(popup_atcursor(split(system("git log -n 1 -L " . line(".") . ",+1:" . expand("%:p")), "\n"), { "padding": [1,1,1,1], "pos": "botleft", "wrap": 0 })), "&filetype", "git")<CR>
-
 
 " :G            等于:Git 接git命令 不接则显示一些基本信息: Untracked Unstaged 
 " :G!           背后执行
@@ -333,12 +328,12 @@ let g:floaterm_height = 0.6
 " 标题
 let g:floaterm_title = '[ what do you want to do ? ]'
 
-" 打开一次性窗口
+" 打开一次性窗口 不用必须关闭才可退出vim
 nnoremap <c-c> :FloatermNew --disposable <CR>
 
-" 终端中打开文件:   floaterm a.txt
-" 放在.zshrc中:     alias f=floaterm
-" 然后:             f s.txt
+" floaterm a.txt
+" alias f=floaterm
+" f s.txt
 
 " ==== fzf T ===========================
 " :Files        Files 
@@ -348,7 +343,8 @@ nnoremap <c-c> :FloatermNew --disposable <CR>
 " :BCommits     commit, show diff
 
 " :Files dir
-map <c-p> :Files ~/QQMail/wework<CR>
+" map <c-p> :Files ~/QQMail/wework<CR>
+map <c-p> :Files ~/QQMail<CR>
 
 " <c-x>         horizon分屏
 " <c-v>         vertical分屏
@@ -357,8 +353,10 @@ map <c-p> :Files ~/QQMail/wework<CR>
 
 " ==== tagbar T ========================
 " 右侧tag窗口 高亮光标所在的tag
+
 " 打开后光标跳回文件 因为lens.vim的原因会卡 窗口还没打开完就跳转光标
 " nnoremap <silent> <Leader>m :TagbarToggle <CR>
+
 " 打开后光标留在tagbar 选择后自动关闭 否则只能;q关闭
 nnoremap <silent> <Leader>m :TagbarOpenAutoClose <CR>
 
@@ -401,15 +399,15 @@ call g:quickmenu#reset()
 call g:quickmenu#header('" 学吧，学无止境 "')
 
 " 添加项 append(show text, cmd, help message, filetype filter)
-call g:quickmenu#append('# Git', '')
-call g:quickmenu#append('Git', 'Git', 'Git base message')
-call g:quickmenu#append('Git blame', 'Git blame', "Git blame")
-call g:quickmenu#append('Git diff  tool', 'Git difftool', "Git difftool")
-call g:quickmenu#append('Git merge tool', 'Git mergetool', "Git mergetool")
-
 call g:quickmenu#append('# Copy', '')
 call g:quickmenu#append('paste-copy on', 'call M_paste_copy()', 'cleanly paste and copy')
 call g:quickmenu#append('paste-copy off', 'call M_no_paste_copy()', 'recovery')
+
+call g:quickmenu#append('# Git', '')
+" call g:quickmenu#append('Git', 'Git', 'Git base message')
+call g:quickmenu#append('Git blame', 'Git blame', "Git blame")
+call g:quickmenu#append('Git diff  tool', 'Git difftool', "Git difftool")
+call g:quickmenu#append('Git merge tool', 'Git mergetool', "Git mergetool")
 
 call g:quickmenu#append('# Plug', '')
 call g:quickmenu#append('Plug Install', 'PlugInstall', 'PlugInstall')
@@ -417,6 +415,7 @@ call g:quickmenu#append('Plug Clean', 'PlugClean!', 'PlugClean!')
 call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 
 " ==== ack T ===========================
+
 " 高亮搜索关键词
 let g:ackhighlight = 1
 " 修改快速预览窗口高度为15 ;  不可改 会导致quickfix不可以使用快捷键 !
@@ -461,6 +460,9 @@ vnoremap g= :Tabularize /=<CR>
 " // 对齐
 vnoremap g/ :Tabularize /\/\/<CR>
 
+" "  对齐    
+vnoremap g" :Tabularize /"<CR>
+
 " ==== coc T ========================
 " quick fix
 nmap <Leader>c <plug>(coc-fix-current)
@@ -474,21 +476,10 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 " go back: <C-o>
-nnoremap gr <C-o>
+" go next: <C-i>
 
 " rename current word
 nmap <leader>rn <Plug>(coc-rename)
-
-" format selected region
-xmap <leader>t  <Plug>(coc-format-selected)
-nmap <leader>t  <Plug>(coc-format-selected)
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json,cc,c++ setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
 
 " Use K to show documentation in preview window
 " 如果没有man page就用cocAction显示
@@ -500,9 +491,6 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " ==== ycm T ========================
 " 全局文件配置
@@ -587,10 +575,6 @@ set expandtab
 set selectmode=mouse,key
 " 选择模式
 set selection=exclusive
-" 编码
-set encoding=utf-8
-set fileencoding=utf-8
-set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 " set modeline
 set modeline
 " 开启语义分析
@@ -603,6 +587,13 @@ set shortmess=atI
 set noshowmode
 " 关闭折叠代码功能 大文件打开所有折叠 卡顿
 set nofoldenable
+
+" vim编码方式，加载文件时自动转换成此编码打开
+set encoding=utf-8                                                      
+" 文件编码方式，探测到文件类型type后，将设为type；保存文件时自动转换此编码保存；新文件以此编码保存
+set fileencoding=utf-8                                                  
+" 以这些类型来探测文件编码；探测失败则以encoding为准；自动探测更好
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1 
 
 " 开启文件类型侦测
 filetype on
@@ -687,6 +678,12 @@ inoremap [ []<ESC>i
 inoremap ' ''<ESC>i
 inoremap " ""<ESC>i
 
+" 将当前行生成一个注释的副本
+nmap <Leader>/ yy P gcc j
+
+" 将复制的没有换行符的内容 插入到下一行
+nmap <Leader>t o<ESC>p
+
 " 使用ctrl c,v实现vim之间的复制粘贴 非mac os实用
 vnoremap <C-c> :w! ~/.vim/.clipboard.txt     <CR>
 nnoremap <C-v> <Esc>:r ~/.vim/.clipboard.txt <CR>
@@ -723,10 +720,10 @@ nnoremap <Leader>r <ESC><C-W>r
 
 " 翻页
 let g:smoothie_enabled = 0 " smoothie翻页顺滑插件开关
-nmap <Leader>f <C-f>
-nmap <Leader>b <C-b>
-nmap <Leader>u <C-u> 
-nmap <Leader>d <C-d>
+" nmap <Leader>f <C-f>
+" nmap <Leader>b <C-b>
+" nmap <Leader>u <C-u> 
+" nmap <Leader>d <C-d>
 
 " 退出并删除buffer
 nmap <Leader>- :bd <CR>
@@ -738,9 +735,6 @@ nmap k <Plug>(accelerated_jk_gk)
 
 " eft 插件 高亮f下一个能到达的字母 且尽量是单词首尾
 nmap f <Plug>(eft-f)
-
-" 将当前行生成一个注释的副本
-nmap <Leader>/ yy P gcc j
 
 " ==== autocmd T =====================================================
 " c++ 花括号 函数/类 格式化  autocmd优先于imap
@@ -755,15 +749,14 @@ autocmd FileType cpp nnoremap <Leader>J J J
 " 新建文件后 自动定位到文件末尾
 autocmd BufNewFile * normal G
 
+" 切换workspace; ack时就可以找到此文件目录下的东西了 
+autocmd BufEnter * silent! lcd %:p:h
+
 " vim-commentary插件 注释针对不同语言的注释方法
 autocmd FileType cpp set commentstring=//\ %s
 autocmd FileType proto set commentstring=//\ %s
 autocmd FileType vim set commentstring=\"\ %s
 autocmd FileType shell set commentstring=#\ %s
-
-" 编译 需要当前目录下有 .bin文件夹
-" autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR> autocmd filetype c nnoremap <F5> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
-" autocmd filetype cpp nnoremap <F5> :w <bar> exec '!g++ --std=c++11 -pthread '.shellescape('%').' -o ./bin/'.shellescape('%:r').' && ./bin/'.shellescape('%:r')<CR>
 
 " 进入窗口高亮 todo TODO
 autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'TODO', -1)
@@ -871,6 +864,7 @@ if !has("gui_running")
 endif
 
 " ==== teaching T (教学) =============================================
+
 " ==== vimdiff teach ===================
 " 对比两个文件的差异 删除 增加 修改 三种颜色不同，删除有--- 修改部分高亮
 " 外部打开 vimdiff a.txt b.txt
@@ -972,6 +966,9 @@ set diffopt=context:6
 " backspace 左移光标 会跨行
 " space     右移光标 会跨行
 
+" <C-e> 向上滚屏
+" <C-y> 向下滚屏
+
 " 2. 施放后进入INSERT模式
 
 " i 插入 a 光标后移插入
@@ -981,7 +978,16 @@ set diffopt=context:6
 " c cc和dd类似 但不会将光标移到下一行 而是在当前行合适的缩进位置 进入插入模式
 " C 和D类似 但删除后 会进入插入模式
 
-" 二、实用快速技巧
+" 二、INSERT模式快捷键
+
+" <C-w> 向前删单词
+
+" 三、CMD模式
+
+" :vs file      垂直分屏打开
+" :sp file      水平分屏打开
+
+" 四、实用快速技巧
 
 " 1. 复合操作
 " y: yy 、nyy 、 ygg yG yw y0 y$
@@ -998,5 +1004,5 @@ set diffopt=context:6
 
 " 2. surround 内容操作
 " yi(  解释:y inner  作用: [复制] 光标所在的 括号 内的所有内容
-" 变种: y d c  +  i  +  ( [ {
+" 扩展: y d c  +  i  +  ( [ {
 
