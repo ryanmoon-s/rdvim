@@ -101,6 +101,7 @@ Plug 'skywind3000/quickmenu.vim'
 " << 搜索 >>
 " 可视化ack 前提是已经安装ack
 Plug 'mileszs/ack.vim', {'branch': 'master'}
+Plug 'dyng/ctrlsf.vim'
 " 内置terminal
 Plug 'voldikss/vim-floaterm'
 " 模糊搜索
@@ -213,15 +214,38 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 " ==== airline T =======================
 " 永远显示状态栏
 set laststatus=2
-" tab
+" tab 在airline中即buffer
 let g:airline#extensions#tabline#enabled = 1              " 是否打开tabline
 let g:airline#extensions#tabline#buffer_idx_mode = 1      " 切换模式
 " let g:airline#extensions#tabline#left_sep = ''           " 分隔符
 " let g:airline#extensions#tabline#left_sep = '░'           " 分隔符
 let g:airline#extensions#tabline#left_alt_sep = '➤'
-" tab 切换
-nmap <Leader>1 <Plug>AirlineSelectPrevTab
-nmap <Leader>2 <Plug>AirlineSelectNextTab
+let g:airline#extensions#tabline#buffer_idx_mode = 1 " 选择模式 1 - 10
+let g:airline#extensions#tabline#show_tabs = 0       " 禁用tab功能
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <leader>0 <Plug>AirlineSelectTab0
+nmap <leader>[ <Plug>AirlineSelectPrevTab
+nmap <leader>] <Plug>AirlineSelectNextTab
+" 退出并删除buffer
+nmap <Leader>- :bd <CR> 
+" 按名字搜索buffer
+nmap <Leader>= :b 
+
+" buffer选择指示
+" :bnext
+" :bprevious
+" :bfirst
+" :blast
+" :b10   -- not work for me
+" :b <buffer-name>
 
 " fugitive support
 let g:airline#extensions#fugitiveline#enabled = 0
@@ -267,8 +291,6 @@ nnoremap <silent> <Up>    :call animate#window_delta_height(10)<CR>
 nnoremap <silent> <Down>  :call animate#window_delta_height(-10)<CR>
 nnoremap <silent> <Left>  :call animate#window_delta_width(-10)<CR>
 nnoremap <silent> <Right> :call animate#window_delta_width(+10)<CR>
-
-nnoremap <silent> <Leader>3 :call animate#window_delta_width(+10)<CR>
 
 " 窗口大小 自动调整 是否关闭
 " let g:lens#disabled = 1
@@ -416,11 +438,16 @@ call g:quickmenu#append('Plug Upgrade', 'PlugUpgrade', 'Self Upgrade')
 
 " ==== ack T ===========================
 
-" Ack搜索 不自动打开第一个文件
-nnoremap gw :Ack! --smart-case<Space>
+" Ack搜索 !不自动打开第一个文件
+nnoremap gw :Ack!<Space>
+
+" 只能全小写？
+" nnoremap gw :Ack! --smart-case<Space>
 
 " AckFile搜索 不自动打开第一个文件
 " nnoremap gf :AckFile! <Space>
+
+" let g:ackpreview = 1
 
 " 高亮搜索关键词
 let g:ackhighlight = 1
@@ -428,19 +455,20 @@ let g:ackhighlight = 1
 " 修改快速预览窗口高度为15 ;  不可改 会导致quickfix不可以使用快捷键 !
 " let g:ack_qhandler = "botright copen 15"
 
+" 全局搜索：1、ctrlp打开一个搜索目录里面的的文件 2、gw 使用ack搜索
+
 " quickfix窗口可做的操作
 " *?:*  a quick summary of these keys, repeat to close
-" *o:*  to open (same as Enter)
-" *t:*  to open in new tab
 " *q:*  to close the quickfix window
 
-" bug
-" *O:*  to open and close the quickfix window
+" *o:*  to open (same as Enter)
+" *go:*  to preview file, open but maintain focus on ack.vim results
+" *t:*  to open in new tab
 
 " *h:*  to open in horizontal split
 " *v:*  to open in vertical split
 
-" *go:*  to preview file, open but maintain focus on ack.vim results
+" *O:*  to open and close the quickfix window;  -- has a bug
 " *gv:*  to open in vertical split, keeping focus on the results
 " *H:*  to open in horizontal split, keeping focus on the results
 " *T:*  to open in new tab without moving to it
@@ -689,16 +717,16 @@ nmap <Leader>t o<ESC>p
 vnoremap <C-c> :w! ~/.vim/.clipboard.txt     <CR>
 nnoremap <C-v> <Esc>:r ~/.vim/.clipboard.txt <CR>
 
-" 会话 记录当前vim所有状态
+" 会话 记录当前vim所有状态;   使用tmux代替
 " vi -> ;]1
-nmap <Leader>[1 :mksession! ~/.session1.vim  <CR>
-nmap <Leader>]1 :source     ~/.session1.vim  <CR>   
+" nmap <Leader>[1 :mksession! ~/.session1.vim  <CR>
+" nmap <Leader>]1 :source     ~/.session1.vim  <CR>   
 
-nmap <Leader>[2 :mksession! ~/.session2.vim  <CR>
-nmap <Leader>]2 :source     ~/.session2.vim  <CR>   
+" nmap <Leader>[2 :mksession! ~/.session2.vim  <CR>
+" nmap <Leader>]2 :source     ~/.session2.vim  <CR>   
 
-nmap <Leader>[3 :mksession! ~/.session3.vim  <CR>
-nmap <Leader>]3 :source     ~/.session3.vim  <CR>   
+" nmap <Leader>[3 :mksession! ~/.session3.vim  <CR>
+" nmap <Leader>]3 :source     ~/.session3.vim  <CR>   
 
 " end of line
 noremap E $
@@ -725,9 +753,6 @@ let g:smoothie_enabled = 0 " smoothie翻页顺滑插件开关
 " nmap <Leader>b <C-b>
 " nmap <Leader>u <C-u> 
 " nmap <Leader>d <C-d>
-
-" 退出并删除buffer
-nmap <Leader>- :bd <CR>
 
 " ==== plug map T ======================
 " accelerated-jk 插件  加快jk操作 
