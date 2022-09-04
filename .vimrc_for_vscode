@@ -25,6 +25,7 @@ noremap ? <nop>
 " 直接按出的 还可以用来组合其它快捷键 
 " noremap t <nop>
 noremap q <nop>
+noremap c <nop>
 noremap " <nop>
 noremap \ <nop>
 noremap . <nop>
@@ -34,9 +35,9 @@ noremap - <nop>
 " 关闭当前窗口
 nnoremap <Leader>q :q <CR>
 " 关闭当前窗口外的所有窗口
-nnoremap <leader>o :only <CR>
+" nnoremap <leader>o :only <CR>
 " 保存
-nnoremap <Leader>w :w <CR>
+" nnoremap <Leader>w :w <CR>
 " 不保存强制退出
 " nnoremap <Leader>Q :q! <CR>
 " 打开文件
@@ -51,7 +52,7 @@ nnoremap , %
 nmap <Leader>/ yy P gcc j
 
 " 将复制的没有换行符的内容 插入到下一行
-nmap <Leader>t o<ESC>p
+" nmap <Leader>t o<ESC>p
 
 " end of line
 noremap E $
