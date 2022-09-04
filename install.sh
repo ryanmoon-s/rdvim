@@ -29,6 +29,9 @@ fi
 echo "\033[0;32mln -s `pwd`/.vimrc .vimrc\033[0m"
 ln -s ${vimdir}/.vimrc .vimrc
 
+echo "\033[0;32mln -s `pwd`/.vimrc_for_vscode .vimrc_for_vscode\033[0m"
+ln -s ${vimdir}/.vimrc_for_vscode .vimrc_for_vscode
+
 echo "\033[0;32mln -s `pwd`/.vim .vim\033[0m"
 ln -s ${vimdir}/.vim .vim
 
