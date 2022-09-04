@@ -101,7 +101,6 @@ Plug 'skywind3000/quickmenu.vim'
 " << 搜索 >>
 " 可视化ack 前提是已经安装ack
 Plug 'mileszs/ack.vim', {'branch': 'master'}
-Plug 'dyng/ctrlsf.vim'
 " 内置terminal
 Plug 'voldikss/vim-floaterm'
 " 模糊搜索
@@ -889,3 +888,4 @@ if !has("gui_running")
     set term=screen-256color
 endif
 
+set paste
