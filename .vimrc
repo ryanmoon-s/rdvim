@@ -34,6 +34,7 @@ let mapleader=";"
 " ==== other ===========================
 " <c-p>         - fzf files
 " <c-c>         - inner terminal
+" <c-[>         - ESC
 
 " E             - $
 " ,             - brackets match
@@ -156,7 +157,10 @@ call plug#end()
 
 " ==== NERD T ==========================
 " 开关
-nnoremap <silent> <Leader>n :NERDTreeToggle <CR>
+" nnoremap <silent> <Leader>n :NERDTreeToggle <CR>
+" 打开当前文件所在目录
+nnoremap <silent> <Leader>n :NERDTreeFind <CR>
+
 " 打开文件自动关闭
 let NERDTreeQuitOnOpen = 1
 " 子窗口位置
@@ -216,7 +220,7 @@ set laststatus=2
 " tab 在airline中即buffer
 let g:airline#extensions#tabline#enabled = 1              " 是否打开tabline
 let g:airline#extensions#tabline#buffer_idx_mode = 1      " 切换模式
-" let g:airline#extensions#tabline#left_sep = ''           " 分隔符
+let g:airline#extensions#tabline#left_sep = ''           " 分隔符
 " let g:airline#extensions#tabline#left_sep = '░'           " 分隔符
 let g:airline#extensions#tabline#left_alt_sep = '➤'
 let g:airline#extensions#tabline#buffer_idx_mode = 1 " 选择模式 1 - 10
@@ -252,7 +256,7 @@ let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#hunks#enabled = 1
 
 " coc.nvim support
-let g:airline#extensions#coc#enabled = 0 " 后台项目pb未引入 错误太多 暂时关闭 仅有下划线提示错误
+" let g:airline#extensions#coc#enabled = 0 " 后台项目pb未引入 错误太多 暂时关闭 仅有下划线提示错误
 let airline#extensions#coc#error_symbol = 'E:'
 let airline#extensions#coc#warning_symbol = 'W:'
 let g:airline#extensions#coc#show_coc_status = 1
@@ -317,7 +321,7 @@ nmap 'j <Plug>(GitGutterNextHunk)
 " nnoremap <Leader>v :Git blame <CR>
 
 " git blame info msg
-nmap <Leader>v <Plug>(git-messenger)
+" nmap <Leader>v <Plug>(git-messenger)
 
 " git blame info msg : popup window ; only workspace can work
 " nmap <silent><Leader>v :call setbufvar(winbufnr(popup_atcursor(split(system("git log -n 1 -L " . line(".") . ",+1:" . expand("%:p")), "\n"), { "padding": [1,1,1,1], "pos": "botleft", "wrap": 0 })), "&filetype", "git")<CR>
@@ -358,14 +362,14 @@ nnoremap <c-c> :FloatermNew --disposable <CR>
 
 " ==== fzf T ===========================
 " :Files        Files 
-" :BLines       lines in current buffer
+" :Lines        lines in current buffer
 " :History      history open files 
 " :Commits      commit log
 " :BCommits     commit, show diff
 
 " :Files dir
-" map <c-p> :Files ~/QQMail/wework<CR>
-map <c-p> :Files ~/QQMail<CR>
+map <c-p> :Files ~/QQMail/wework<CR>
+map <c-l> :Lines <CR>
 
 " <c-x>         horizon分屏
 " <c-v>         vertical分屏
@@ -676,6 +680,7 @@ noremap " <nop>
 noremap \ <nop>
 noremap . <nop>
 noremap - <nop>
+noremap x <nop>
 
 " ==== file opention map T =============
 " 关闭当前窗口
@@ -888,4 +893,3 @@ if !has("gui_running")
     set term=screen-256color
 endif
 
-set paste

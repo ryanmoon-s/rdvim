@@ -1,5 +1,10 @@
 {
     "languageserver": {
+        "clangd": {
+            "command": "clangd",
+            "rootPatterns": ["compile_flags.txt", "compile_commands.json, .vim/, .git/"],
+            "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+        },
         "ccls": {
             "command": "ccls",
             "args": ["--log-file=/tmp/ccls_arashi.log"],
@@ -13,17 +18,19 @@
                     "resourceDir": "/usr/local/lib/clang/11.0.0"
                 },
                 "index": {
-		    "trackDependency": 1 ,
-		    "initialBlacklist": ["."]
+                    "trackDependency": 1 ,
+                    "initialBlacklist": ["."]
                 }
             }
         }
     },
+    "diagnostic.highlighLimit":5000,
+    "diagnostic.enableSign":false,
+
     "suggest.triggerAfterInsertEnter": true,
-    "suggest.noselect": false,
+    "suggest.noselect": true,
     "suggest.enablePreview": true,
     "suggest.minTriggerInputLength": 2,
-    "suggest.acceptSuggestionOnCommitCharacter": true,
-
-    "diagnostic.enableSign":false
+    "suggest.acceptSuggestionOnCommitCharacter": true
 }
+

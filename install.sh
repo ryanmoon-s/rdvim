@@ -16,23 +16,28 @@ cd ~
 # back-up
 
 if [ -f ~/.vimrc ] || [ -h ~/.vimrc ]; then
-    echo "\033[0;33mFound ~/.vimrc.\033[0m \033[0;32mBacking up to ~/.vimrc.`digitaldatetime`\033[0m";
+    echo "Found ~/.vimrc Backing up to ~/.vim.`digitaldatetime`";
     mv ~/.vimrc ~/.vimrc.`digitaldatetime`;
 fi
 
+if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
+    echo "Found ~/.tmux.conf Backing up to ~/.tmux.conf.`digitaldatetime`";
+    mv ~/.tmux.conf ~/.tmux.conf.`digitaldatetime`;
+fi
+
 if [ -d ~/.vim ]; then
-    echo "\033[0;33mFound ~/.vim.\033[0m \033[0;32mBacking up to ~/.vim.`digitaldatetime`\033[0m";
+    echo "Found ~/.vim Backing up to ~/.vim `digitaldatetime`";
     mv ~/.vim ~/.vim.`digitaldatetime`;
 fi
 
 # ln
-echo "\033[0;32mln -s `pwd`/.vimrc .vimrc\033[0m"
+echo "ln -s `pwd`/.vimrc .vimrc"
 ln -s ${vimdir}/.vimrc .vimrc
 
-echo "\033[0;32mln -s `pwd`/.vimrc_for_vscode .vimrc_for_vscode\033[0m"
+echo "ln -s `pwd`/.vimrc_for_vscode .vimrc_for_vscode"
 ln -s ${vimdir}/.vimrc_for_vscode .vimrc_for_vscode
 
-echo "\033[0;32mln -s `pwd`/.vim .vim\033[0m"
+echo "ln -s `pwd`/.vim .vim"
 ln -s ${vimdir}/.vim .vim
 
 # finish
