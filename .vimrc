@@ -680,7 +680,6 @@ noremap " <nop>
 noremap \ <nop>
 noremap . <nop>
 noremap - <nop>
-noremap x <nop>
 
 " ==== file opention map T =============
 " 关闭当前窗口
