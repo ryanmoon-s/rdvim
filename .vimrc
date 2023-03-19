@@ -283,7 +283,7 @@ let g:airline_symbols.paste = '｢paste｣'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
 let g:airline_symbols.branch = ' '
-let g:airline_symbols.branch = '  →✒'
+" let g:airline_symbols.branch = '  →✒'
 
 " 关闭white space 提示
 let g:airline#extensions#whitespace#enabled = 0
@@ -321,7 +321,7 @@ nmap 'j <Plug>(GitGutterNextHunk)
 " nnoremap <Leader>v :Git blame <CR>
 
 " git blame info msg
-" nmap <Leader>v <Plug>(git-messenger)
+nmap <Leader>v <Plug>(git-messenger)
 
 " git blame info msg : popup window ; only workspace can work
 " nmap <silent><Leader>v :call setbufvar(winbufnr(popup_atcursor(split(system("git log -n 1 -L " . line(".") . ",+1:" . expand("%:p")), "\n"), { "padding": [1,1,1,1], "pos": "botleft", "wrap": 0 })), "&filetype", "git")<CR>
@@ -510,9 +510,7 @@ nmap <Leader>c <plug>(coc-fix-current)
 
 " keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
 " go back: <C-o>
 " go next: <C-i>
 
@@ -685,9 +683,9 @@ noremap - <nop>
 " 关闭当前窗口
 nnoremap <Leader>q :q <CR>
 " 关闭当前窗口外的所有窗口
-nnoremap <leader>o :only <CR>
+nnoremap <leader>O :only <CR>
 " 关闭当前buf外的所有buf
-map <Leader>p :call BufCloseOthers() <CR>
+map <Leader>o :call BufCloseOthers() <CR>
 " 保存文件
 nnoremap <Leader>w :w <CR>
 " 不保存强制退出
@@ -715,6 +713,10 @@ nmap <Leader>/ yy P gcc j
 
 " 将复制的没有换行符的内容 插入到下一行
 nmap <Leader>t o<ESC>p
+
+" 跨终端复制 先复制 再;y 再;p
+nmap <silent> ;y :call Write_copy_file()<Enter>
+nmap <silent> ;p :call Read_copy_file()<Enter>
 
 " 会话 记录当前vim所有状态;   使用tmux代替
 " vi -> ;]1
@@ -789,6 +791,9 @@ autocmd WinEnter,VimEnter * :silent! call matchadd('todo', 'todo', -1)
 
 " 只剩下help/quickfix/nerd/tag_list等等窗口时直接关闭vim
 autocmd BufEnter * call CheckLeftBuffers()
+
+" json文件引号消失: 禁用indentLine插件
+autocmd Filetype json let g:indentLine_setConceal = 0
 
 " ==== function T ====================================================
 func SetTime()
@@ -869,6 +874,21 @@ function! CheckLeftBuffers()
     endif
     unlet i
   endif
+endfunction
+
+" 跨终端粘贴
+let g:copy_file=$HOME . "/.vim_copybuffer"
+function Write_copy_file()
+	"本函数将 @" 缓冲区内容写入文件
+	let lines=split(@", "\n")
+	call writefile(lines,g:copy_file)
+endfunction
+
+function Read_copy_file()
+	"将copy_file文件写入@" 缓冲区，并且粘贴
+	let l:buf=readfile(g:copy_file)
+	let @"=join(l:buf,"\n")
+	normal ""p
 endfunction
 
 " ==== block T =======================================================

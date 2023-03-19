@@ -29,6 +29,12 @@ if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
     echo "Found ~/.tmux.conf Backing up to ~/.tmux.conf.`digitaldatetime`";
     mv ~/.tmux.conf ~/.tmux.conf.`digitaldatetime`;
 fi
+
+if [ -f ~/.tmux.conf.local ] || [ -h ~/.tmux.conf.local ]; then
+    echo "Found ~/.tmux.conf.local Backing up to ~/.tmux.conf.local.`digitaldatetime`";
+    mv ~/.tmux.conf.local ~/.tmux.conf.local.`digitaldatetime`;
+fi
+
 echo
 
 # ln
@@ -40,6 +46,9 @@ ln -s ${vimdir}/.vim .vim
 
 echo "ln -s `pwd`/.tmux.conf .vim.conf"
 ln -s ${vimdir}/.tmux.conf .tmux.conf
+
+echo "ln -s `pwd`/.tmux.conf.local .vim.conf.lcoal"
+ln -s ${vimdir}/.tmux.conf.local .tmux.conf.local
 
 # echo "ln -s `pwd`/.vimrc_for_vscode .vimrc_for_vscode"
 # ln -s ${vimdir}/.vimrc_for_vscode .vimrc_for_vscode

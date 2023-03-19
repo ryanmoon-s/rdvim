@@ -1,0 +1,1 @@
+nnoremap <C-v> <Esc>:r ~/.vim/.clipboard.txt <CR>
