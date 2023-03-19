@@ -201,7 +201,7 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 " 文件打开方式
 " o         open in buf / open or close dir
 " go        preview
-" v         vertical split
+" s         vertical split
 " i         horizon  split
 
 " 导航
@@ -266,10 +266,10 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-" let g:airline_left_sep = ''
-" let g:airline_left_alt_sep = '❯'
-" let g:airline_right_sep = ''
-" let g:airline_right_alt_sep = '❮'
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = '❯'
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = '❮'
 
 " let g:airline_left_sep = '░'
 let g:airline_left_alt_sep = '❯'
@@ -282,7 +282,7 @@ let g:airline_symbols.colnr = '   ❤ '
 let g:airline_symbols.paste = '｢paste｣'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
-" let g:airline_symbols.branch = ' '
+let g:airline_symbols.branch = ' '
 let g:airline_symbols.branch = '  →✒'
 
 " 关闭white space 提示
@@ -680,7 +680,6 @@ noremap " <nop>
 noremap \ <nop>
 noremap . <nop>
 noremap - <nop>
-noremap x <nop>
 
 " ==== file opention map T =============
 " 关闭当前窗口
@@ -689,7 +688,7 @@ nnoremap <Leader>q :q <CR>
 nnoremap <leader>o :only <CR>
 " 关闭当前buf外的所有buf
 map <Leader>p :call BufCloseOthers() <CR>
-" 保存
+" 保存文件
 nnoremap <Leader>w :w <CR>
 " 不保存强制退出
 nnoremap <Leader>Q :q! <CR>
@@ -716,10 +715,6 @@ nmap <Leader>/ yy P gcc j
 
 " 将复制的没有换行符的内容 插入到下一行
 nmap <Leader>t o<ESC>p
-
-" 使用ctrl c,v实现vim之间的复制粘贴 非mac os实用
-vnoremap <C-c> :w! ~/.vim/.clipboard.txt     <CR>
-nnoremap <C-v> <Esc>:r ~/.vim/.clipboard.txt <CR>
 
 " 会话 记录当前vim所有状态;   使用tmux代替
 " vi -> ;]1

@@ -20,25 +20,29 @@ if [ -f ~/.vimrc ] || [ -h ~/.vimrc ]; then
     mv ~/.vimrc ~/.vimrc.`digitaldatetime`;
 fi
 
+if [ -d ~/.vim ]; then
+    echo "Found ~/.vim Backing up to ~/.vim.`digitaldatetime`";
+    mv ~/.vim ~/.vim.`digitaldatetime`;
+fi
+
 if [ -f ~/.tmux.conf ] || [ -h ~/.tmux.conf ]; then
     echo "Found ~/.tmux.conf Backing up to ~/.tmux.conf.`digitaldatetime`";
     mv ~/.tmux.conf ~/.tmux.conf.`digitaldatetime`;
 fi
-
-if [ -d ~/.vim ]; then
-    echo "Found ~/.vim Backing up to ~/.vim `digitaldatetime`";
-    mv ~/.vim ~/.vim.`digitaldatetime`;
-fi
+echo
 
 # ln
 echo "ln -s `pwd`/.vimrc .vimrc"
 ln -s ${vimdir}/.vimrc .vimrc
 
-echo "ln -s `pwd`/.vimrc_for_vscode .vimrc_for_vscode"
-ln -s ${vimdir}/.vimrc_for_vscode .vimrc_for_vscode
-
 echo "ln -s `pwd`/.vim .vim"
 ln -s ${vimdir}/.vim .vim
+
+echo "ln -s `pwd`/.tmux.conf .vim.conf"
+ln -s ${vimdir}/.tmux.conf .tmux.conf
+
+# echo "ln -s `pwd`/.vimrc_for_vscode .vimrc_for_vscode"
+# ln -s ${vimdir}/.vimrc_for_vscode .vimrc_for_vscode
 
 # finish
 
